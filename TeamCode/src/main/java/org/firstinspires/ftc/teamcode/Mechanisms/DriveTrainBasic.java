@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 @Config
-public class DriveTrain2025 {
+public class DriveTrainBasic {
 
     // Driving Motors
     private final Motor leftFrontDrive;
@@ -25,8 +25,6 @@ public class DriveTrain2025 {
 
 
     //servos
-    private final SimpleServo claw;
-    private final SimpleServo elbow;
     MecanumDrive driveBase;
 
     public GoBildaPinpointDriver odometer;
@@ -61,16 +59,6 @@ public class DriveTrain2025 {
         rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
         leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
-        //elevator = new Motor(hwMap,"elevator");
-        claw = new SimpleServo(hwMap, "claw", 0, 1); // expansion hub port 0
-        elbow = new SimpleServo(hwMap, "elbow", 0, 1); // expansion hub port 1
-
-        //elevator.resetEncoder();
-
-
-        // xPod = new Motor(hwMap, "x-pod"); // 3
-        //  yPod = new Motor(hwMap, "y-pod"); // 2
-
 
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
 
