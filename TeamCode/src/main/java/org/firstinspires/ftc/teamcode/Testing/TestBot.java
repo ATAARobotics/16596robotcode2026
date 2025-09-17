@@ -80,7 +80,7 @@ public class TestBot extends OpMode {
     @Override
     public void start() {
         driveTrain.start();//reset encoders
-        elevator.start();
+
         driver = new GamepadEx(gamepad1); // This controls the movement of the robot
         operator = new GamepadEx(gamepad2); // This controls the movement of items on the robot
         runtime.reset();
