@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Testing;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.bylazar.panels.json.PanelsWidget;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -21,7 +22,7 @@ import com.bylazar.telemetry.JoinedTelemetry;
 public class LimeLightTest extends OpMode {
 
     private Limelight3A limelight;
-
+    private JoinedTelemetry joinedTelemetry;
 
     @Override
     public void init() {
@@ -35,10 +36,13 @@ public class LimeLightTest extends OpMode {
         // This tells Limelight to start looking!
         // Update Telemetry
         FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = new MultipleTelemetry(telemetry,dashboard.getTelemetry());
-        telemetry.addData("Status", "LimeLight Initialized");
-        telemetry.update();
+        PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
+        // Join them together
+        joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
+        joinedTelemetry.addLine("LimeLight Initalized");
+        joinedTelemetry.update();
     }
+    @Override
     public void start() {
 
         limelight.start(); // This tells Limelight to start looking!
@@ -52,15 +56,15 @@ public class LimeLightTest extends OpMode {
 
         // Send data to telemetry
         if (limeLightResults != null && limeLightResults.isValid()) {
-            telemetry.addData("Target X", limeLightResults.getTx()); // How far left or right the target is (degrees)
-            telemetry.addData("Target Y", limeLightResults.getTy()); // How far up or down the target is (degrees)
-            telemetry.addData("Target Area", limeLightResults.getTa()); // How big the target looks (0%-100% of the image)
-            telemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
+            joinedTelemetry.addData("Target X", limeLightResults.getTx()); // How far left or right the target is (degrees)
+            joinedTelemetry.addData("Target Y", limeLightResults.getTy()); // How far up or down the target is (degrees)
+            joinedTelemetry.addData("Target Area", limeLightResults.getTa()); // How big the target looks (0%-100% of the image)
+            joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
         } else {
-            telemetry.addData("Limelight", "No Targets");
-            telemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
+            joinedTelemetry.addData("Limelight", "No Targets");
+            joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
         }
-        telemetry.update();
+        joinedTelemetry.update();
 
     }
 }
