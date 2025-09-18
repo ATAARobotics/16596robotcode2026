@@ -28,7 +28,7 @@
  */
 
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Testing;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -66,7 +66,7 @@ public class TestBot extends OpMode {
         ((CAITelemetry) telemetry).setDashboardEnabled(false);
         telemetry.addData("Status", "Initializing");
         telemetry.update();
-        driveTrain = new DriveTrain2025(hardwareMap);
+        driveTrain = new DriveTrainBasic(hardwareMap);
 
         driveTrain.init();  // commented out ,done in Auto
         // comment this out for competition and ensure it happens in auto code

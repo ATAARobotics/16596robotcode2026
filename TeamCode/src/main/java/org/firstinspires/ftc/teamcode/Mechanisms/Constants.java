@@ -95,5 +95,7 @@ Constants {
     public static double HEADING_Kp = 0.015; // was 0.01
 
 
-
+    // Limelight Settings
+    public static int LIMELIGHT_APRIL_TAG_BLUE = 0;
+    public static int LIMELIGHT_APRIL_TAG_RED = 1;
 }
