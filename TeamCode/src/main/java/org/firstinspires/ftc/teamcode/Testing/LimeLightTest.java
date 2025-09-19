@@ -51,7 +51,7 @@ public class LimeLightTest extends OpMode {
     }
     @Override
     public void loop() {
-// Process Limelight data
+        // Process Limelight data
         LLResult limeLightResults = limelight.getLatestResult();
 
         // Send data to telemetry
@@ -60,11 +60,22 @@ public class LimeLightTest extends OpMode {
             joinedTelemetry.addData("Target Y", limeLightResults.getTy()); // How far up or down the target is (degrees)
             joinedTelemetry.addData("Target Area", limeLightResults.getTa()); // How big the target looks (0%-100% of the image)
             joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
+            joinedTelemetry.addData("Distance to Target inches", target_distance(limeLightResults));
         } else {
             joinedTelemetry.addData("Limelight", "No Targets");
             joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
         }
         joinedTelemetry.update();
 
+    }
+    public double target_distance(LLResult limeLightResults) {
+
+        double targetOffsetAngle_Vertical = limeLightResults.getTy();
+        double angleToGoalDegree = Constants.LIMELIGHT_MOUNT_ANGLE_DEGREE + targetOffsetAngle_Vertical;
+        double angleToGoalRadian = Math.toRadians(angleToGoalDegree);
+
+        // https://docs.limelightvision.io/docs/docs-limelight/tutorials/tutorial-estimating-distance
+
+        return (Constants.LIMELIGHT_GOAL_HEIGHT_INCHES - Constants.LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadian);
     }
 }
