@@ -4,11 +4,13 @@ package org.firstinspires.ftc.teamcode.Mechanisms;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
-
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -23,6 +25,7 @@ public class DriveTrainBasic {
     private final Motor leftBackDrive;
     private final Motor rightBackDrive;
 
+    public final Motor shooter;
 
     //servos
     MecanumDrive driveBase;
@@ -34,7 +37,8 @@ public class DriveTrainBasic {
     public static PIDCoefficients ypid = new PIDCoefficients(Constants.YPID_Kp, 0.0, 0.00);
     public PIDController xControl = null;
     public PIDController yControl = null;
-
+    public GamepadEx driver = null;
+    public GamepadEx operator = null;
     public double headingCorrection = 0;
 
     public double headingSetPoint = Constants.FORWARD;
@@ -59,9 +63,8 @@ public class DriveTrainBasic {
         rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
         leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
-
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-
+        shooter = new Motor(hwMap,"shooter");
 
     }
 
@@ -109,6 +112,7 @@ public class DriveTrainBasic {
             } else {
                 headingSetPoint = 180;
             }
+
         }
 
         // PID controller for heading
