@@ -27,6 +27,7 @@ public class DriveTrainBasic {
 
     public final Motor shooter;
 
+    public final Motor intake;
     //servos
     MecanumDrive driveBase;
 
@@ -65,6 +66,7 @@ public class DriveTrainBasic {
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         shooter = new Motor(hwMap,"shooter");
+        intake = new Motor(hwMap,"intake");
 
     }
 
@@ -73,7 +75,7 @@ public class DriveTrainBasic {
         headingControl.setTolerance(Constants.HEADING_ERROR_Tolerance);// was 3 increased to see if affects spinnning ..cbw
         xControl = new PIDController(xpid.p, xpid.i, xpid.d);//FOR AUTO
         yControl = new PIDController(ypid.p, ypid.i, ypid.d);//For AUTO
-
+        intake.setInverted(true);
         // redundant as default is brake mode
         leftBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);

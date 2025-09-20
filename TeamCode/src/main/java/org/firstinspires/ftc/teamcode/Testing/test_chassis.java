@@ -33,6 +33,8 @@ package org.firstinspires.ftc.teamcode.Testing;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+
+
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -96,11 +98,16 @@ test_chassis extends OpMode {
         driveTrain.drive(forwardSpeed, strafeSpeed);
 
         if(operator.wasJustPressed(GamepadKeys.Button.A)) {
-
+//original speed = 1
             driveTrain.shooter.set(1);
 
         }
-        else  driveTrain.shooter.set(0);
+    //    else  driveTrain.shooter.set(0);        - figure out stop system
+
+        if(operator.wasJustPressed(GamepadKeys.Button.B)) {
+
+        driveTrain.intake.set(1);
+        }
 //Select N, S, E, W
         if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.WEST); // west
