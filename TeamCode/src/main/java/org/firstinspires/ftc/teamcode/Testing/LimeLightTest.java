@@ -25,20 +25,17 @@ public class LimeLightTest extends OpMode {
 
     @Override
     public void init() {
-//        telemetry = new CAITelemetry(telemetry);
-//        ((CAITelemetry) telemetry).setDashboardEnabled(false);
-//        telemetry.addData("Status", "Initializing");
-//        telemetry.update();
+
         // Limelight Stuff
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
+        limelight.setPollRateHz(50); // This sets how often we ask Limelight for data (100 times per second)
         // This tells Limelight to start looking!
         // Update Telemetry
         FtcDashboard dashboard = FtcDashboard.getInstance();
         PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
         // Join them together
         joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
-        joinedTelemetry.addLine("LimeLight Initalized");
+        joinedTelemetry.addLine("LimeLight Initialized");
         joinedTelemetry.update();
     }
     @Override
