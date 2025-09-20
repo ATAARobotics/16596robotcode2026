@@ -24,7 +24,6 @@ public class DriveTrainBasic {
     private final Motor rightFrontDrive;
     private final Motor leftBackDrive;
     private final Motor rightBackDrive;
-
     public final Motor shooter;
 
     //servos
@@ -65,6 +64,8 @@ public class DriveTrainBasic {
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         shooter = new Motor(hwMap,"shooter");
+        shooter.setRunMode(Motor.RunMode.VelocityControl);
+
 
     }
 
@@ -84,7 +85,7 @@ public class DriveTrainBasic {
         rightBackDrive.setInverted(true);
         leftFrontDrive.setInverted(true);
         leftBackDrive.setInverted(true);
-        // odometer initializing -- this should go into PracticeDriveTrain2025??
+        // odometer initializing -- may need to be moved??
         odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
         odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);

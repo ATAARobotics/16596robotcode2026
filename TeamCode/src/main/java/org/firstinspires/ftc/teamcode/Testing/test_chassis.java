@@ -52,8 +52,7 @@ import java.util.Locale;
 
 @Config // need to use dashboard to change PID gains; comment out for competition
 @TeleOp(name = "CompBot")
-public class
-test_chassis extends OpMode {
+public class test_chassis extends OpMode {
 
 
     private final ElapsedTime runtime = new ElapsedTime();
@@ -97,9 +96,10 @@ test_chassis extends OpMode {
 
         if(operator.wasJustPressed(GamepadKeys.Button.A)) {
 
-            driveTrain.shooter.set(.8);
+            driveTrain.shooter.set(1);
 
         }
+        else driveTrain.shooter.set(0);
 
 //Select N, S, E, W
         if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
