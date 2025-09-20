@@ -97,10 +97,10 @@ test_chassis extends OpMode {
 
         if(operator.wasJustPressed(GamepadKeys.Button.A)) {
 
-            driveTrain.shooter.set(.8);
+            driveTrain.shooter.set(1);
 
         }
-
+        else  driveTrain.shooter.set(0);
 //Select N, S, E, W
         if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.WEST); // west
