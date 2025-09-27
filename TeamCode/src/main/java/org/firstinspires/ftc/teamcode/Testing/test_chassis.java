@@ -100,9 +100,10 @@ test_chassis extends OpMode {
         if(operator.isDown(GamepadKeys.Button.A)) {
 //original speed = 1
             driveTrain.shooter.set(1);
-
+           driveTrain.shooter2.set(1);
         }
        else  driveTrain.shooter.set(0);
+            driveTrain.shooter2.set(0);
 
         if(operator.isDown(GamepadKeys.Button.B)) {
 
