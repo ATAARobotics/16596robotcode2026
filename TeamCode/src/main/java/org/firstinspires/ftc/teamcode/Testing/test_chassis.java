@@ -33,6 +33,8 @@ package org.firstinspires.ftc.teamcode.Testing;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+
+
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -51,7 +53,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.GoBildaPinpointDriver;
 import java.util.Locale;
 
 @Config // need to use dashboard to change PID gains; comment out for competition
-@TeleOp(name = "CompBot")
+@TeleOp(name = "RealTestBot")
 public class
 test_chassis extends OpMode {
 
@@ -95,12 +97,18 @@ test_chassis extends OpMode {
         //===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
 
-        if(operator.wasJustPressed(GamepadKeys.Button.A)) {
-
+        if(operator.isDown(GamepadKeys.Button.A)) {
+//original speed = 1
             driveTrain.shooter.set(1);
 
         }
-        else  driveTrain.shooter.set(0);
+       else  driveTrain.shooter.set(0);
+
+        if(operator.isDown(GamepadKeys.Button.B)) {
+
+        driveTrain.intake.set(1);
+        }
+        else  driveTrain.intake.set(0);
 //Select N, S, E, W
         if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.WEST); // west

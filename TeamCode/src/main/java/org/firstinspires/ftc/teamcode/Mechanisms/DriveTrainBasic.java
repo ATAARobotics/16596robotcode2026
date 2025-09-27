@@ -24,8 +24,12 @@ public class DriveTrainBasic {
     private final Motor rightFrontDrive;
     private final Motor leftBackDrive;
     private final Motor rightBackDrive;
-    public final Motor shooter;
 
+    public final Motor shooter; //port 0-expansion hub
+    //uses button A
+
+    public final Motor intake; //port 1-expansion hub
+    //uses button B
     //servos
     MecanumDrive driveBase;
 
@@ -64,8 +68,7 @@ public class DriveTrainBasic {
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         shooter = new Motor(hwMap,"shooter");
-        shooter.setRunMode(Motor.RunMode.VelocityControl);
-
+        intake = new Motor(hwMap,"intake");
 
     }
 
@@ -74,7 +77,7 @@ public class DriveTrainBasic {
         headingControl.setTolerance(Constants.HEADING_ERROR_Tolerance);// was 3 increased to see if affects spinnning ..cbw
         xControl = new PIDController(xpid.p, xpid.i, xpid.d);//FOR AUTO
         yControl = new PIDController(ypid.p, ypid.i, ypid.d);//For AUTO
-
+        intake.setInverted(true);
         // redundant as default is brake mode
         leftBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -85,7 +88,7 @@ public class DriveTrainBasic {
         rightBackDrive.setInverted(true);
         leftFrontDrive.setInverted(true);
         leftBackDrive.setInverted(true);
-        // odometer initializing -- may need to be moved??
+        // odometer initializing -- this should go into PracticeDriveTrain2025??
         odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
         odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
