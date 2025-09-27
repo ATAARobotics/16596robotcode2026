@@ -27,6 +27,7 @@ public class DriveTrainBasic {
 
     public final Motor shooter; //port 0-expansion hub
     //uses button A
+   public final Motor shooter2; //port-2-expansion-hub
 
     public final Motor intake; //port 1-expansion hub
     //uses button B
@@ -68,6 +69,7 @@ public class DriveTrainBasic {
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         shooter = new Motor(hwMap,"shooter");
+        shooter2 = new Motor(hwMap,"shooter2");
         intake = new Motor(hwMap,"intake");
 
     }
@@ -93,7 +95,10 @@ public class DriveTrainBasic {
         odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-
+//set up for two shooter motors
+        shooter.setRunMode(Motor.RunMode.VelocityControl);
+         shooter2.setRunMode(Motor.RunMode.VelocityControl);
+        shooter2.setInverted(true);
 
     }// end of init()
 

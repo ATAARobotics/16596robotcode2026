@@ -30,12 +30,14 @@
 
 package org.firstinspires.ftc.teamcode.Testing;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.bylazar.telemetry.JoinedTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -46,6 +48,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.CAITelemetry;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
+
+// The following libraries are for FTControl
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.JoinedTelemetry;
+
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.GoBildaPinpointDriver;
@@ -62,7 +69,8 @@ test_chassis extends OpMode {
     private DriveTrainBasic driveTrain;
     public GamepadEx driver = null;
     public GamepadEx operator = null;
-
+    private JoinedTelemetry joinedTelemetry;
+    public double speed = 0;
 
     /* private double heading; */
 
@@ -73,6 +81,12 @@ test_chassis extends OpMode {
         driveTrain.odometer.resetPosAndIMU(); // comment out with Auto
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        // Update Telemetry
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
+        // Join them together
+        joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
+        joinedTelemetry.update();
     }
 
     @Override
@@ -81,14 +95,17 @@ test_chassis extends OpMode {
         driver = new GamepadEx(gamepad1); // This controls the movement of the robot
         operator = new GamepadEx(gamepad2); // This controls the movement of items on the robot
         runtime.reset();
+
     }
 
     @Override
     public void loop() {
         driver.readButtons();  // enable 'was just pressed' methods
         operator.readButtons();
-        driveTrain.loop(); // Current elbow position
-
+        driveTrain.loop(); // Current elbow
+        speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
+        joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
+        joinedTelemetry.update();
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
@@ -100,9 +117,10 @@ test_chassis extends OpMode {
         if(operator.isDown(GamepadKeys.Button.A)) {
 //original speed = 1
             driveTrain.shooter.set(1);
-
+           driveTrain.shooter2.set(1);
         }
        else  driveTrain.shooter.set(0);
+            driveTrain.shooter2.set(0);
 
         if(operator.isDown(GamepadKeys.Button.B)) {
 
@@ -131,11 +149,17 @@ test_chassis extends OpMode {
             driveTrain.setDirection(Constants.SOUTH_EAST); // south east
         }
 
+        // Send data to telemetry
+        joinedTelemetry.update();
+            double target_distance;
+    }
 
-        }
+
+}
 
 
-        }
+
+
 
 
 
