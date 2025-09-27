@@ -33,10 +33,8 @@ package org.firstinspires.ftc.teamcode.Testing;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -46,13 +44,12 @@ import org.firstinspires.ftc.teamcode.Mechanisms.CAITelemetry;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
-import org.firstinspires.ftc.teamcode.Mechanisms.GoBildaPinpointDriver;
 
 import java.util.Locale;
 
 @Config // need to use dashboard to change PID gains; comment out for competition
 @TeleOp(name = "TestBot")
-public class TestBot extends OpMode {
+public class TestBot_lime extends OpMode {
 
 
     private final ElapsedTime runtime = new ElapsedTime();
