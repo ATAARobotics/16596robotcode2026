@@ -30,12 +30,16 @@
 
 package org.firstinspires.ftc.teamcode.Testing;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.bylazar.telemetry.JoinedTelemetry;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -46,6 +50,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.CAITelemetry;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
+
+// The following libraries are for FTControl
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.JoinedTelemetry;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.GoBildaPinpointDriver;
@@ -62,7 +70,9 @@ test_chassis extends OpMode {
     private DriveTrainBasic driveTrain;
     public GamepadEx driver = null;
     public GamepadEx operator = null;
+    private JoinedTelemetry joinedTelemetry;
 
+    private Limelight3A limelight;
 
     /* private double heading; */
 
@@ -73,6 +83,18 @@ test_chassis extends OpMode {
         driveTrain.odometer.resetPosAndIMU(); // comment out with Auto
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
+        // Limelight Stuff//Pasted from LimeLightTest
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.setPollRateHz(50); // This sets how often we ask Limelight for data (100 times per second)
+        // This tells Limelight to start looking!
+        // Update Telemetry
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
+        // Join them together
+        joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
+        joinedTelemetry.addLine("LimeLight Initialized");
+        joinedTelemetry.update();
     }
 
     @Override
@@ -81,6 +103,11 @@ test_chassis extends OpMode {
         driver = new GamepadEx(gamepad1); // This controls the movement of the robot
         operator = new GamepadEx(gamepad2); // This controls the movement of items on the robot
         runtime.reset();
+
+        //Pasted from LimeLightTest
+        limelight.start(); // This tells Limelight to start looking!
+        limelight.pipelineSwitch(Constants.LIMELIGHT_APRIL_TAG_BLUE);
+
     }
 
     @Override
@@ -129,12 +156,40 @@ test_chassis extends OpMode {
         } else if (driver.getRightX() > Constants.JOYSTICK_TOLERANCE & driver.getRightY() > Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.SOUTH_EAST); // south east
         }
+        // Process Limelight data
+        LLResult limeLightResults = limelight.getLatestResult();
+
+        // Send data to telemetry
+        if (limeLightResults != null && limeLightResults.isValid()) {
+            joinedTelemetry.addData("Target X", limeLightResults.getTx()); // How far left or right the target is (degrees)
+            joinedTelemetry.addData("Target Y", limeLightResults.getTy()); // How far up or down the target is (degrees)
+            joinedTelemetry.addData("Target Area", limeLightResults.getTa()); // How big the target looks (0%-100% of the image)
+            joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
+            joinedTelemetry.addData("Distance to Target inches", target_distance(limeLightResults));
+        } else {
+            joinedTelemetry.addData("Limelight", "No Targets");
+            joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
+        }
+        joinedTelemetry.update();
+            double target_distance;
+        {
+            double targetOffsetAngle_Vertical = limeLightResults.getTy();
+            double angleToGoalDegree = Constants.LIMELIGHT_MOUNT_ANGLE_DEGREE + targetOffsetAngle_Vertical;
+            double angleToGoalRadian = Math.toRadians(angleToGoalDegree);
 
 
         }
+    }
+
+    private String target_distance(LLResult limeLightResults) {
+        return "(Constants.LIMELIGHT_GOAL_HEIGHT_INCHES - Constants.LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadian)";
+    }
+
+}
 
 
-        }
+
+
 
 
 
