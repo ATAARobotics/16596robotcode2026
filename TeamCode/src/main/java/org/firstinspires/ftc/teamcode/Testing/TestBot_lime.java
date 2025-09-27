@@ -48,7 +48,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import java.util.Locale;
 
 @Config // need to use dashboard to change PID gains; comment out for competition
-@TeleOp(name = "TestBot")
+//@TeleOp(name = "TestBot")
 public class TestBot_lime extends OpMode {
 
 
