@@ -1,0 +1,17 @@
+This is a template for a subsystem. Just copy and paste it into the beginning
+of a subsystem command
+
+public class ExampleSubsystem extends SubsystemBase {
+  // Creates a new ExampleSubsystem.
+  public ExampleSubsystem() {
+  }
+// Overide methods
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
+// Other methods
+Public void exampleMethod(){
+	// This is an additional method in the example subsystem
+}
+}

@@ -1,0 +1,26 @@
+This is the template to use for creating a new command
+
+public class ExCommand extends CommandBase {
+  private final ExSubsystem m_subsystem;
+
+  public ExCommand(ExSubsystem subsystem) {
+    		m_subsystem = subsystem;
+      		addRequirements(subsystem);
+  }
+
+  @Override
+  public void initialize(){
+  }
+
+  @Override
+  public void execute(){
+  }
+
+  @Override
+  public boolean isFinished(){
+  }
+
+  @Override
+  public void end(boolean interrupted){
+  }
+}

@@ -61,7 +61,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.GoBildaPinpointDriver;
 import java.util.Locale;
 
 @Config // need to use dashboard to change PID gains; comment out for competition
-@TeleOp(name = "CompBot")
+@TeleOp(name = "RealTestBot")
 public class
 test_chassis extends OpMode {
 
@@ -124,17 +124,18 @@ test_chassis extends OpMode {
         //===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
 
-        if(operator.wasJustPressed(GamepadKeys.Button.A)) {
+        if(operator.isDown(GamepadKeys.Button.A)) {
 //original speed = 1
             driveTrain.shooter.set(1);
 
         }
-    //    else  driveTrain.shooter.set(0);        - figure out stop system
+       else  driveTrain.shooter.set(0);
 
-        if(operator.wasJustPressed(GamepadKeys.Button.B)) {
+        if(operator.isDown(GamepadKeys.Button.B)) {
 
         driveTrain.intake.set(1);
         }
+        else  driveTrain.intake.set(0);
 //Select N, S, E, W
         if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.WEST); // west

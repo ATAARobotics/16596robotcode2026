@@ -25,9 +25,11 @@ public class DriveTrainBasic {
     private final Motor leftBackDrive;
     private final Motor rightBackDrive;
 
-    public final Motor shooter;
+    public final Motor shooter; //port 0-expansion hub
+    //uses button A
 
-    public final Motor intake;
+    public final Motor intake; //port 1-expansion hub
+    //uses button B
     //servos
     MecanumDrive driveBase;
 
