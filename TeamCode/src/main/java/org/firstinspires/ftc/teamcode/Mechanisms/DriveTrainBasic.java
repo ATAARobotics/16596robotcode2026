@@ -98,7 +98,7 @@ public class DriveTrainBasic {
 //set up for two shooter motors
         shooter.setRunMode(Motor.RunMode.VelocityControl);
          shooter2.setRunMode(Motor.RunMode.VelocityControl);
-
+        shooter2.setInverted(true);
 
     }// end of init()
 
