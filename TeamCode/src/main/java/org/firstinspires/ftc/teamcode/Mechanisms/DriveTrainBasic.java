@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -34,7 +33,7 @@ public class DriveTrainBasic {
     //uses button B
     //servos
     MecanumDrive driveBase;
-public MotorGroup flywheel;// use group to control both shooter motors
+
     public GoBildaPinpointDriver odometer;
     public PIDController headingControl = null;
     public static PIDCoefficients headingpid = new PIDCoefficients(Constants.HEADING_Kp, 0.001, 0.000);
@@ -72,16 +71,14 @@ public MotorGroup flywheel;// use group to control both shooter motors
         shooter = new Motor(hwMap,"shooter");
         shooter2 = new Motor(hwMap,"shooter2");
         intake = new Motor(hwMap,"intake");
-        // add motorGroup for shooter
-        MotorGroup flywheel = new MotorGroup(shooter, shooter2);
 
     }
 
     public void init() {
-//        headingControl = new PIDController(headingpid.p, headingpid.i, headingpid.d);
-//        headingControl.setTolerance(Constants.HEADING_ERROR_Tolerance);// was 3 increased to see if affects spinnning ..cbw
-//        xControl = new PIDController(xpid.p, xpid.i, xpid.d);//FOR AUTO
-//        yControl = new PIDController(ypid.p, ypid.i, ypid.d);//For AUTO
+        headingControl = new PIDController(headingpid.p, headingpid.i, headingpid.d);
+        headingControl.setTolerance(Constants.HEADING_ERROR_Tolerance);// was 3 increased to see if affects spinnning ..cbw
+        xControl = new PIDController(xpid.p, xpid.i, xpid.d);//FOR AUTO
+        yControl = new PIDController(ypid.p, ypid.i, ypid.d);//For AUTO
         intake.setInverted(true);
         // redundant as default is brake mode
         leftBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -99,11 +96,9 @@ public MotorGroup flywheel;// use group to control both shooter motors
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //set up for two shooter motors
-        flywheel.setRunMode(Motor.RunMode.VelocityControl);
-         //shooter2.setRunMode(Motor.RunMode.VelocityControl);
-         // set up PID parameters for velocity control- these need to be tuned
-       // flywheel.setVeloCoefficients(kP, 0, 0);
-        // flywheel.setFeedforwardCoefficients(0, kV);
+        shooter.setRunMode(Motor.RunMode.VelocityControl);
+         shooter2.setRunMode(Motor.RunMode.VelocityControl);
+        shooter2.setInverted(true);
 
     }// end of init()
 
