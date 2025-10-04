@@ -14,6 +14,9 @@ Constants {
 // intake and shooter speeds
     public static final double INTAKE_SPEED = 1.0;
     public static final double FLYWHEEL_SPEED = 1.0;
+    public static final double FLYWHEEL_KP = 0.05;
+    public static final double FLYWHEEL_KI = 0.01;
+    public static final double FLYWHEEL_KD = 0.31;
     public static final double AUTO_DRIVE_SPEED = 0.3;
     public static final double AUTO_STEP_DELAY = 2.0;
 

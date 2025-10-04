@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Mechanisms;
 
 
+
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
@@ -16,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 
 @Config
 public class DriveTrainBasic {
@@ -103,7 +106,8 @@ MotorGroup flywheel = new MotorGroup(shooter,shooter2);
        // shooter.setRunMode(Motor.RunMode.VelocityControl);
         // shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setInverted(true);
-
+        flywheel.setRunMode(Motor.RunMode.VelocityControl);
+        flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
     }// end of init()
 
     public void start() {
