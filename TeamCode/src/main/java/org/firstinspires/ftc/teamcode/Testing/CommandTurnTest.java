@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Subsystem.DriveTrainSubsystem;
 
 // This test program is going to turn the robot
-@TeleOp(name="CommandTurnTest")
+//@TeleOp(name="CommandTurnTest")
 public class CommandTurnTest extends CommandOpMode {
     private DriveTrainSubsystem driveTrain;
 
