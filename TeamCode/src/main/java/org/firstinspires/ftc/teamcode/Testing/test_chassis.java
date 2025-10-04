@@ -37,7 +37,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.bylazar.telemetry.JoinedTelemetry;
+
 /*import com.bylazar.ftcontrol.LoopTimer;
 import com.bylazar.ftcontrol.panels.Panels;
 import com.bylazar.ftcontrol.panels.configurables.annotaions.Configurable;
@@ -57,8 +57,11 @@ import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 
 // The following libraries are for FTControl
+
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.JoinedTelemetry;
+import com.bylazar.graph.PanelsGraph;
+import com.bylazar.graph.GraphManager;
 
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
@@ -78,7 +81,8 @@ test_chassis extends OpMode {
     public GamepadEx driver = null;
     public GamepadEx operator = null;
     private JoinedTelemetry joinedTelemetry;
-    public double speed = 0;
+    private GraphManager graphManager;
+    public double speed = 0.0;
 
     /* private double heading; */
 
@@ -92,8 +96,11 @@ test_chassis extends OpMode {
         // Update Telemetry
         FtcDashboard dashboard = FtcDashboard.getInstance();
         PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
+        // Setup graph
+        graphManager = PanelsGraph.INSTANCE.getManager();
+
         // Join them together
-        joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
+        this.joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
         joinedTelemetry.update();
     }
 
@@ -113,12 +120,14 @@ test_chassis extends OpMode {
         driveTrain.loop(); // Current elbow
         speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
-        joinedTelemetry.update();
+        graphManager.addData("Shooter Speed",speed);
+
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
         double forwardSpeed = driver.getLeftY() * Constants.SPEED_RATIO;
-
+        graphManager.addData("strafe Speed",strafeSpeed);
+        graphManager.addData("forward Speed",forwardSpeed);
         //===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
 
@@ -159,6 +168,7 @@ test_chassis extends OpMode {
 
         // Send data to telemetry
         joinedTelemetry.update();
+        graphManager.update();
             double target_distance;
     }
 
