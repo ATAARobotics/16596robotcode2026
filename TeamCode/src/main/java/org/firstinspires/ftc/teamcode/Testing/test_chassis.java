@@ -137,10 +137,16 @@ test_chassis extends OpMode {
 
         if(operator.isDown(GamepadKeys.Button.A)) {
 //original speed = 1
-            driveTrain.flywheel.set(Constants.FLYWHEEL_SPEED);
+            //   driveTrain.flywheel.set(Constants.FLYWHEEL_SPEED);
+            driveTrain.shooter.set(Constants.FLYWHEEL_SPEED);
+            driveTrain.shooter2.set(Constants.FLYWHEEL_SPEED);
+        }
+            // else  driveTrain.flywheel.set(0);
+        else{
+            driveTrain.shooter.set(0);
+            driveTrain.shooter2.set(0);
 
         }
-       else  driveTrain.flywheel.set(0);
 
 
         if(operator.isDown(GamepadKeys.Button.B)) {

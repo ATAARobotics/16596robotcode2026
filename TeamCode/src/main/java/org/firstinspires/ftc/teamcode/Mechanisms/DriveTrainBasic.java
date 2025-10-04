@@ -36,7 +36,7 @@ public class DriveTrainBasic {
     public final Motor intake; //port 1-expansion hub
     //uses button B
     //servos
-    public MotorGroup flywheel;
+    //public MotorGroup flywheel;
 
     MecanumDrive driveBase;
 
@@ -77,7 +77,7 @@ public class DriveTrainBasic {
         shooter = new Motor(hwMap,"shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
         shooter2 = new Motor(hwMap,"shooter2");
         intake = new Motor(hwMap,"intake");
-MotorGroup flywheel = new MotorGroup(shooter,shooter2);
+//MotorGroup flywheel = new MotorGroup(shooter,shooter2);
 
     }
 
@@ -106,8 +106,8 @@ MotorGroup flywheel = new MotorGroup(shooter,shooter2);
        // shooter.setRunMode(Motor.RunMode.VelocityControl);
         // shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setInverted(true);
-        flywheel.setRunMode(Motor.RunMode.VelocityControl);
-        flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
+       // flywheel.setRunMode(Motor.RunMode.VelocityControl);
+      //  flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
     }// end of init()
 
     public void start() {
