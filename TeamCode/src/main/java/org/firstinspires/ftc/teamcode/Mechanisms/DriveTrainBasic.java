@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -32,6 +33,8 @@ public class DriveTrainBasic {
     public final Motor intake; //port 1-expansion hub
     //uses button B
     //servos
+    public MotorGroup flywheel;
+
     MecanumDrive driveBase;
 
     public GoBildaPinpointDriver odometer;
@@ -68,9 +71,10 @@ public class DriveTrainBasic {
         leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-        shooter = new Motor(hwMap,"shooter");
+        shooter = new Motor(hwMap,"shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
         shooter2 = new Motor(hwMap,"shooter2");
         intake = new Motor(hwMap,"intake");
+MotorGroup flywheel = new MotorGroup(shooter,shooter2);
 
     }
 
@@ -96,8 +100,8 @@ public class DriveTrainBasic {
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //set up for two shooter motors
-        shooter.setRunMode(Motor.RunMode.VelocityControl);
-         shooter2.setRunMode(Motor.RunMode.VelocityControl);
+       // shooter.setRunMode(Motor.RunMode.VelocityControl);
+        // shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setInverted(true);
 
     }// end of init()

@@ -43,6 +43,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -116,15 +117,15 @@ test_chassis extends OpMode {
 
         if(operator.isDown(GamepadKeys.Button.A)) {
 //original speed = 1
-            driveTrain.shooter.set(1);
-           driveTrain.shooter2.set(1);
+            driveTrain.flywheel.set(Constants.FLYWHEEL_SPEED);
+
         }
-       else  driveTrain.shooter.set(0);
-            driveTrain.shooter2.set(0);
+       else  driveTrain.flywheel.set(0);
+
 
         if(operator.isDown(GamepadKeys.Button.B)) {
 
-        driveTrain.intake.set(1);
+        driveTrain.intake.set(Constants.INTAKE_SPEED);
         }
         else  driveTrain.intake.set(0);
 //Select N, S, E, W
