@@ -125,7 +125,7 @@ test_chassis extends OpMode {
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
         graphManager.addData("Shooter Speed",speed);
         joinedTelemetry.addData("Shooter Speed", speed2); //telemetry shooter2 speed
-        graphManager.addData("Shooter Speed",speed2);
+        graphManager.addData("Shooter Speed2",speed2);
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
