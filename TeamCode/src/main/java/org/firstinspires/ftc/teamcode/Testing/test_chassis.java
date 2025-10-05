@@ -124,7 +124,7 @@ test_chassis extends OpMode {
         speed2 = driveTrain.shooter2.getCorrectedVelocity();
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
         graphManager.addData("Shooter Speed",speed);
-        joinedTelemetry.addData("Shooter Speed", speed2); //telemetry shooter2 speed
+        joinedTelemetry.addData("Shooter Speed2", speed2); //telemetry shooter2 speed
         graphManager.addData("Shooter Speed2",speed2);
         //======= get human inputs for drive=============
 
