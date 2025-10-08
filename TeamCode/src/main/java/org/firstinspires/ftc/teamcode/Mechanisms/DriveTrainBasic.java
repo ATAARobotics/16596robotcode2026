@@ -65,8 +65,7 @@ public class DriveTrainBasic {
     double ySpeed = 0;
     public double headingError;
 
-    public DriveTrainBasic(MotorGroup flywheel, HardwareMap hwMap) {
-        this.flywheel = flywheel;
+    public DriveTrainBasic(HardwareMap hwMap) {
         this.hwMap = hwMap;
 
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
