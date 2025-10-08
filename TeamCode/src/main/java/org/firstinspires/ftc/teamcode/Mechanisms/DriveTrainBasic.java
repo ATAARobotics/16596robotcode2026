@@ -7,18 +7,15 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
+
 
 @Config
 public class DriveTrainBasic {
@@ -58,11 +55,11 @@ public class DriveTrainBasic {
     private boolean autoEnabled = false;
 
     HardwareMap hwMap;
-    private double currentSpeed = 0;
-    private double currentXTarget = 0;
-    private double currentYTarget = 0;
-    double xSpeed = 0;
-    double ySpeed = 0;
+    private double currentSpeed = 0.0;
+    private double currentXTarget = 0.0;
+    private double currentYTarget = 0.0;
+    double xSpeed = 0.0;
+    double ySpeed = 0.0;
     public double headingError;
 
     public DriveTrainBasic(HardwareMap hwMap) {
@@ -104,11 +101,11 @@ public class DriveTrainBasic {
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //set up for two shooter motors
-       shooter.setRunMode(Motor.RunMode.VelocityControl);
-       shooter2.setRunMode(Motor.RunMode.VelocityControl);
+        shooter.setRunMode(Motor.RunMode.VelocityControl);
+        shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setInverted(true);
-      //  flywheel.setRunMode(Motor.RunMode.VelocityControl);
-    //  flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
+        flywheel.setRunMode(Motor.RunMode.VelocityControl);
+        flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
     }// end of init()
 
     public void start() {
