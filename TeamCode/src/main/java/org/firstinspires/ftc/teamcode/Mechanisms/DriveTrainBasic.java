@@ -32,6 +32,7 @@ public class DriveTrainBasic {
     public final Motor shooter; //port 0-expansion hub
     //uses button A
    public final Motor shooter2; //port-2-expansion-hub
+    public final MotorGroup flywheel;
 
     public final Motor intake; //port 1-expansion hub
     //uses button B
@@ -64,7 +65,8 @@ public class DriveTrainBasic {
     double ySpeed = 0;
     public double headingError;
 
-    public DriveTrainBasic(HardwareMap hwMap) {
+    public DriveTrainBasic(MotorGroup flywheel, HardwareMap hwMap) {
+        this.flywheel = flywheel;
         this.hwMap = hwMap;
 
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
@@ -77,7 +79,7 @@ public class DriveTrainBasic {
         shooter = new Motor(hwMap,"shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
         shooter2 = new Motor(hwMap,"shooter2");
         intake = new Motor(hwMap,"intake");
-//MotorGroup flywheel = new MotorGroup(shooter,shooter2);
+        MotorGroup flywheel = new MotorGroup(shooter,shooter2);
 
     }
 
@@ -103,11 +105,11 @@ public class DriveTrainBasic {
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //set up for two shooter motors
-       // shooter.setRunMode(Motor.RunMode.VelocityControl);
-        // shooter2.setRunMode(Motor.RunMode.VelocityControl);
+       shooter.setRunMode(Motor.RunMode.VelocityControl);
+       shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setInverted(true);
-       // flywheel.setRunMode(Motor.RunMode.VelocityControl);
-      //  flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
+        flywheel.setRunMode(Motor.RunMode.VelocityControl);
+      flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
     }// end of init()
 
     public void start() {
