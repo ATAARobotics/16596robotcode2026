@@ -66,8 +66,8 @@ public class DriveTrainBasic {
     public double headingError;
 
     public DriveTrainBasic(HardwareMap hwMap) {
-        this.hwMap = hwMap;
 
+        this.hwMap = hwMap;
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
 
         leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
@@ -78,7 +78,7 @@ public class DriveTrainBasic {
         shooter = new Motor(hwMap,"shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
         shooter2 = new Motor(hwMap,"shooter2");
         intake = new Motor(hwMap,"intake");
-        MotorGroup flywheel = new MotorGroup(shooter,shooter2);
+        flywheel = new MotorGroup(shooter,shooter2);
 
     }
 
@@ -99,16 +99,16 @@ public class DriveTrainBasic {
         leftFrontDrive.setInverted(true);
         leftBackDrive.setInverted(true);
         // odometer initializing -- this should go into PracticeDriveTrain2025??
-        odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
-        odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
-        odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+//       // odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
+//        odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
+//        odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+//        odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //set up for two shooter motors
        shooter.setRunMode(Motor.RunMode.VelocityControl);
        shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setInverted(true);
-        flywheel.setRunMode(Motor.RunMode.VelocityControl);
-      flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
+      //  flywheel.setRunMode(Motor.RunMode.VelocityControl);
+    //  flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
     }// end of init()
 
     public void start() {
