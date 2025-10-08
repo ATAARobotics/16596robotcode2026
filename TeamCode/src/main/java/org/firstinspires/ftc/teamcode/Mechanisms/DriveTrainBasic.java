@@ -99,10 +99,10 @@ public class DriveTrainBasic {
         leftFrontDrive.setInverted(true);
         leftBackDrive.setInverted(true);
         // odometer initializing -- this should go into PracticeDriveTrain2025??
-//       // odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
-//        odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
-//        odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-//        odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
+        odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
+        odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //set up for two shooter motors
        shooter.setRunMode(Motor.RunMode.VelocityControl);
        shooter2.setRunMode(Motor.RunMode.VelocityControl);
