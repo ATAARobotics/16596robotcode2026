@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.Mechanisms;
 
+import com.bylazar.configurables.annotations.Configurable;
+@Configurable// need this to access constants from Panels-Bruce
+
 public class
+
 
 
 Constants {
