@@ -128,6 +128,7 @@ test_chassis extends OpMode {
         double forwardSpeed = driver.getLeftY() * Constants.SPEED_RATIO;
         graphManager.addData("strafe Speed",strafeSpeed);
         graphManager.addData("forward Speed",forwardSpeed);
+
         //===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
 
