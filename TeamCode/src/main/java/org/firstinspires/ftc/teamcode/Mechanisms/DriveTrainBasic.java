@@ -64,7 +64,7 @@ public class DriveTrainBasic {
 
 
 
-
+    public DriveTrainBasic(HardwareMap hwMap)
     {
             this.hwMap = hwMap;
             // Define and Initialize Motors (note: need to use reference to actual OpMode).
