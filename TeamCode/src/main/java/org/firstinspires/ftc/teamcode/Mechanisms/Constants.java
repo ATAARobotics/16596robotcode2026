@@ -106,6 +106,7 @@ Constants {
     // Limelight Settings
     public static int LIMELIGHT_APRIL_TAG_BLUE = 0;
     public static int LIMELIGHT_APRIL_TAG_RED = 1;
+    public static int LIMELIGHT_APRIL_TESTING = 2;
     public static double LIMELIGHT_GOAL_HEIGHT_INCHES = 29.50;
     public static double LIMELIGHT_LENS_HEIGHT_INCHES = 8.25;
     public static double LIMELIGHT_MOUNT_ANGLE_DEGREE = 1.0;
