@@ -55,7 +55,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.CAITelemetry;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
-
+import org.firstinspires.ftc.teamcode.Subsystem.LightIndicator;
 // The following libraries are for FTControl
 
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -83,6 +83,7 @@ test_chassis extends OpMode {
     private JoinedTelemetry joinedTelemetry;
     private GraphManager graphManager;
     public double speed = 0.0;
+    public LightIndicator indicator;//port 0 control hub
 
 
 
@@ -100,7 +101,8 @@ test_chassis extends OpMode {
         PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
         // Setup graph
         graphManager = PanelsGraph.INSTANCE.getManager();
-
+        //initiazlizing indiacttor
+       // indicator = new LightIndicator(hardwareMap);
         // Join them together
         this.joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
         joinedTelemetry.update();
@@ -112,7 +114,7 @@ test_chassis extends OpMode {
         driver = new GamepadEx(gamepad1); // This controls the movement of the robot
         operator = new GamepadEx(gamepad2); // This controls the movement of items on the robot
         runtime.reset();
-
+       // indicator.setColor(ON);
     }
 
     @Override
