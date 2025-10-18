@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
-import org.firstinspires.ftc.teamcode.Subsystem.LightIndicator;
+import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 // The following libraries are special for LimeLight
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -24,7 +24,7 @@ public class LimeLightTest extends OpMode {
     private Limelight3A limelight;
     private JoinedTelemetry joinedTelemetry;
     // Testing Indicator
-    private LightIndicator indicator;
+    private LightIndicatorSubsystem indicator;
 
     @Override
     public void init() {
@@ -41,7 +41,7 @@ public class LimeLightTest extends OpMode {
         joinedTelemetry.addLine("LimeLight Initialized");
         joinedTelemetry.update();
         // Indicator light
-        indicator = new LightIndicator(hardwareMap);
+        indicator = new LightIndicatorSubsystem(hardwareMap);
     }
     @Override
     public void start() {
@@ -54,7 +54,6 @@ public class LimeLightTest extends OpMode {
     public void loop() {
         // Process Limelight data
         LLResult limeLightResults = limelight.getLatestResult();
-
         // Send data to telemetry
         if (limeLightResults != null && limeLightResults.isValid()) {
             indicator.setColor(Constants.RGB_Light.ON);
@@ -67,8 +66,9 @@ public class LimeLightTest extends OpMode {
         } else {
             indicator.setColor(Constants.RGB_Light.OFF);
             joinedTelemetry.addData("Limelight", "No Targets");
-            joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
+            joinedTelemetry.addData("Limelight Pipeline Index", "No Index");
         }
+        // Update telemetry
         joinedTelemetry.update();
 
     }
@@ -82,4 +82,5 @@ public class LimeLightTest extends OpMode {
 
         return (Constants.LIMELIGHT_GOAL_HEIGHT_INCHES - Constants.LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadian);
     }
+
 }
