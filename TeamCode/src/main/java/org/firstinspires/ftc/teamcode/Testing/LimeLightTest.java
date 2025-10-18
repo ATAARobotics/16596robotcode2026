@@ -62,7 +62,8 @@ public class LimeLightTest extends OpMode {
             joinedTelemetry.addData("Target Y", limeLightResults.getTy()); // How far up or down the target is (degrees)
             joinedTelemetry.addData("Target Area", limeLightResults.getTa()); // How big the target looks (0%-100% of the image)
             joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
-            joinedTelemetry.addData("Distance to Target inches", target_distance(limeLightResults));
+            joinedTelemetry.addData("Distance to Target inches", getTargetDistanceCalculated(limeLightResults));
+            joinedTelemetry.addData("Distance to Target Area in inches",getTargetDistanceArea(limeLightResults));
         } else {
             indicator.setColor(Constants.RGB_Light.OFF);
             joinedTelemetry.addData("Limelight", "No Targets");
@@ -72,7 +73,7 @@ public class LimeLightTest extends OpMode {
         joinedTelemetry.update();
 
     }
-    public double target_distance(LLResult limeLightResults) {
+    public double getTargetDistanceCalculated(LLResult limeLightResults) {
 
         double targetOffsetAngle_Vertical = limeLightResults.getTy();
         double angleToGoalDegree = Constants.LIMELIGHT_MOUNT_ANGLE_DEGREE + targetOffsetAngle_Vertical;
@@ -82,5 +83,7 @@ public class LimeLightTest extends OpMode {
 
         return (Constants.LIMELIGHT_GOAL_HEIGHT_INCHES - Constants.LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadian);
     }
-
+    public double getTargetDistanceArea(LLResult limeLightResults){
+        return 1.0;
+    }
 }
