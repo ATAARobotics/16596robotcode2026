@@ -7,18 +7,17 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
+
 
 @Config
 public class DriveTrainBasic {
@@ -32,11 +31,10 @@ public class DriveTrainBasic {
     public final Motor shooter; //port 0-expansion hub
     //uses button A
    public final Motor shooter2; //port-2-expansion-hub
+    public final MotorGroup flywheel;
 
     public final Motor intake; //port 1-expansion hub
-    //uses button B
-    //servos
-    //public MotorGroup flywheel;
+  //servos
 
     MecanumDrive driveBase;
 
@@ -57,29 +55,31 @@ public class DriveTrainBasic {
     private boolean autoEnabled = false;
 
     HardwareMap hwMap;
-    private double currentSpeed = 0;
-    private double currentXTarget = 0;
-    private double currentYTarget = 0;
-    double xSpeed = 0;
-    double ySpeed = 0;
+    private double currentSpeed = 0.0;
+    private double currentXTarget = 0.0;
+    private double currentYTarget = 0.0;
+    double xSpeed = 0.0;
+    double ySpeed = 0.0;
     public double headingError;
 
-    public DriveTrainBasic(HardwareMap hwMap) {
-        this.hwMap = hwMap;
 
-        // Define and Initialize Motors (note: need to use reference to actual OpMode).
 
-        leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
-        rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
-        leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
-        rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
-        driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-        shooter = new Motor(hwMap,"shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        shooter2 = new Motor(hwMap,"shooter2");
-        intake = new Motor(hwMap,"intake");
-//MotorGroup flywheel = new MotorGroup(shooter,shooter2);
 
-    }
+    {
+            this.hwMap = hwMap;
+            // Define and Initialize Motors (note: need to use reference to actual OpMode).
+
+            leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
+            rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
+            leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
+            rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
+            driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
+            shooter = new Motor(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+            shooter2 = new Motor(hwMap, "shooter2");
+            intake = new Motor(hwMap, "intake");
+            flywheel = new MotorGroup(shooter, shooter2);
+
+        }
 
     public void init() {
         headingControl = new PIDController(headingpid.p, headingpid.i, headingpid.d);
@@ -103,11 +103,11 @@ public class DriveTrainBasic {
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //set up for two shooter motors
-       // shooter.setRunMode(Motor.RunMode.VelocityControl);
-        // shooter2.setRunMode(Motor.RunMode.VelocityControl);
+        shooter.setRunMode(Motor.RunMode.VelocityControl);
+        shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setInverted(true);
-       // flywheel.setRunMode(Motor.RunMode.VelocityControl);
-      //  flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
+        flywheel.setRunMode(Motor.RunMode.VelocityControl);
+        flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
     }// end of init()
 
     public void start() {

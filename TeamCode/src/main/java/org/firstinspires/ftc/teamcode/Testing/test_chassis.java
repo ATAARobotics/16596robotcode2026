@@ -84,7 +84,7 @@ test_chassis extends OpMode {
     private GraphManager graphManager;
     public double speed = 0.0;
 
-    public double speed2 = 0.0;
+
 
     /* private double heading; */
 
@@ -121,32 +121,25 @@ test_chassis extends OpMode {
         operator.readButtons();
         driveTrain.loop(); // Current elbow
         speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
-        speed2 = driveTrain.shooter2.getCorrectedVelocity();
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
         graphManager.addData("Shooter Speed",speed);
-        joinedTelemetry.addData("Shooter Speed2", speed2); //telemetry shooter2 speed
-        graphManager.addData("Shooter Speed2",speed2);
+
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
         double forwardSpeed = driver.getLeftY() * Constants.SPEED_RATIO;
         graphManager.addData("strafe Speed",strafeSpeed);
         graphManager.addData("forward Speed",forwardSpeed);
+
         //===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
 
         if(operator.isDown(GamepadKeys.Button.A)) {
 //original speed = 1
-            //   driveTrain.flywheel.set(Constants.FLYWHEEL_SPEED);
-            driveTrain.shooter.set(Constants.FLYWHEEL_SPEED);
-            driveTrain.shooter2.set(Constants.FLYWHEEL_SPEED);
-        }
-            // else  driveTrain.flywheel.set(0);
-        else{
-            driveTrain.shooter.set(0);
-            driveTrain.shooter2.set(0);
+            driveTrain.flywheel.set(Constants.FLYWHEEL_SPEED);
 
         }
+       else  driveTrain.flywheel.set(0);
 
 
         if(operator.isDown(GamepadKeys.Button.B)) {
