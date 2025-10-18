@@ -84,6 +84,6 @@ public class LimeLightTest extends OpMode {
         return (Constants.LIMELIGHT_GOAL_HEIGHT_INCHES - Constants.LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadian);
     }
     public double getTargetDistanceArea(LLResult limeLightResults){
-        return 1.0;
+        return limeLightResults.getTa();
     }
 }
