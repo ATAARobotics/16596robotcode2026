@@ -127,14 +127,14 @@ test_chassis extends OpMode {
         driveTrain.intake.set(Constants.INTAKE_SPEED);
         }
         else  driveTrain.intake.set(0);
-
+//button control for servos
         if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
 
             driveTrain.feed1.setPower(Constants.FEED_SPEED);
 
         }
         else {
-            driveTrain.feed2.setPower(0);
+            driveTrain.feed1.setPower(0);
         }
         if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
 
