@@ -21,21 +21,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 @Config
 public class DriveTrainBasic {
+    //Control Hub config
+    // Driving Motors GoBILDA 5202
+    private final Motor leftFrontDrive;     //port 0 name = left_front_drive
+    private final Motor rightFrontDrive;    //port 1 name = right_front_drive
+    private final Motor leftBackDrive;      //port 2 name = left_back_drive
+    private final Motor rightBackDrive;     //port 3 name = right_back_drive
 
-    // Driving Motors
-    private final Motor leftFrontDrive;
-    private final Motor rightFrontDrive;
-    private final Motor leftBackDrive;
-    private final Motor rightBackDrive;
-
+    //Expansion Hub Config
+    //expansion hub motors = GoBILDA 5202
     public final Motor shooter; //port 0-expansion hub
     //uses button A
-   public final Motor shooter2; //port-2-expansion-hub
+   public final Motor shooter2; //port-1-expansion-hub
     public final MotorGroup flywheel;
+    public final Motor intake; //port 2-expansion hub
 
-    public final Motor intake; //port 1-expansion hub
-  //servos
-
+    //I2C Bus0 config
+                 //   Rev internal IMU
+                        // name= imu, port 0
+                //    goBILDA Pinpoint Odometry
+                        // name= xy-cord, port 1
     MecanumDrive driveBase;
 
     public GoBildaPinpointDriver odometer;
@@ -98,7 +103,7 @@ public class DriveTrainBasic {
         leftFrontDrive.setInverted(true);
         leftBackDrive.setInverted(true);
         // odometer initializing -- this should go into PracticeDriveTrain2025??
-        odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
+        odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord"); //xy cord
         odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
