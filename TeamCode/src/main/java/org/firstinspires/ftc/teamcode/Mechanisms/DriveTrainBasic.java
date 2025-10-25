@@ -3,12 +3,19 @@ package org.firstinspires.ftc.teamcode.Mechanisms;
 
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.CRServoImpl;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -28,14 +35,15 @@ public class DriveTrainBasic {
     private final Motor leftBackDrive;
     private final Motor rightBackDrive;
 
-    public final Motor shooter; //port 0-expansion hub
+    public final MotorEx shooter; //port 0-expansion hub
     //uses button A
-   public final Motor shooter2; //port-2-expansion-hub
+   public final MotorEx shooter2; //port-2-expansion-hub
     public final MotorGroup flywheel;
 
     public final Motor intake; //port 1-expansion hub
   //servos
-
+    public CRServo feed1;
+    public CRServo feed2;
     MecanumDrive driveBase;
 
     public GoBildaPinpointDriver odometer;
@@ -74,12 +82,15 @@ public class DriveTrainBasic {
             leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
             rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
             driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-            shooter = new Motor(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-            shooter2 = new Motor(hwMap, "shooter2");
+            shooter = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+            shooter2 = new MotorEx(hwMap, "shooter2");
             intake = new Motor(hwMap, "intake");
             flywheel = new MotorGroup(shooter, shooter2);
 
-        }
+            feed1 = hwMap.get(CRServo.class,"feed1");
+            feed2 = hwMap.get(CRServo.class,"feed2");
+
+    }
 
     public void init() {
         headingControl = new PIDController(headingpid.p, headingpid.i, headingpid.d);

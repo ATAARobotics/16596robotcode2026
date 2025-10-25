@@ -127,6 +127,23 @@ test_chassis extends OpMode {
         driveTrain.intake.set(Constants.INTAKE_SPEED);
         }
         else  driveTrain.intake.set(0);
+
+        if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+
+            driveTrain.feed1.setPower(Constants.FEED_SPEED);
+
+        }
+        else {
+            driveTrain.feed2.setPower(0);
+        }
+        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
+
+            driveTrain.feed2.setPower(Constants.FEED_SPEED);
+
+        }
+        else {
+            driveTrain.feed2.setPower(0);
+        }
 //Select N, S, E, W
         if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.WEST); // west

@@ -24,7 +24,7 @@ Constants {
     public static final double AUTO_DRIVE_SPEED = 0.3;
     public static final double AUTO_STEP_DELAY = 2.0;
 
-
+    public static final double FEED_SPEED = -1.0;
 
     //
     // ========== Define Drive constants.  Make them public so they CAN be used by the calling OpMode
