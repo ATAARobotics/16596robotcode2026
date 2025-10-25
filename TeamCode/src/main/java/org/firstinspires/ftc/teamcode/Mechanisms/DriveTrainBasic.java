@@ -42,8 +42,8 @@ public class DriveTrainBasic {
 
     public final Motor intake; //port 1-expansion hub
   //servos
-    public CRServo feed1;
-    public CRServo feed2;
+    public CRServo feed1;//port 1
+    public CRServo feed2;//port 0
     MecanumDrive driveBase;
 
     public GoBildaPinpointDriver odometer;
@@ -116,6 +116,8 @@ public class DriveTrainBasic {
 //set up for two shooter motors
         shooter.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setRunMode(Motor.RunMode.VelocityControl);
+        shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         shooter2.setInverted(true);
         flywheel.setRunMode(Motor.RunMode.VelocityControl);
         flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd

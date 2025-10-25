@@ -125,25 +125,28 @@ test_chassis extends OpMode {
         if(operator.isDown(GamepadKeys.Button.B)) {
 
         driveTrain.intake.set(Constants.INTAKE_SPEED);
+        } else { driveTrain.intake.set(0);
         }
-        else  driveTrain.intake.set(0);
 //button control for servos
         if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
 
-            driveTrain.feed1.setPower(Constants.FEED_SPEED);
-
+           driveTrain.feed1.setPower(Constants.FEED_SPEED);
         }
         else {
             driveTrain.feed1.setPower(0);
         }
+
         if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
 
-            driveTrain.feed2.setPower(Constants.FEED_SPEED);
-
-        }
-        else {
+            if (speed >= Constants.FLYWHEEL_RECOVERY) {
+                driveTrain.feed2.setPower(Constants.FEED_SPEED);
+            } else {
+                driveTrain.feed2.setPower(0);
+            }
+        } else {
             driveTrain.feed2.setPower(0);
         }
+
 //Select N, S, E, W
         if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.WEST); // west
@@ -167,7 +170,7 @@ test_chassis extends OpMode {
         }
 
         // Send data to telemetry
-        joinedTelemetry.update();
+       joinedTelemetry.update();
         graphManager.update();
     }
 

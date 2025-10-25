@@ -17,7 +17,11 @@ Constants {
     public static final double TURN_RATIO = 1.0; // use this to slow turn rate
 // intake and shooter speeds
     public static final double INTAKE_SPEED = 1.0;
-    public static final double FLYWHEEL_SPEED = 0.8;
+    public static final double FLYWHEEL_SPEED = 0.7;
+    public static final double FLYWHEEL_CLOSE = 0.7;
+    public static final double FLYWHEEL_FAR = 0.8;
+    public static final double FLYWHEEL_RECOVERY = 1750.0;
+
     public static final double FLYWHEEL_KP = 0.05;
     public static final double FLYWHEEL_KI = 0.01;
     public static final double FLYWHEEL_KD = 0.31;
