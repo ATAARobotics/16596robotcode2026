@@ -51,19 +51,19 @@ import com.bylazar.graph.GraphManager;
 @Config // need to use dashboard to change PID gains; comment out for competition
 
 @TeleOp(name = "RealTestBot")
-public class
-test_chassis extends OpMode {
+public class test_chassis extends OpMode {
 
 
     private final ElapsedTime runtime = new ElapsedTime();
     private DriveTrainBasic driveTrain;
     public GamepadEx driver = null;
     public GamepadEx operator = null;
-    private JoinedTelemetry joinedTelemetry;
-    private GraphManager graphManager;
     public double speed = 0.0;
     public LightIndicatorSubsystem indicator; //port 0 control hub
 
+    // Dashboards and Telemetry
+    private JoinedTelemetry joinedTelemetry;
+    private GraphManager graphManager;
 
 
     /* private double heading; */
@@ -73,6 +73,9 @@ test_chassis extends OpMode {
         driveTrain = new DriveTrainBasic(hardwareMap);
         driveTrain.init();  // commented out ,done in Auto
         driveTrain.odometer.resetPosAndIMU(); // comment out with Auto
+        // Initializing indicator
+        indicator = new LightIndicatorSubsystem(hardwareMap);
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         // Update Telemetry
@@ -80,10 +83,8 @@ test_chassis extends OpMode {
         PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
         // Setup graph
         graphManager = PanelsGraph.INSTANCE.getManager();
-        // Initializing indicator
-        indicator = new LightIndicatorSubsystem(hardwareMap);
         // Join them together
-        this.joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
+        this.joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(), dashboard.getTelemetry());
         joinedTelemetry.update();
     }
 
@@ -97,15 +98,12 @@ test_chassis extends OpMode {
 
     @Override
     public void loop() {
-        driver.readButtons();  // enable 'was just pressed' methods
-        operator.readButtons();
-        driveTrain.loop(); // Current elbow
+        // Process Shooter information
         speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
         graphManager.addData("Shooter Speed",speed);
 
         //======= get human inputs for drive=============
-
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
         double forwardSpeed = driver.getLeftY() * Constants.SPEED_RATIO;
         graphManager.addData("strafe Speed",strafeSpeed);
@@ -114,37 +112,35 @@ test_chassis extends OpMode {
         //===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
 
+        //===== OPERATOR CONTROLS =====
+        operator.readButtons();
         if(operator.isDown(GamepadKeys.Button.A)) {
-//original speed = 1
             driveTrain.flywheel.set(Constants.FLYWHEEL_SPEED);
-
         }
-       else  driveTrain.flywheel.set(0);
-
-
+       else {
+           driveTrain.flywheel.set(0);
+        }
         if(operator.isDown(GamepadKeys.Button.B)) {
-
-        driveTrain.intake.set(Constants.INTAKE_SPEED);
+            driveTrain.intake.set(Constants.INTAKE_SPEED);
         }
-        else  driveTrain.intake.set(0);
-
+        else {
+            driveTrain.intake.set(0);
+        }
         if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-
             driveTrain.feed1.setPower(Constants.FEED_SPEED);
-
         }
         else {
             driveTrain.feed2.setPower(0);
         }
         if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
-
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
-
         }
         else {
             driveTrain.feed2.setPower(0);
         }
-//Select N, S, E, W
+        //===== DRIVER CONTROLS =====
+        driver.readButtons();
+        //Select N, S, E, W
         if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.WEST); // west
         } else if (driver.getRightX() >= Constants.JOYSTICK_TOLERANCE) {
@@ -154,8 +150,7 @@ test_chassis extends OpMode {
         } else if (driver.getRightY() <= -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.NORTH); // north
         }
-
-// Select Diagonal Directions (NE,SE,SW,NW)
+        // Select Diagonal Directions (NE,SE,SW,NW)
         if (driver.getRightX() > Constants.JOYSTICK_TOLERANCE & driver.getRightY() < -Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.NORTH_EAST); // north east
         } else if (driver.getRightX() < -Constants.JOYSTICK_TOLERANCE & driver.getRightY() < -Constants.JOYSTICK_TOLERANCE) {
@@ -165,25 +160,10 @@ test_chassis extends OpMode {
         } else if (driver.getRightX() > Constants.JOYSTICK_TOLERANCE & driver.getRightY() > Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.SOUTH_EAST); // south east
         }
-
+        // Process Drive loop
+        driveTrain.loop();
         // Send data to telemetry
         joinedTelemetry.update();
         graphManager.update();
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
