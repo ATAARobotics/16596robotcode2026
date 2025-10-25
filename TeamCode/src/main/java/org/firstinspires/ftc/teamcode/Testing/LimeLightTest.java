@@ -33,7 +33,6 @@ public class LimeLightTest extends OpMode {
 
     @Override
     public void init() {
-
         // Limelight Stuff
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(50); // This sets how often we ask Limelight for data (100 times per second)
@@ -55,7 +54,7 @@ public class LimeLightTest extends OpMode {
 
         limelight.start(); // This tells Limelight to start looking!
         limelight.pipelineSwitch(Constants.LIMELIGHT_APRIL_TESTING);
-
+        this.count = 0;
     }
     @Override
     public void loop() {
@@ -63,9 +62,12 @@ public class LimeLightTest extends OpMode {
         LLResult limeLightResults = limelight.getLatestResult();
         // Send data to telemetry
         if (limeLightResults != null && limeLightResults.isValid()) {
+            // Turn light on if able to see AprilTag
             indicator.setColor(Constants.RGB_Light.ON);
-            count = count + 1;
-            sum = sum + limeLightResults.getTa();
+            // Update counter and sum for average
+            this.count = this.count + 1;
+            this.sum = this.sum + limeLightResults.getTa();
+            // Send data to telemetry
             joinedTelemetry.addData("Indicator Light", indicator.getColor());
             joinedTelemetry.addData("Target X", limeLightResults.getTx()); // How far left or right the target is (degrees)
             joinedTelemetry.addData("Target Y", limeLightResults.getTy()); // How far up or down the target is (degrees)
@@ -73,38 +75,33 @@ public class LimeLightTest extends OpMode {
             joinedTelemetry.addData("Limelight Pipeline Index", limeLightResults.getPipelineIndex());
             joinedTelemetry.addData("Distance to Target inches", getTargetDistanceCalculated(limeLightResults));
             joinedTelemetry.addData("Distance to Target Area in inches",getDistanceFromTarget(limeLightResults));
-            joinedTelemetry.addData("Distance to Target Area in inches AVERAGE", sum/count);
+            joinedTelemetry.addData("Distance to Target Area in inches AVERAGE", this.sum/this.count);
+            joinedTelemetry.addData("Distance Count", this.count);
         } else {
             indicator.setColor(Constants.RGB_Light.OFF);
             joinedTelemetry.addData("Limelight", "No Targets");
             joinedTelemetry.addData("Limelight Pipeline Index", "No Index");
-            sum = 0.0;
-            count = 0;
         }
         // Update telemetry
         joinedTelemetry.update();
-        if (controller1.getButton(GamepadKeys.Button.X)){
-
+        // Reset Average
+        if (controller1.isDown(GamepadKeys.Button.X)){
+            this.sum = 0.0;
+            this.count = 0;
         }
 
 
     }
     public double getTargetDistanceCalculated(LLResult limeLightResults) {
-
-        double targetOffsetAngle_Vertical = limeLightResults.getTy();
-        double angleToGoalDegree = Constants.LIMELIGHT_MOUNT_ANGLE_DEGREE + targetOffsetAngle_Vertical;
-        double angleToGoalRadian = Math.toRadians(angleToGoalDegree);
-
         // https://docs.limelightvision.io/docs/docs-limelight/tutorials/tutorial-estimating-distance
-
+        double targetOffsetAngle_Vertical = limeLightResults.getTy();
+        double angleToGoalDegrees = Constants.LIMELIGHT_MOUNT_ANGLE_DEGREE + targetOffsetAngle_Vertical;
+        double angleToGoalRadian = angleToGoalDegrees * (Math.PI / 180.0);
         return (Constants.LIMELIGHT_GOAL_HEIGHT_INCHES - Constants.LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadian);
     }
 
     public double getDistanceFromTarget(LLResult limeLightResults){
         double scale = 5444.216;             //calculated from fit my curve
-        double distance = scale / Math.sqrt(limeLightResults.getTa());      //distance is in inches
-        return distance;
-
-
+        return scale / Math.sqrt(limeLightResults.getTa());      //distance is in inches
     }
 }
