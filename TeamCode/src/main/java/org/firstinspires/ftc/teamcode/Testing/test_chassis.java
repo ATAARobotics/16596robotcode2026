@@ -113,15 +113,16 @@ test_chassis extends OpMode {
 
         //===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
-
+// =========  Flywheel control ===========
         if(operator.isDown(GamepadKeys.Button.A)) {
 //original speed = 1
+            // will need to add location to change flywheel speed for near, far,etc
             driveTrain.flywheel.set(Constants.FLYWHEEL_SPEED);
 
         }
        else  driveTrain.flywheel.set(0);
 
-
+// ===============  servo controls
         if(operator.isDown(GamepadKeys.Button.B)) {
 
         driveTrain.intake.set(Constants.INTAKE_SPEED);
@@ -134,9 +135,10 @@ test_chassis extends OpMode {
 
         }
         else {
-            driveTrain.feed2.setPower(0);
+            driveTrain.feed1.setPower(0);
         }
-        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
+        //  check that flywheel is back up to speed before allowing operator to shoot
+        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) && speed >= Constants.FLYWHEEL_FAR) {
 
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
 
