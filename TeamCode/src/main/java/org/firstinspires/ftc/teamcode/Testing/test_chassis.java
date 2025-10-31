@@ -122,13 +122,13 @@ test_chassis extends OpMode {
         }
        else  driveTrain.flywheel.set(0);
 
-// ===============  servo controls
+// ===============  Intake controls
         if(operator.isDown(GamepadKeys.Button.B)) {
 
         driveTrain.intake.set(Constants.INTAKE_SPEED);
         }
         else  driveTrain.intake.set(0);
-
+// =================  Servo Control ===========================================
         if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
 
             driveTrain.feed1.setPower(Constants.FEED_SPEED);
