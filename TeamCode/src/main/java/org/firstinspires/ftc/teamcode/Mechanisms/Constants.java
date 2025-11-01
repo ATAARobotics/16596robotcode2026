@@ -20,10 +20,10 @@ public class Constants {
     // ========== Intake, Shooter and Feeder Speeds
     /// /
     public static double INTAKE_SPEED = 1.0;
-    public static  double FLYWHEEL_SPEED = 0.6;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
-    public static final double FLYWHEEL_CLOSE = 0.7;
-    public static final double FLYWHEEL_FAR = 0.71;
-    public static final double FLYWHEEL_RECOVERY = 1750.0;
+    public static double FLYWHEEL_SPEED = 0.6;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
+    public static double FLYWHEEL_CLOSE = 0.7;
+    public static double FLYWHEEL_FAR = 0.71;
+    public static double FLYWHEEL_RECOVERY = 1750.0;
 
     public static final double FLYWHEEL_KP = 0.05;
     public static final double FLYWHEEL_KI = 0.01;
