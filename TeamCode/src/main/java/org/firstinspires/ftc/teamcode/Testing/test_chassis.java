@@ -103,7 +103,8 @@ test_chassis extends OpMode {
         speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
         graphManager.addData("Shooter Speed",speed);
-
+        telemetry.addData("Xcor",driveTrain.getXPosition());
+        telemetry.addData("Ycor",driveTrain.getXPosition());
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
@@ -138,7 +139,7 @@ test_chassis extends OpMode {
             driveTrain.feed1.setPower(0);
         }
         //  check that flywheel is back up to speed before allowing operator to shoot
-        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) && speed >= Constants.FLYWHEEL_FAR) {
+        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) && speed >= Constants.FLYWHEEL_RECOVERY) {
 
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
 
