@@ -9,7 +9,7 @@ public class Constants {
     //
     public static final boolean DASHBOARD_ENABLED = true;       // this needs to be false for competitions!!
     public static final boolean TELEMETRY_ENABLED = true;
-    public static final boolean JUST_TESTING=true;      // will be used to insert temporary test code
+    public static final boolean JUST_TESTING = true;      // will be used to insert temporary test code
     //
     // ========== Setting
     //
@@ -20,17 +20,21 @@ public class Constants {
     // ========== Intake, Shooter and Feeder Speeds
     /// /
     public static double INTAKE_SPEED = 1.0;
-    public static  double FLYWHEEL_SPEED = 0.6;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
+    public static  double FLYWHEEL_SPEED = 0.8;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
     public static final double FLYWHEEL_CLOSE = 0.7;
     public static final double FLYWHEEL_FAR = 0.71;
-    public static final double FLYWHEEL_RECOVERY = 1750.0;
-
+    public static double FLYWHEEL_MAX = 24600;
+    public static final double FLYWHEEL_RECOVERY = 0.8 * FLYWHEEL_MAX;
     public static final double FLYWHEEL_KP = 0.05;
     public static final double FLYWHEEL_KI = 0.01;
     public static final double FLYWHEEL_KD = 0.31;
+
+
     //public static final double AUTO_DRIVE_SPEED = 0.3;
   //  public static final double AUTO_STEP_DELAY = 2.0;
     public static final double FEED_SPEED = -1.0;
+
+
     //
     // ========== Define Drive constants.  Make them public so they CAN be used by the calling OpMode
     //

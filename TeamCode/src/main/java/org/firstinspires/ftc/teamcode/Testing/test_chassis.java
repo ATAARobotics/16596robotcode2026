@@ -62,6 +62,8 @@ test_chassis extends OpMode {
     private JoinedTelemetry joinedTelemetry;
     private GraphManager graphManager;
     public double speed = 0.0;
+    public double speed2 = 0.0;
+    public double flywheelspeed = 0.0;
     public LightIndicatorSubsystem indicator; //port 0 control hub
 
 
@@ -103,6 +105,12 @@ test_chassis extends OpMode {
         speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
         graphManager.addData("Shooter Speed",speed);
+        speed2 = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
+        joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
+        graphManager.addData("Shooter2 Speed",speed2);
+       // flywheelspeed = driveTrain.flywheel.getCorrectedVelocity();// what is corrected velocity??
+       // joinedTelemetry.addData("Flywheel Speed",flywheelspeed); //telemetry shooter speed
+       // graphManager.addData("Flywheel Speed",flywheelspeed);
         telemetry.addData("Xcor",driveTrain.getXPosition());
         telemetry.addData("Ycor",driveTrain.getXPosition());
         //======= get human inputs for drive=============
@@ -139,7 +147,7 @@ test_chassis extends OpMode {
             driveTrain.feed1.setPower(0);
         }
         //  check that flywheel is back up to speed before allowing operator to shoot
-        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) && speed >= Constants.FLYWHEEL_RECOVERY) {
+        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) && speed >= Constants.FLYWHEEL_RECOVERY * Constants.FLYWHEEL_SPEED) {
 
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
 
@@ -168,6 +176,13 @@ test_chassis extends OpMode {
         } else if (driver.getRightX() > Constants.JOYSTICK_TOLERANCE & driver.getRightY() > Constants.JOYSTICK_TOLERANCE) {
             driveTrain.setDirection(Constants.SOUTH_EAST); // south east
         }
+
+//        if(flywheelspeed < Constants.FLYWHEEL_RECOVERY) {
+//            indicator.setColor(Constants.RGB_Light.RED);
+//        }
+//       else{
+//           indicator.setColor(Constants.RGB_Light.GREEN);
+//        }
 
         // Send data to telemetry
         joinedTelemetry.update();
