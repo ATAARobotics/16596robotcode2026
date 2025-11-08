@@ -5,24 +5,16 @@ import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
-import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-import java.util.Locale;
 @Autonomous(name = "SimpleAuto")
 public class SimpleAuto extends OpMode {
-    private final ElapsedTime runtime = new ElapsedTime();
     private DriveTrainBasic driveTrain;
 
     private JoinedTelemetry joinedTelemetry;
-    public double speed = 0.0;
-    public double speed2 = 0.0;
-    public double flywheelspeed = 0.0;
 
     private int current_step = 0;
     private final int total_waypoints = 2;
@@ -45,17 +37,12 @@ public class SimpleAuto extends OpMode {
         //Waypoint setup
         this.wayPoints = new WayPoint[this.total_waypoints + 1];
         this.wayPoints[0] = new WayPoint();
-        this.wayPoints[0].x = 0.0;
-        this.wayPoints[0].y = 0.0;
         this.wayPoints[0].facing = Constants.NORTH;
         // WayPoint 1
         this.wayPoints[1] = new WayPoint();
         this.wayPoints[1].x = 100.0;
         this.wayPoints[1].x_speed = 0.5;
-        this.wayPoints[1].y = 0.0;
-        this.wayPoints[1].y_speed = 0.0;
         this.wayPoints[1].facing = Constants.NORTH;
-        // Waypoint Enum
 
         this.current_step = 1;
         autoDone = false;
@@ -65,7 +52,6 @@ public class SimpleAuto extends OpMode {
     public void loop() {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
-        String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", driveTrain.getXPosition(), driveTrain.getYPosition(), pos.getHeading(AngleUnit.DEGREES));
         if (!autoDone) {
             switch (this.current_step) {
                 case 1:
@@ -106,11 +92,11 @@ public class SimpleAuto extends OpMode {
         return (Math.abs(targetY) - Math.abs(driveTrain.getYPosition())) <= Constants.AUTO_Y_DISTANCE_ERROR;
     }
 
-    public class WayPoint {
-        public double x;
-        public double x_speed = 0.2;
-        public double y;
-        public double y_speed = 0.2;
+    public static class WayPoint {
+        public double x = 0.0;
+        public double x_speed = 0.0;
+        public double y = 0.0;
+        public double y_speed = 0.0;
         public double facing;
     }
 
