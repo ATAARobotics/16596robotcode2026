@@ -19,6 +19,7 @@ dependencies {
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.16'
     // This is for FTControl
     implementation 'com.bylazar:fullpanels:1.0.9'
+    implementation 'com.bylazar:graph:1.0.4'
     // Fix Duplicate class
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
 }
