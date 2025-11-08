@@ -30,7 +30,7 @@ public class Constants {
     public static final double FLYWHEEL_KD = 0.31;
 
 
-    //public static final double AUTO_DRIVE_SPEED = 0.3;
+    public static final double AUTO_DRIVE_SPEED = 0.3;
   //  public static final double AUTO_STEP_DELAY = 2.0;
     public static final double FEED_SPEED = -1.0;
 
@@ -55,8 +55,8 @@ public class Constants {
     //
     public static final double JOYSTICK_TOLERANCE = 0.5;
 //    public static final double AT_XY_TOLERANCE = 25.0;
-//    public static double AUTO_Y_DISTANCE_ERROR = 15.0;
-//    public static double AUTO_X_DISTANCE_ERROR = 15.0;
+    public static double AUTO_Y_DISTANCE_ERROR = 15.0;
+    public static double AUTO_X_DISTANCE_ERROR = 15.0;
     public static final double DRIVE_PID_ERROR = 1.5; // inches?? Only used in PractiseDriveTrain??
     public static double HEADING_ERROR_Tolerance = 5.0; // Degrees... this now matches PID tolerance
     //
