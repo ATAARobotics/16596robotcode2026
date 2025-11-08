@@ -53,14 +53,12 @@ import com.bylazar.telemetry.JoinedTelemetry;
 @TeleOp(name = "RealTestBot")
 public class
 test_chassis extends OpMode {
-
-
     private final ElapsedTime runtime = new ElapsedTime();
     private DriveTrainBasic driveTrain;
     public GamepadEx driver = null;
     public GamepadEx operator = null;
     private JoinedTelemetry joinedTelemetry;
-  //  private GraphManager graphManager;
+
     public double speed = 0.0;
     public double speed2 = 0.0;
     public double flywheelspeed = 0.0;
@@ -68,9 +66,7 @@ test_chassis extends OpMode {
 
     public double shootingspeed = 0.0;
 
-
     /* private double heading; */
-
     @Override
     public void init() {
         driveTrain = new DriveTrainBasic(hardwareMap);
@@ -81,12 +77,10 @@ test_chassis extends OpMode {
         // Update Telemetry
         FtcDashboard dashboard = FtcDashboard.getInstance();
         PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
-        // Setup graph
-    //    graphManager = PanelsGraph.INSTANCE.getManager();
         // Initializing indicator
         indicator = new LightIndicatorSubsystem(hardwareMap);
         // Join them together
-        this.joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
+        joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
         joinedTelemetry.update();
     }
 
@@ -105,60 +99,58 @@ test_chassis extends OpMode {
         driveTrain.loop(); // Current elbow
         speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
-      //  graphManager.addData("Shooter Speed",speed);
         speed2 = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
-       // graphManager.addData("Shooter2 Speed",speed2);
        // flywheelspeed = driveTrain.flywheel.getCorrectedVelocity();// what is corrected velocity??
        // joinedTelemetry.addData("Flywheel Speed",flywheelspeed); //telemetry shooter speed
-       // graphManager.addData("Flywheel Speed",flywheelspeed);
         telemetry.addData("Xcor",driveTrain.getXPosition());
         telemetry.addData("Ycor",driveTrain.getXPosition());
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
         double forwardSpeed = driver.getLeftY() * Constants.SPEED_RATIO;
-        //graphManager.addData("strafe Speed",strafeSpeed);
-        //graphManager.addData("forward Speed",forwardSpeed);
+        joinedTelemetry.addData("strafe Speed",strafeSpeed);
+        joinedTelemetry.addData("forward Speed",forwardSpeed);
 
-        //===== DRIVETRAIN CONTROLS =====
+        // ===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
-// =========  Flywheel control ===========
+        // =========  Flywheel control ===========
+        // Set shooting speed
         if(operator.isDown(GamepadKeys.Button.DPAD_DOWN)){
-
             shootingspeed = Constants.FLYWHEEL_FAR;
-
         }
-        else shootingspeed = Constants.FLYWHEEL_CLOSE;
+        else {
+            shootingspeed = Constants.FLYWHEEL_NEAR;
+        }
         if(operator.isDown(GamepadKeys.Button.A)) {
-//original speed = 1
-            // will need to add location to change flywheel speed for near, far,etc
             driveTrain.flywheel.set(shootingspeed);
-
         }
-       else  driveTrain.flywheel.set(0);
-
-// ===============  Intake controls
+       else  {
+           driveTrain.flywheel.set(0);
+        }
+        // ===== Indicator control =====
+        if (driveTrain.canLaunch(shootingspeed)) {
+            indicator.setColor(Constants.RGB_Light.GREEN);
+        } else {
+            indicator.setColor(Constants.RGB_Light.RED);
+        }
+        // ===============  Intake controls
         if(operator.isDown(GamepadKeys.Button.B)) {
-
         driveTrain.intake.set(Constants.INTAKE_SPEED);
         }
-       else  driveTrain.intake.set(0);
-// =================  Servo Control ===========================================
+       else {
+           driveTrain.intake.set(0);
+        }
+        // =================  Servo Control ===========================================
         if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-
             driveTrain.feed1.setPower(Constants.FEED_SPEED);
-
         }
         else {
             driveTrain.feed1.setPower(0);
         }
         //  check that flywheel is back up to speed before allowing operator to shoot
-
-        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER)){
-
+        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) && driveTrain.canLaunch(shootingspeed)){
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
-
         }
         else {
             driveTrain.feed2.setPower(0);
@@ -194,7 +186,6 @@ test_chassis extends OpMode {
 
         // Send data to telemetry
         joinedTelemetry.update();
-        //graphManager.update();
     }
 
 
