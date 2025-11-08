@@ -1,9 +1,6 @@
-package org.firstinspires.ftc.teamcode.Testing;
+package org.firstinspires.ftc.teamcode.Auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-//import com.bylazar.graph.GraphManager;
-//import com.bylazar.graph.PanelsGraph;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -17,22 +14,20 @@ import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 import java.util.Locale;
-@Autonomous(name = "NazAuto")
-public class NazAuto extends OpMode {
+@Autonomous(name = "SimpleAuto")
+public class SimpleAuto extends OpMode {
     private final ElapsedTime runtime = new ElapsedTime();
     private DriveTrainBasic driveTrain;
 
     private JoinedTelemetry joinedTelemetry;
-  //  private GraphManager graphManager;
     public double speed = 0.0;
     public double speed2 = 0.0;
     public double flywheelspeed = 0.0;
-    public LightIndicatorSubsystem indicator; //port 0 control hub
 
     private int current_step = 0;
-    private int total_waypoints = 20;
+    private final int total_waypoints = 2;
     private WayPoint[] wayPoints;
-    private boolean autodone;
+    private boolean autoDone;
 
     @Override
     public void init() {
@@ -44,10 +39,6 @@ public class NazAuto extends OpMode {
         // Update Telemetry
         FtcDashboard dashboard = FtcDashboard.getInstance();
         PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
-        // Setup graph
-    //    graphManager = PanelsGraph.INSTANCE.getManager();
-        // Initializing indicator
-        indicator = new LightIndicatorSubsystem(hardwareMap);
         // Join them together
         this.joinedTelemetry = new JoinedTelemetry(telemetry, panelsTelemetry.getTelemetry().getWrapper(), dashboard.getTelemetry());
         joinedTelemetry.update();
@@ -64,9 +55,10 @@ public class NazAuto extends OpMode {
         this.wayPoints[1].y = 0.0;
         this.wayPoints[1].y_speed = 0.0;
         this.wayPoints[1].facing = Constants.NORTH;
+        // Waypoint Enum
 
         this.current_step = 1;
-        autodone = false;
+        autoDone = false;
     }
 
     @Override
@@ -74,7 +66,7 @@ public class NazAuto extends OpMode {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
         String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", driveTrain.getXPosition(), driveTrain.getYPosition(), pos.getHeading(AngleUnit.DEGREES));
-        if (!autodone) {
+        if (!autoDone) {
             switch (this.current_step) {
                 case 1:
                     driveTrain.setFacing(this.wayPoints[this.current_step].facing);
@@ -87,13 +79,13 @@ public class NazAuto extends OpMode {
                     break;
                 default:
                     driveTrain.setFacing(Constants.NORTH);
-                    driveTrain.drive(0.0, 0.0);
-                    autodone = true;
+                    driveTrain.stop();
+                    autoDone = true;
                     break;
             }
             // Send data to telemetry
-            joinedTelemetry.addData("X-cord", driveTrain.getXPosition());
-            joinedTelemetry.addData("Y-cord", driveTrain.getYPosition());
+            joinedTelemetry.addData("X-cord", driveTrain.odometer.getPosX());
+            joinedTelemetry.addData("Y-cord", driveTrain.odometer.getPosY());
             joinedTelemetry.addData("Heading", pos.getHeading(AngleUnit.DEGREES));
             joinedTelemetry.addData("Current Step",this.current_step);
             joinedTelemetry.addData("Waypoint X",this.wayPoints[this.current_step].x);
