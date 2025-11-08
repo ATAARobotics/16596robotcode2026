@@ -215,8 +215,8 @@ public class DriveTrainBasic {
         }
     }
     public boolean canLaunch(double launchSpeed){
-        //return flywheel.getCorrectedVelocity() >= launchSpeed;
-        return shooter.getVelocity() >= launchSpeed* Constants.FLYWHEEL_RECOVERY;
+
+        return shooter.getVelocity() >= 0.8*launchSpeed * Constants.FLYWHEEL_MAX;
         //return true;// need to fix for comp
     }
 }

@@ -15,7 +15,7 @@ public class Constants {
     //
     public static final double TICKS_TO_INCHES = Math.PI * 48 / (25.4 * 2000);                      // for use in Odometry
     public static final double SPEED_RATIO = 1.0;  // Use this to slow down robot
-    public static final double TURN_RATIO = 1.0; // use this to slow turn rate
+    public static final double TURN_RATIO = 1.0; // use this to slow turn rate1q
     //
     // ========== Intake, Shooter and Feeder Speeds
     /// /
@@ -23,11 +23,11 @@ public class Constants {
     public static  double FLYWHEEL_SPEED = 0.8;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
     public static final double FLYWHEEL_NEAR = 0.5;
     public static final double FLYWHEEL_FAR = 0.67;
-    public static double FLYWHEEL_MAX = 24600;
+    public static double FLYWHEEL_MAX = 1600;
     public static final double FLYWHEEL_RECOVERY = 0.8 * FLYWHEEL_MAX;
-    public static final double FLYWHEEL_KP = 0.05;
-    public static final double FLYWHEEL_KI = 0.01;
-    public static final double FLYWHEEL_KD = 0.31;
+    public static double FLYWHEEL_KP = 0.1;
+    public static double FLYWHEEL_KI = 0.01;
+    public static double FLYWHEEL_KD = 0.0;// WAS 0.31
 
 
     public static final double AUTO_DRIVE_SPEED = 0.3;
