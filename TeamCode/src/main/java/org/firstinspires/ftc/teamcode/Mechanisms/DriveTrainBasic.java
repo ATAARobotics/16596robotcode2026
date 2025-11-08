@@ -1,30 +1,19 @@
 package org.firstinspires.ftc.teamcode.Mechanisms;
 
-
-
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.CRServoImpl;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-
 
 @Config
 public class DriveTrainBasic {
@@ -34,17 +23,17 @@ public class DriveTrainBasic {
     private final Motor rightFrontDrive;
     private final Motor leftBackDrive;
     private final Motor rightBackDrive;
-
+    // Shooter Motors
     public final MotorEx shooter; //port 0-expansion hub
-    //uses button A
-   public final MotorEx shooter2; //port-2-expansion-hub
-    public final MotorGroup flywheel;
-
+    public final MotorEx shooter2; //port 2-expansion-hub
+    public final MotorGroup flywheel; // assigned shooter and shooter2
+    // Intake Motor
     public final Motor intake; //port 1-expansion hub
-  //servos
-    public CRServo feed1;//port 1
-    public CRServo feed2;//port 0
-    MecanumDrive driveBase;
+    // Servos
+    public CRServo feed1;   //port 1
+    public CRServo feed2;   //port 0
+
+    public MecanumDrive driveBase;
 
     public GoBildaPinpointDriver odometer;
     public PIDController headingControl = null;
@@ -53,8 +42,6 @@ public class DriveTrainBasic {
     public static PIDCoefficients ypid = new PIDCoefficients(Constants.YPID_Kp, 0.0, 0.00);
     public PIDController xControl = null;
     public PIDController yControl = null;
-    public GamepadEx driver = null;
-    public GamepadEx operator = null;
     public double headingCorrection = 0;
 
     public double headingSetPoint = Constants.FORWARD;
@@ -62,7 +49,7 @@ public class DriveTrainBasic {
 
     private boolean autoEnabled = false;
 
-    HardwareMap hwMap;
+    public HardwareMap hwMap;
     private double currentSpeed = 0.0;
     private double currentXTarget = 0.0;
     private double currentYTarget = 0.0;
@@ -74,21 +61,22 @@ public class DriveTrainBasic {
 
     public DriveTrainBasic(HardwareMap hwMap)
     {
-            this.hwMap = hwMap;
-            // Define and Initialize Motors (note: need to use reference to actual OpMode).
-
-            leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
-            rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
-            leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
-            rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
-            driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-            shooter = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-            shooter2 = new MotorEx(hwMap, "shooter2");
-            intake = new Motor(hwMap, "intake");
-            flywheel = new MotorGroup(shooter, shooter2);
-
-            feed1 = hwMap.get(CRServo.class,"feed1");
-            feed2 = hwMap.get(CRServo.class,"feed2");
+        this.hwMap = hwMap;
+        // Define and Initialize Motors (note: need to use reference to actual OpMode).
+        leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
+        rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
+        leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
+        rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
+        driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
+        // Flywheel assignment
+        shooter = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        shooter2 = new MotorEx(hwMap, "shooter2");
+        flywheel = new MotorGroup(shooter, shooter2);
+        // Intake assignment
+        intake = new Motor(hwMap, "intake");
+        // Servo assignment
+        feed1 = hwMap.get(CRServo.class,"feed1");
+        feed2 = hwMap.get(CRServo.class,"feed2");
 
     }
 
@@ -97,6 +85,7 @@ public class DriveTrainBasic {
         headingControl.setTolerance(Constants.HEADING_ERROR_Tolerance);// was 3 increased to see if affects spinnning ..cbw
         xControl = new PIDController(xpid.p, xpid.i, xpid.d);//FOR AUTO
         yControl = new PIDController(ypid.p, ypid.i, ypid.d);//For AUTO
+        // Intake configuration
         intake.setInverted(true);
         // redundant as default is brake mode
         leftBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -113,12 +102,13 @@ public class DriveTrainBasic {
         odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-//set up for two shooter motors
+        //set up for two shooter motors
         shooter.setRunMode(Motor.RunMode.VelocityControl);
-        shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        shooter2.setRunMode(Motor.RunMode.VelocityControl);
         shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         shooter2.setInverted(true);
+        // configuring flywheel mo
         flywheel.setRunMode(Motor.RunMode.VelocityControl);
         flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
     }// end of init()
@@ -134,7 +124,6 @@ public class DriveTrainBasic {
         heading = pos.getHeading(AngleUnit.DEGREES);
         // Because it's a double, can't check for exactly 180, so we check if it's almost 180 in either direction.
         if (Math.abs(Math.abs(headingSetPoint) - 180.0) < Constants.HEADING_ERROR_Tolerance) {
-
             // "south" is special because it's around the 180/-180 toggle-point
             // Change set-point between 180/-180 depending on which is closer.
             if (heading < 0.0) {
@@ -142,7 +131,6 @@ public class DriveTrainBasic {
             } else {
                 headingSetPoint = 180;
             }
-
         }
 
         // PID controller for heading
@@ -153,10 +141,6 @@ public class DriveTrainBasic {
         if (headingError <= Constants.HEADING_ERROR_Tolerance) {
             headingCorrection = 0;
         }
-
-        // need to send 0 correction if 'Happy"
-
-
         driveBase.driveFieldCentric(
                 xSpeed,// strafe
                 ySpeed,//forward
@@ -189,9 +173,7 @@ public class DriveTrainBasic {
 
         xControl.setSetPoint(currentXTarget);
         yControl.setSetPoint(currentYTarget);
-
     }
-
     public void drive(double forwardSpeed,  double strafeSpeed) {
         // tell ftclib its inputs  strafeSpeed,forwardSpeed,turn,heading
         // turn and heading are managed in loop with the heading control PID
@@ -199,29 +181,20 @@ public class DriveTrainBasic {
         xSpeed = -strafeSpeed;
         ySpeed = forwardSpeed;
     }
-
     public double getXPosition() { // Convert xPod into actual direction based on current heading
-        double xPos = 0.0;
         Pose2D pos = odometer.getPosition();
-        xPos = pos.getX(DistanceUnit.MM);
-        return -xPos;// pod mounted backwards
+        return -pos.getX(DistanceUnit.MM);// pod mounted backwards
     }
     public double getYPosition() { // Convert yPod into actual direction based on current heading
-        double yPos = 0.0;
         Pose2D pos = odometer.getPosition();
-        // The following is needed because of an error in the driver
-        yPos = pos.getY(DistanceUnit.MM);
-
-        return -yPos;// pod mounted backwards
+        return -pos.getY(DistanceUnit.MM);// pod mounted backwards
     }
-
     public void stop() {
         xSpeed = 0.0;
         ySpeed = 0.0;
         driveBase.stop();
         autoEnabled = false;
     }
-
     public void printTelemetry(Telemetry telemetry) {
         //telemetry.addData("actual heading:", "%5.2f", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("saved heading:", "%5.2f", heading);
@@ -241,6 +214,7 @@ public class DriveTrainBasic {
             telemetry.update();
         }
     }
-
-
+    public boolean canLaunch(double launchSpeed){
+        return flywheel.getCorrectedVelocity() >= launchSpeed;
+    }
 }
