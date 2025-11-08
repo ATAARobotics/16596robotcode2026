@@ -21,7 +21,7 @@ public class Constants {
     /// /
     public static double INTAKE_SPEED = 1.0;
     public static  double FLYWHEEL_SPEED = 0.8;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
-    public static final double FLYWHEEL_CLOSE = 0.5;
+    public static final double FLYWHEEL_NEAR = 0.5;
     public static final double FLYWHEEL_FAR = 0.67;
     public static double FLYWHEEL_MAX = 24600;
     public static final double FLYWHEEL_RECOVERY = 0.8 * FLYWHEEL_MAX;
