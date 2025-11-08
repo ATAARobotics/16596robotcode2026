@@ -109,8 +109,8 @@ public class DriveTrainBasic {
         shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         shooter2.setInverted(true);
         // configuring flywheel mo
-        flywheel.setRunMode(Motor.RunMode.VelocityControl);
-        flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficeients are. kp, ki, and kd
+        flywheel.setRunMode(Motor.RunMode.VelocityControl);// motor group of the 2 shooter motors
+        flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
     }// end of init()
 
     public void start() {
@@ -215,6 +215,8 @@ public class DriveTrainBasic {
         }
     }
     public boolean canLaunch(double launchSpeed){
-        return flywheel.getCorrectedVelocity() >= launchSpeed;
+        //return flywheel.getCorrectedVelocity() >= launchSpeed;
+        return shooter.getVelocity() >= launchSpeed* Constants.FLYWHEEL_RECOVERY;
+        //return true;// need to fix for comp
     }
 }
