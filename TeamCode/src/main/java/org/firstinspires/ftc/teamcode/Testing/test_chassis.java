@@ -45,8 +45,8 @@ import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.JoinedTelemetry;
-import com.bylazar.graph.PanelsGraph;
-import com.bylazar.graph.GraphManager;
+//import com.bylazar.graph.PanelsGraph;
+//import com.bylazar.graph.GraphManager;
 
 @Config // need to use dashboard to change PID gains; comment out for competition
 
@@ -60,12 +60,13 @@ test_chassis extends OpMode {
     public GamepadEx driver = null;
     public GamepadEx operator = null;
     private JoinedTelemetry joinedTelemetry;
-    private GraphManager graphManager;
+  //  private GraphManager graphManager;
     public double speed = 0.0;
     public double speed2 = 0.0;
     public double flywheelspeed = 0.0;
     public LightIndicatorSubsystem indicator; //port 0 control hub
 
+    public double shootingspeed = 0.0;
 
 
     /* private double heading; */
@@ -81,7 +82,7 @@ test_chassis extends OpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
         // Setup graph
-        graphManager = PanelsGraph.INSTANCE.getManager();
+    //    graphManager = PanelsGraph.INSTANCE.getManager();
         // Initializing indicator
         indicator = new LightIndicatorSubsystem(hardwareMap);
         // Join them together
@@ -104,10 +105,10 @@ test_chassis extends OpMode {
         driveTrain.loop(); // Current elbow
         speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
-        graphManager.addData("Shooter Speed",speed);
+      //  graphManager.addData("Shooter Speed",speed);
         speed2 = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
-        graphManager.addData("Shooter2 Speed",speed2);
+       // graphManager.addData("Shooter2 Speed",speed2);
        // flywheelspeed = driveTrain.flywheel.getCorrectedVelocity();// what is corrected velocity??
        // joinedTelemetry.addData("Flywheel Speed",flywheelspeed); //telemetry shooter speed
        // graphManager.addData("Flywheel Speed",flywheelspeed);
@@ -117,16 +118,22 @@ test_chassis extends OpMode {
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
         double forwardSpeed = driver.getLeftY() * Constants.SPEED_RATIO;
-        graphManager.addData("strafe Speed",strafeSpeed);
-        graphManager.addData("forward Speed",forwardSpeed);
+        //graphManager.addData("strafe Speed",strafeSpeed);
+        //graphManager.addData("forward Speed",forwardSpeed);
 
         //===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
 // =========  Flywheel control ===========
+        if(operator.isDown(GamepadKeys.Button.DPAD_DOWN)){
+
+            shootingspeed = Constants.FLYWHEEL_FAR;
+
+        }
+        else shootingspeed = Constants.FLYWHEEL_CLOSE;
         if(operator.isDown(GamepadKeys.Button.A)) {
 //original speed = 1
             // will need to add location to change flywheel speed for near, far,etc
-            driveTrain.flywheel.set(Constants.FLYWHEEL_SPEED);
+            driveTrain.flywheel.set(shootingspeed);
 
         }
        else  driveTrain.flywheel.set(0);
@@ -136,7 +143,7 @@ test_chassis extends OpMode {
 
         driveTrain.intake.set(Constants.INTAKE_SPEED);
         }
-        else  driveTrain.intake.set(0);
+       else  driveTrain.intake.set(0);
 // =================  Servo Control ===========================================
         if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
 
@@ -147,7 +154,8 @@ test_chassis extends OpMode {
             driveTrain.feed1.setPower(0);
         }
         //  check that flywheel is back up to speed before allowing operator to shoot
-        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) && speed >= Constants.FLYWHEEL_RECOVERY * Constants.FLYWHEEL_SPEED) {
+
+        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER)){
 
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
 
@@ -186,7 +194,7 @@ test_chassis extends OpMode {
 
         // Send data to telemetry
         joinedTelemetry.update();
-        graphManager.update();
+        //graphManager.update();
     }
 
 
