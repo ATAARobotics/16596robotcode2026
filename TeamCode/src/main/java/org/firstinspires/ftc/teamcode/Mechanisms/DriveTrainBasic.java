@@ -189,6 +189,7 @@ public class DriveTrainBasic {
         Pose2D pos = odometer.getPosition();
         return -pos.getY(DistanceUnit.MM);// pod mounted backwards
     }
+
     public void stop() {
         xSpeed = 0.0;
         ySpeed = 0.0;
@@ -215,8 +216,7 @@ public class DriveTrainBasic {
         }
     }
     public boolean canLaunch(double launchSpeed){
-
-        return shooter.getVelocity() >= 0.8*launchSpeed * Constants.FLYWHEEL_MAX;
+        return shooter.getVelocity() >= 0.8 * launchSpeed * Constants.FLYWHEEL_MAX;
         //return true;// need to fix for comp
     }
 }
