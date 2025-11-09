@@ -40,8 +40,10 @@ public class SimpleAuto extends OpMode {
         this.wayPoints[0].facing = Constants.NORTH;
         // WayPoint 1
         this.wayPoints[1] = new WayPoint();
-        this.wayPoints[1].x = 100.0;
-        this.wayPoints[1].x_speed = 0.5;
+        this.wayPoints[1].x = 0.0;
+        this.wayPoints[1].x_speed = 0.0;
+        this.wayPoints[1].y = 500.0;
+        this.wayPoints[1].y_speed = 0.5;
         this.wayPoints[1].facing = Constants.NORTH;
 
         this.current_step = 1;
@@ -70,12 +72,14 @@ public class SimpleAuto extends OpMode {
                     break;
             }
             // Send data to telemetry
+            joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
+            joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
             joinedTelemetry.addData("X-cord", driveTrain.odometer.getPosX());
             joinedTelemetry.addData("Y-cord", driveTrain.odometer.getPosY());
             joinedTelemetry.addData("Heading", pos.getHeading(AngleUnit.DEGREES));
             joinedTelemetry.addData("Current Step",this.current_step);
-            joinedTelemetry.addData("Waypoint X",this.wayPoints[this.current_step].x);
-            joinedTelemetry.addData("Waypoint Y",this.wayPoints[this.current_step].y);
+       //     joinedTelemetry.addData("Waypoint X",this.wayPoints[this.current_step].x);
+       //     joinedTelemetry.addData("Waypoint Y",this.wayPoints[this.current_step].y);
             joinedTelemetry.update();
         }
     }
@@ -104,6 +108,8 @@ public class SimpleAuto extends OpMode {
         // New Way to get there
         driveTrain.xControl.setSetPoint(targetWaypoint.x);
         driveTrain.yControl.setSetPoint(targetWaypoint.y);
+        joinedTelemetry.addData("X Speed",driveTrain.xControl.calculate(driveTrain.getXPosition()) * Constants.AUTO_DRIVE_SPEED);
+        joinedTelemetry.addData("Y Speed",driveTrain.yControl.calculate(driveTrain.getYPosition()) * Constants.AUTO_DRIVE_SPEED);
         driveTrain.drive(driveTrain.xControl.calculate(driveTrain.getXPosition()) * Constants.AUTO_DRIVE_SPEED, driveTrain.yControl.calculate(driveTrain.getYPosition()) * Constants.AUTO_DRIVE_SPEED);
     }
 }
