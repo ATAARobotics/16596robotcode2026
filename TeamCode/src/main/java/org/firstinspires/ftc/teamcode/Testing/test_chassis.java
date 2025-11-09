@@ -103,8 +103,8 @@ test_chassis extends OpMode {
         joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
        // flywheelspeed = driveTrain.flywheel.getCorrectedVelocity();// what is corrected velocity??
        // joinedTelemetry.addData("Flywheel Speed",flywheelspeed); //telemetry shooter speed
-        telemetry.addData("Xcor",driveTrain.getXPosition());
-        telemetry.addData("Ycor",driveTrain.getXPosition());
+        joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
+        joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
