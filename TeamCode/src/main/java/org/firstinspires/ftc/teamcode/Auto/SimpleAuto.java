@@ -55,6 +55,7 @@ public class SimpleAuto extends OpMode {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
         if (!autoDone) {
+            driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
             switch (this.current_step) {
                 case 1:
                     driveTrain.setFacing(this.wayPoints[this.current_step].facing);
