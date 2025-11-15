@@ -10,8 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 
-@Autonomous(name = "SimpleAuto")
-public class SimpleAuto extends OpMode {
+@Autonomous(name = "RedNearSimpleAuto")
+public class RedSimpleAuto extends OpMode {
     private DriveTrainBasic driveTrain;
 
     private JoinedTelemetry joinedTelemetry;
@@ -42,7 +42,7 @@ public class SimpleAuto extends OpMode {
         this.wayPoints[1] = new WayPoint();
         this.wayPoints[1].x = 0.0;
         this.wayPoints[1].x_speed = 0.0;
-        this.wayPoints[1].y = 500.0;
+        this.wayPoints[1].y = 700.0;
         this.wayPoints[1].y_speed = 0.5;
         this.wayPoints[1].facing = Constants.NORTH;
 
@@ -51,7 +51,7 @@ public class SimpleAuto extends OpMode {
     }
     @Override
     public void start(){
-        driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
+       // driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
     }
     @Override
     public void loop() {

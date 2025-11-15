@@ -11,8 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 
-@Autonomous(name = "BucketAuto")
-public class BucketAuto extends OpMode {
+@Autonomous(name = "RedFarBucketAuto")
+public class RedBucketAuto extends OpMode {
     private DriveTrainBasic driveTrain;
 
     private JoinedTelemetry joinedTelemetry;
@@ -41,10 +41,9 @@ public class BucketAuto extends OpMode {
         this.wayPoints[0].facing = Constants.NORTH;
         // WayPoint 1
         this.wayPoints[1] = new WayPoint();
-        this.wayPoints[1].x = 300;
-        this.wayPoints[1].x_speed = 0.0;
-        this.wayPoints[1].y = -1000.0;
-
+        this.wayPoints[1].x = -700.0;
+        this.wayPoints[1].x_speed = 0.5;
+        this.wayPoints[1].y = 0.0;
         this.wayPoints[1].y_speed = 0.5;
         this.wayPoints[1].facing = Constants.NORTH;
 
@@ -53,7 +52,7 @@ public class BucketAuto extends OpMode {
     }
     @Override
     public void start(){
-        driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
+       // driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
     }
     @Override
     public void loop() {
