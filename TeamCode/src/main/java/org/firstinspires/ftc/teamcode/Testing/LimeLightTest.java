@@ -77,6 +77,7 @@ public class LimeLightTest extends OpMode {
             joinedTelemetry.addData("Distance to Target Area in inches",getDistanceFromTarget(limeLightResults));
             joinedTelemetry.addData("Distance to Target Area in inches AVERAGE", this.sum/this.count);
             joinedTelemetry.addData("Distance Count", this.count);
+
         } else {
             indicator.setColor(Constants.RGB_Light.OFF);
             joinedTelemetry.addData("Limelight", "No Targets");

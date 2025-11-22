@@ -105,6 +105,7 @@ test_chassis extends OpMode {
        // joinedTelemetry.addData("Flywheel Speed",flywheelspeed); //telemetry shooter speed
         joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
         joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
+        joinedTelemetry.addData("heading", driveTrain.heading);
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
@@ -141,6 +142,19 @@ test_chassis extends OpMode {
        else {
            driveTrain.intake.set(0);
         }
+       //Set small shooting area angel
+//        if(driver.isDown(GamepadKeys.Button.DPAD_DOWN)){
+//            set.headingpos
+//        }
+//        else {
+//            shootingspeed = Constants.FLYWHEEL_NEAR;
+//        }
+//        if(operator.isDown(GamepadKeys.Button.A)) {
+//            driveTrain.flywheel.set(shootingspeed);
+//        }
+//        else  {
+//            driveTrain.flywheel.set(0);
+//        }
         // =================  Servo Control ===========================================
         if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
             driveTrain.feed1.setPower(Constants.FEED_SPEED);
