@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "FarShootingAuto",group = "Testing")
-public class FarShootingAuto extends OpMode {
+@Autonomous(name = "BlueFarShootingAuto",group = "Testing")
+public class BlueFarShootingAuto extends OpMode {
     private DriveTrainBasic driveTrain;
     public LightIndicatorSubsystem indicator;
 
@@ -26,8 +26,8 @@ public class FarShootingAuto extends OpMode {
     @Override
     public void init() {
         driveTrain = new DriveTrainBasic(hardwareMap);
-        driveTrain.init();  // commented out ,done in Auto
-        driveTrain.odometer.resetPosAndIMU(); // comment out with Auto
+        driveTrain.init();
+        driveTrain.odometer.resetPosAndIMU();
         // Initializing indicator
         indicator = new LightIndicatorSubsystem(hardwareMap);
         telemetry.addData("Status", "Initialized");
@@ -92,7 +92,6 @@ public class FarShootingAuto extends OpMode {
                         driveTrain.feed2.setPower(0.0);
                         currentWayPoint = WayPoints.Safe_Park;
                     }
-                    currentWayPoint = WayPoints.Safe_Park;
                     break;
                 case Safe_Park:
                     // Set Destination
@@ -122,7 +121,7 @@ public class FarShootingAuto extends OpMode {
             joinedTelemetry.addData("X-cord", driveTrain.odometer.getPosX());
             joinedTelemetry.addData("Y-cord", driveTrain.odometer.getPosY());
             joinedTelemetry.addData("Heading", pos.getHeading(AngleUnit.DEGREES));
-            joinedTelemetry.addData("Current Waypoint",currentWayPoint);
+            joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
             joinedTelemetry.addData("Destination X",currentDestination.x);
             joinedTelemetry.addData("Destination Y",currentDestination.y);
             joinedTelemetry.update();
