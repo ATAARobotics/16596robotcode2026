@@ -54,8 +54,9 @@ public class Constants {
     public static final double SOUTH_EAST = -135; // South East
     public static final double SOUTH_WEST = 135; // South West
     public static final double NORTH_WEST = 45; // North West
-    public static final double SMALL_SHOOT = 112.67; //Small Triangle Shoot
-    //
+    public static double SMALL_SHOOT = 112.67; //Small Triangle Shoot
+
+    public static double BIG_SHOOT = 136.67;
     // ========== Tolerance Section
     //
     public static final double JOYSTICK_TOLERANCE = 0.5;
