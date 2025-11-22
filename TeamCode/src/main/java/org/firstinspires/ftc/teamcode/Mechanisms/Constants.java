@@ -32,7 +32,7 @@ public class Constants {
     public static double FLYWHEEL_KP = 0.1;
     public static double FLYWHEEL_KI = 0.01;
     public static double FLYWHEEL_KD = 0.0;// WAS 0.31
-
+    public static double FAR_AUTO_AIM_ANGLE = 113.5; //turn to face shooting
 
     public static final double AUTO_DRIVE_SPEED = 0.3;
   //  public static final double AUTO_STEP_DELAY = 2.0;
@@ -64,8 +64,7 @@ public class Constants {
     public static double AUTO_X_DISTANCE_ERROR = 15.0;
     public static final double DRIVE_PID_ERROR = 1.5; // inches?? Only used in PractiseDriveTrain??
     public static double HEADING_ERROR_Tolerance = 5.0; // Degrees... this now matches PID tolerance
-    //
-    // ========== Odometer constants
+    //    // ========== Odometer constants
     //
 //    public static int ODOMETER_PRACTICE_MODE = 1;
 //    public static int ODOMETER_COMPETITION_MODE = 8;
