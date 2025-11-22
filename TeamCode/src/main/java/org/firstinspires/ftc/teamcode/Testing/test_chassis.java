@@ -34,6 +34,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -48,8 +49,8 @@ import com.bylazar.telemetry.JoinedTelemetry;
 //import com.bylazar.graph.PanelsGraph;
 //import com.bylazar.graph.GraphManager;
 
-@Config // need to use dashboard to change PID gains; comment out for competition
-
+// need to use dashboard to change PID gains; comment out for competition
+@Configurable
 @TeleOp(name = "RealTestBot")
 public class
 test_chassis extends OpMode {
@@ -142,6 +143,29 @@ test_chassis extends OpMode {
        else {
            driveTrain.intake.set(0);
         }
+
+      //===============driving presets======================
+        //small  red shooting position
+        if(driver.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+            driveTrain.setFacing(Constants.REDSMALL_SHOOT);
+        }
+
+        //small blue shooting position
+//      dont have a constant angle yet
+        if(driver.isDown(GamepadKeys.Button.LEFT_BUMPER)){
+            driveTrain.setFacing(Constants.BLUESMALL_SHOOT);
+        }
+
+//        //big red shooting position
+//        if(driver.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+//            driveTrain.setFacing(Constants.REDBIG_SHOOT);
+//        }
+//       // big blue shooting position
+//        if(driver.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+//            driveTrain.setFacing(Constants.BLUEBIG_SHOOT);
+//        }
+//
+
        //Set small shooting area angel
 //        if(driver.isDown(GamepadKeys.Button.DPAD_DOWN)){
 //            set.headingpos
