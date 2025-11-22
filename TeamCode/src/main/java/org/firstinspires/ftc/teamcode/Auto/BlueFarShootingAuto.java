@@ -53,9 +53,9 @@ public class BlueFarShootingAuto extends OpMode {
                 case Move_Off_Wall:
                     // Set Destination
                     currentDestination.x = 0.0;
-                    currentDestination.x_speed = 0.0;
-                    currentDestination.y = 0.0;
-                    currentDestination.y_speed = 0.0;
+                    currentDestination.x_speed = 0.5;
+                    currentDestination.y = -121.0; //current value needs to be test, was -221
+                    currentDestination.y_speed = 0.5;
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
@@ -68,16 +68,20 @@ public class BlueFarShootingAuto extends OpMode {
                     break;
                 case Aim:
                     // Set Destination
-                    currentDestination.x = 0.0;
-                    currentDestination.x_speed = 0.0;
-                    currentDestination.y = 0.0;
-                    currentDestination.y_speed = 0.0;
-                    currentDestination.facing = Constants.NORTH;
+                    // Turns our robot to face to the obelisk
+                    currentDestination.x = 43.0;
+                    currentDestination.x_speed = 0.5;
+                    currentDestination.y = -121.0; //shouldn't change from the previous value
+                    //current value needs to be test, was -221
+                    currentDestination.y_speed = 0.5;
+                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE; //Turns to the obelisk, may need to be adjusted
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    currentWayPoint = WayPoints.Far_Shot;
+                   // currentWayPoint = WayPoints.Far_Shot; // put back in for final
+                    currentWayPoint = WayPoints.Move_Off_White_Tape; // temporary
                     break;
-                case Far_Shot:
+                case Far_Shot://Shoots the artifacts
+                    // Currently not running as of Nov 22 2025
                     driveTrain.flywheel.set(Constants.FLYWHEEL_FAR);
                     driveTrain.feed1.setPower(Constants.FEED_SPEED);
                     if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR)) {
@@ -93,12 +97,28 @@ public class BlueFarShootingAuto extends OpMode {
                         currentWayPoint = WayPoints.Safe_Park;
                     }
                     break;
+                case Move_Off_White_Tape:
+                    // Set Destination
+                    currentDestination.x = 115.0;
+                    currentDestination.x_speed = 0.5;
+                    currentDestination.y = -622.0;
+                    currentDestination.y_speed = 0.5;
+                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE;
+                    // Move to Location
+                    driveTrain.setFacing(currentDestination.facing);
+                    if (!this.at_xy(currentDestination)) {
+                        this.goto_xy(currentDestination);
+                    } else {
+                        driveTrain.drive(0.0, 0.0);
+                        currentWayPoint = WayPoints.Safe_Park;
+                    }
+                    break;
                 case Safe_Park:
                     // Set Destination
-                    currentDestination.x = 0.0;
-                    currentDestination.x_speed = 0.0;
-                    currentDestination.y = 0.0;
-                    currentDestination.y_speed = 0.0;
+                    currentDestination.x = 100.0; // makes if face the drive team, same facing as starting
+                    currentDestination.x_speed = 0.5;
+                    currentDestination.y = -735.0;
+                    currentDestination.y_speed = 0.5;
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
@@ -159,6 +179,6 @@ public class BlueFarShootingAuto extends OpMode {
 
     // ===== Enum Data Type for waypoint switch
     enum WayPoints {
-        Move_Off_Wall, Aim, Far_Shot, Safe_Park, Done
+        Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park, Done
     }
 }
