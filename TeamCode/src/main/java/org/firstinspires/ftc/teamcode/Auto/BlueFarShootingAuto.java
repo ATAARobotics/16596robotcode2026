@@ -77,7 +77,7 @@ public class BlueFarShootingAuto extends OpMode {
                     currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE; //Turns to the obelisk, may need to be adjusted
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                   // currentWayPoint = WayPoints.Far_Shot; // put back in for final
+                 //  currentWayPoint = WayPoints.Far_Shot; // put back in for final
                     currentWayPoint = WayPoints.Move_Off_White_Tape; // temporary
                     break;
                 case Far_Shot://Shoots the artifacts

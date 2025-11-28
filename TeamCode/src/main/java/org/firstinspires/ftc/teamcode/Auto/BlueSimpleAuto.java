@@ -71,6 +71,7 @@ public class BlueSimpleAuto extends OpMode {
             switch (this.current_step) {
                 case 1:
                     driveTrain.setFacing(this.wayPoints[this.current_step].facing);
+
                     if (!this.at_xy(this.wayPoints[this.current_step])) {
                         this.goto_xy(this.wayPoints[this.current_step]);
                     } else {
