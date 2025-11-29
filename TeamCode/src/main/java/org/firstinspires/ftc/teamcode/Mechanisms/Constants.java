@@ -26,7 +26,7 @@ public class Constants {
     public static double INTAKE_SPEED = 1.0;
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
     public static double FLYWHEEL_NEAR = 0.7; // previously 0.67
-    public static double FLYWHEEL_FAR = 0.88; // previously 0.85
+    public static double FLYWHEEL_FAR = 0.83; // previously 0.85
     public static double FLYWHEEL_MAX = 1600;
     public static final double FLYWHEEL_RECOVERY = 0.8 * FLYWHEEL_MAX;
     public static double FLYWHEEL_KP = 0.1;
@@ -60,6 +60,7 @@ public class Constants {
     //
     public static final double JOYSTICK_TOLERANCE = 0.5;
 //    public static final double AT_XY_TOLERANCE = 25.0;
+    public static final double TRIGGER_TOLERANCE = 0.5;
     public static double AUTO_Y_DISTANCE_ERROR = 15.0;
     public static double AUTO_X_DISTANCE_ERROR = 15.0;
     public static final double DRIVE_PID_ERROR = 1.5; // inches?? Only used in PractiseDriveTrain??

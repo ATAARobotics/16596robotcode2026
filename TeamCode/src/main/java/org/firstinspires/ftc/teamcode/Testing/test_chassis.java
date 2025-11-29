@@ -157,14 +157,14 @@ test_chassis extends OpMode {
         }
 
 //        //big red shooting position
-//        if(driver.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-//            driveTrain.setFacing(Constants.REDBIG_SHOOT);
-//        }
-//       // big blue shooting position
-//        if(driver.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-//            driveTrain.setFacing(Constants.BLUEBIG_SHOOT);
-//        }
-//
+        if(driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>= Constants.TRIGGER_TOLERANCE)  {
+            driveTrain.setFacing(Constants.REDBIG_SHOOT);
+        }
+       //big blue shooting position
+        if(driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>= Constants.TRIGGER_TOLERANCE) {
+            driveTrain.setFacing(Constants.BLUEBIG_SHOOT);
+        }
+
 
        //Set small shooting area angel
 //        if(driver.isDown(GamepadKeys.Button.DPAD_DOWN)){
