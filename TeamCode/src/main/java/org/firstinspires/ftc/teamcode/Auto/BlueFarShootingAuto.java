@@ -49,6 +49,7 @@ public class BlueFarShootingAuto extends OpMode {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
         if (!autoDone) {
+            driveTrain.feed1.setPower(Constants.FEED_SPEED);
             switch (currentWayPoint) {
                 case Move_Off_Wall:
                     // Set Destination
@@ -78,23 +79,22 @@ public class BlueFarShootingAuto extends OpMode {
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
                  //  currentWayPoint = WayPoints.Far_Shot; // put back in for final
-                    currentWayPoint = WayPoints.Move_Off_White_Tape; // temporary
+                    currentWayPoint = WayPoints.Far_Shot;
                     break;
                 case Far_Shot://Shoots the artifacts
                     // Currently not running as of Nov 22 2025
                     driveTrain.flywheel.set(Constants.FLYWHEEL_FAR);
-                    driveTrain.feed1.setPower(Constants.FEED_SPEED);
                     if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR)) {
                         indicator.setColor(Constants.RGB_Light.GREEN);
                         driveTrain.feed2.setPower(Constants.FEED_SPEED);
                     } else {
                         indicator.setColor(Constants.RGB_Light.RED);
                     }
-                    if (getRuntime() - startTime >= 25.0){
+                    if (getRuntime() - startTime >= 20.0){
                         driveTrain.flywheel.set(0.0);
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
-                        currentWayPoint = WayPoints.Safe_Park;
+                        currentWayPoint = WayPoints.Move_Off_White_Tape;
                     }
                     break;
                 case Move_Off_White_Tape:

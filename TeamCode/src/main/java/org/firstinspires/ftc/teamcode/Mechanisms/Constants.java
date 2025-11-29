@@ -27,7 +27,7 @@ public class Constants {
     public static double INTAKE_SPEED = 1.0;
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
     public static double FLYWHEEL_NEAR = 0.7; // previously 0.67
-    public static double FLYWHEEL_FAR = 0.74; // previously 0.85
+    public static double FLYWHEEL_FAR = 0.73; // previously 0.85
     public static double FLYWHEEL_MAX = 1600;
     public static final double FLYWHEEL_RECOVERY = 0.8 * FLYWHEEL_MAX;
     public static double FLYWHEEL_KP = 0.1;
@@ -53,9 +53,9 @@ public class Constants {
     public static final double SOUTH_EAST = -135; // South East
     public static final double SOUTH_WEST = 135; // South West
     public static final double NORTH_WEST = 45; // North West
-    public static double BLUESMALL_SHOOT = 103.67; //Small Triangle Shoot
+    public static double BLUESMALL_SHOOT = 112.67; //Small Triangle Shoot
     public static double BLUEBIG_SHOOT = 136.67;
-    public static double REDSMALL_SHOOT = -103.67; //Small Triangle Shoot
+    public static double REDSMALL_SHOOT = -112.67; //Small Triangle Shoot
     public static double REDBIG_SHOOT = -136.67;
     // ========== Tolerance Section
     //
