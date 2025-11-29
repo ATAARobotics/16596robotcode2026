@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Testing;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.GoBildaPinpointDriver;
 
+@Configurable
 @Config
 @TeleOp(name = "GetStats")
 
