@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Mechanisms;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
 //import com.bylazar.configurables.annotations.Configurable;
 
 //@Configurable// need this to access constants from Panels-Bruce
 @Config// for FTC dashboard
-
+@Configurable // Needed for Panels
 
 public class Constants {
     //
