@@ -24,20 +24,22 @@ public class Constants {
     //
     // ========== Intake, Shooter and Feeder Speeds
     /// /
-    public static double INTAKE_SPEED = 1.0;
+    public static double INTAKE_SPEED = 0.9; //changed from 1.0 used for both auto and teleop
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
     public static double FLYWHEEL_NEAR = 0.7; // previously 0.67
-    public static double FLYWHEEL_FAR = 0.73; // previously 0.85
+    public static double FLYWHEEL_FAR = 0.7767; // previously 0.85
+    public static double FLYWHEEL_FAR_AUTO = 0.7767;
     public static double FLYWHEEL_MAX = 1600;
     public static final double FLYWHEEL_RECOVERY = 0.8 * FLYWHEEL_MAX;
     public static double FLYWHEEL_KP = 0.1;
     public static double FLYWHEEL_KI = 0.01;
     public static double FLYWHEEL_KD = 0.0;// WAS 0.31
-    public static double FAR_AUTO_AIM_ANGLE = 113.5; //turn to face shooting
+    public static double FAR_AUTO_AIM_ANGLE = 112.67; //turn to face shooting
 
     public static final double AUTO_DRIVE_SPEED = 0.3;
   //  public static final double AUTO_STEP_DELAY = 2.0;
     public static final double FEED_SPEED = -1.0;
+    public static final double FEED_SPEED_AUTO = -0.5;
     //
     // ========== Define Drive constants.  Make them public so they CAN be used by the calling OpMode
     //

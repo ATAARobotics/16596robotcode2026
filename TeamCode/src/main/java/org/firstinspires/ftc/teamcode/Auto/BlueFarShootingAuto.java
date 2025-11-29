@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -49,8 +50,9 @@ public class BlueFarShootingAuto extends OpMode {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
         if (!autoDone) {
-            driveTrain.feed1.setPower(Constants.FEED_SPEED);
+            driveTrain.intake.set(Constants.INTAKE_SPEED);
             switch (currentWayPoint) {
+
                 case Move_Off_Wall:
                     // Set Destination
                     currentDestination.x = 0.0;
@@ -83,18 +85,34 @@ public class BlueFarShootingAuto extends OpMode {
                     break;
                 case Far_Shot://Shoots the artifacts
                     // Currently not running as of Nov 22 2025
-                    driveTrain.flywheel.set(Constants.FLYWHEEL_FAR);
-                    if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR)) {
+                    driveTrain.flywheel.set(Constants.FLYWHEEL_FAR_AUTO);
+                    if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR_AUTO)) {
                         indicator.setColor(Constants.RGB_Light.GREEN);
+                        driveTrain.feed1.setPower(Constants.FEED_SPEED);
                         driveTrain.feed2.setPower(Constants.FEED_SPEED);
+
+                    // creates an if statement based on the flywheel recovery speed so it only shoots when it's up to speed
+                    if(Constants.FLYWHEEL_FAR_AUTO >= Constants.FLYWHEEL_RECOVERY){
+                        driveTrain.feed2.setPower(Constants.FEED_SPEED);
+                    }
+//                    else {
+//                        driveTrain.feed2.setPower(0);
+//                    }
                     } else {
                         indicator.setColor(Constants.RGB_Light.RED);
                     }
-                    if (getRuntime() - startTime >= 20.0){
-                        driveTrain.flywheel.set(0.0);
+
+                    if (getRuntime() - startTime >= 16.7) {
+                        driveTrain.flywheel.set(0.0); //this doesnt stop at the end either-we need it to stop
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
+                        driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
                         currentWayPoint = WayPoints.Move_Off_White_Tape;
+                    }
+                        else{ //rechecks constantly if under that amount of time
+                        if(Constants.FLYWHEEL_FAR_AUTO >= Constants.FLYWHEEL_RECOVERY) {
+                            driveTrain.feed2.setPower(Constants.FEED_SPEED);
+                        }
                     }
                     break;
                 case Move_Off_White_Tape:
@@ -124,6 +142,11 @@ public class BlueFarShootingAuto extends OpMode {
                     driveTrain.setFacing(currentDestination.facing);
                     if (!this.at_xy(currentDestination)) {
                         this.goto_xy(currentDestination);
+                        //stops everything
+                      driveTrain.flywheel.set(0.0);
+         //               driveTrain.feed1.setPower(0.0);
+          //              driveTrain.feed2.setPower(0.0);
+                      driveTrain.intake.set(0);
                     } else {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Done;
