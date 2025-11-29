@@ -18,7 +18,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.16'
     // This is for FTControl
-    implementation 'com.bylazar:fullpanels:1.0.10'
+    implementation 'com.bylazar:fullpanels:1.0.9'
     implementation 'com.bylazar:graph:1.0.4'
     implementation 'com.bylazar:capture:1.0.3'
     // Fix Duplicate class
