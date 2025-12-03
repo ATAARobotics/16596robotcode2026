@@ -136,8 +136,10 @@ public class DriveTrainBasic {
         // PID controller for heading
         headingControl.setSetPoint(headingSetPoint);
         headingCorrection = -headingControl.calculate(heading);// confirm if (-) is needed.
+
         headingError = Math.abs(headingSetPoint - heading);
-//temporary test code
+
+        //temporary test code
         if (headingError <= Constants.HEADING_ERROR_Tolerance) {
             headingCorrection = 0;
         }
@@ -193,6 +195,10 @@ public class DriveTrainBasic {
     public void stop() {
         xSpeed = 0.0;
         ySpeed = 0.0;
+        flywheel.set(0.0);
+        feed1.setPower(0.0);
+        feed2.setPower(0.0);
+        intake.set(0);
         driveBase.stop();
         autoEnabled = false;
     }
@@ -216,7 +222,13 @@ public class DriveTrainBasic {
         }
     }
     public boolean canLaunch(double launchSpeed){
-        return shooter.getVelocity() >= 0.8 * launchSpeed * Constants.FLYWHEEL_MAX;
+        return shooter.getVelocity() >= (0.8 * launchSpeed * Constants.FLYWHEEL_MAX);
         //return true;// need to fix for comp
+    }
+    public double convert360(double angle){
+        if (angle > 0){
+            return 360.0 - angle;
+        }
+        return Math.abs(angle);
     }
 }
