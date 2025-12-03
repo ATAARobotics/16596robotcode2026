@@ -90,11 +90,10 @@ public class BlueFarShootingAuto extends OpMode {
                         indicator.setColor(Constants.RGB_Light.GREEN);
                         driveTrain.feed1.setPower(Constants.FEED_SPEED);
                         driveTrain.feed2.setPower(Constants.FEED_SPEED);
-
-                    // creates an if statement based on the flywheel recovery speed so it only shoots when it's up to speed
-                    if(Constants.FLYWHEEL_FAR_AUTO >= Constants.FLYWHEEL_RECOVERY){
-                        driveTrain.feed2.setPower(Constants.FEED_SPEED);
-                    }
+                        // creates an if statement based on the flywheel recovery speed so it only shoots when it's up to speed
+                        if(Constants.FLYWHEEL_FAR_AUTO >= Constants.FLYWHEEL_RECOVERY){
+                            driveTrain.feed2.setPower(Constants.FEED_SPEED);
+                        }
 //                    else {
 //                        driveTrain.feed2.setPower(0);
 //                    }
@@ -152,6 +151,7 @@ public class BlueFarShootingAuto extends OpMode {
                         currentWayPoint = WayPoints.Done;
                     }
                     break;
+                case Done:
                 default:
                     driveTrain.setFacing(Constants.NORTH);
                     driveTrain.stop();
