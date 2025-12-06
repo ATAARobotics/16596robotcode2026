@@ -94,9 +94,6 @@ public class BlueFarShootingAuto extends OpMode {
                         if(Constants.FLYWHEEL_FAR_AUTO >= Constants.FLYWHEEL_RECOVERY){
                             driveTrain.feed2.setPower(Constants.FEED_SPEED);
                         }
-//                    else {
-//                        driveTrain.feed2.setPower(0);
-//                    }
                     } else {
                         indicator.setColor(Constants.RGB_Light.RED);
                     }
@@ -144,8 +141,6 @@ public class BlueFarShootingAuto extends OpMode {
                         this.goto_xy(currentDestination);
                         //stops everything
                       driveTrain.flywheel.set(0.0);
-         //               driveTrain.feed1.setPower(0.0);
-          //              driveTrain.feed2.setPower(0.0);
                       driveTrain.intake.set(0);
                     } else {
                         driveTrain.drive(0.0, 0.0);
@@ -168,6 +163,8 @@ public class BlueFarShootingAuto extends OpMode {
             joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
             joinedTelemetry.addData("Destination X",currentDestination.x);
             joinedTelemetry.addData("Destination Y",currentDestination.y);
+            joinedTelemetry.addData("Run Time",getRuntime());
+            joinedTelemetry.addData("Time Diff",getRuntime() - startTime);
             joinedTelemetry.update();
         }
     }
