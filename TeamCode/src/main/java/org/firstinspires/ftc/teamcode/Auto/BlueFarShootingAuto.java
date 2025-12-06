@@ -100,10 +100,10 @@ public class BlueFarShootingAuto extends OpMode {
 
                     if (getRuntime() - startTime >= 16.7) {
                         driveTrain.flywheel.set(0.0); //this doesnt stop at the end either-we need it to stop
+                        driveTrain.flywheel.stopMotor();
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
                         driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
-                        driveTrain.stopFlyWheel();
                         currentWayPoint = WayPoints.Move_Off_White_Tape;
                     }
                         else{ //rechecks constantly if under that amount of time
@@ -150,6 +150,7 @@ public class BlueFarShootingAuto extends OpMode {
                 case Done:
                 default:
                     driveTrain.setFacing(Constants.NORTH);
+                    driveTrain.flywheel.stopMotor();
                     driveTrain.stop();
                     autoDone = true;
                     break;
