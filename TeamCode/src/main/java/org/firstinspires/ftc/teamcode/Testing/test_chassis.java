@@ -107,6 +107,7 @@ test_chassis extends OpMode {
         joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
         joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
         joinedTelemetry.addData("heading", driveTrain.heading);
+        joinedTelemetry.addData("I am in Real",driveTrain.heading);
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
