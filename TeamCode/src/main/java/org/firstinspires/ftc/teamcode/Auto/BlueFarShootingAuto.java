@@ -106,6 +106,7 @@ public class BlueFarShootingAuto extends OpMode {
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
                         driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
+                        driveTrain.stopFlyWheel();
                         currentWayPoint = WayPoints.Move_Off_White_Tape;
                     }
                         else{ //rechecks constantly if under that amount of time
