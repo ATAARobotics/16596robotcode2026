@@ -158,6 +158,7 @@ public class RedFarShootingAuto extends OpMode {
                     autoDone = true;
                     break;
             }
+
             // Send data to telemetry
             joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
             joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
