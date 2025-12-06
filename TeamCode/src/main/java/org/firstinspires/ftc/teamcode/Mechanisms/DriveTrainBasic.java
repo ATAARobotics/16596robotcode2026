@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Mechanisms;
 
+import static java.lang.Runtime.getRuntime;
+
+import android.widget.Spinner;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
@@ -10,6 +14,8 @@ import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
+
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -201,6 +207,14 @@ public class DriveTrainBasic {
         intake.set(0);
         driveBase.stop();
         autoEnabled = false;
+    }
+    public void stopFlyWheel(){
+        shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        shooter.set(0.0);
+        shooter2.set(0.0);
+        shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
     }
     public void printTelemetry(Telemetry telemetry) {
         //telemetry.addData("actual heading:", "%5.2f", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
