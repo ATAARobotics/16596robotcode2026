@@ -24,7 +24,7 @@ public class Constants {
     //
     // ========== Intake, Shooter and Feeder Speeds
     /// /
-    public static double INTAKE_SPEED = 0.9; //changed from 1.0 used for both auto and teleop
+    public static double INTAKE_SPEED = 0.95; //changed from 1.0 used for both auto and teleop
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
     public static double FLYWHEEL_NEAR = 0.7; // previously 0.67
     public static double FLYWHEEL_FAR = 0.7767; // previously 0.85
