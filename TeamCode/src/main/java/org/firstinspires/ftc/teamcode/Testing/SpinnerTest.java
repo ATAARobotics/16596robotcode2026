@@ -65,7 +65,7 @@ public class SpinnerTest extends OpMode{
         joinedTelemetry = new JoinedTelemetry(telemetry,panelsTelemetry.getTelemetry().getWrapper(),dashboard.getTelemetry());
         joinedTelemetry.update();
     }
-
+    @Override
     public void loop(){
         // Update controller info
         driver.readButtons();
@@ -89,6 +89,7 @@ public class SpinnerTest extends OpMode{
         joinedTelemetry.addData("Flywheel",flywheelVelocity);
         joinedTelemetry.update();
     }
+    @Override
     public void stop(){
         logger.stopLog();
     }
