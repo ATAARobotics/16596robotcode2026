@@ -11,7 +11,9 @@ import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
@@ -24,6 +26,7 @@ import java.util.Locale;
 public class SpinnerTest extends OpMode{
 
     public HardwareMap hwMap;
+    private VoltageSensor voltageSensor;
     // Shooter Motors
     public MotorEx shooter; //port 0-expansion hub
     public MotorEx shooter2; //port 2-expansion-hub
@@ -54,7 +57,8 @@ public class SpinnerTest extends OpMode{
         // configuring flywheel motor group
         flywheel.setRunMode(Motor.RunMode.VelocityControl);// motor group of the 2 shooter motors
         flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
-
+        // Configure Voltage Sensor
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
         // Setup Telemetry
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -81,12 +85,14 @@ public class SpinnerTest extends OpMode{
         double shooterVelocity = shooter.getVelocity();
         double shooter2Velocity = shooter2.getVelocity();
         double flywheelVelocity = flywheel.getVelocity();
-        logger.writeLog(String.format(Locale.ENGLISH,"%f,%f,%f,%f",speedCounter, shooterVelocity,shooter2Velocity,flywheelVelocity));
+        double currentVoltage = voltageSensor.getVoltage();
+        logger.writeLog(String.format(Locale.ENGLISH,"%f,%f,%f,%f,%f",speedCounter, shooterVelocity,shooter2Velocity,flywheelVelocity,currentVoltage));
         // Send telemetry
         joinedTelemetry.addData("Speed Counter",speedCounter);
         joinedTelemetry.addData("Shooter 1", shooterVelocity);
         joinedTelemetry.addData("Shooter 2",shooter2Velocity);
         joinedTelemetry.addData("Flywheel",flywheelVelocity);
+        joinedTelemetry.addData("Voltage", currentVoltage);
         joinedTelemetry.update();
     }
     @Override
