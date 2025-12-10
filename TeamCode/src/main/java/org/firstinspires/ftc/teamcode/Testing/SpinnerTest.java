@@ -74,7 +74,7 @@ public class SpinnerTest extends OpMode{
         // Update controller info
         driver.readButtons();
         // Process controller
-        if (driver.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+        if (driver.wasJustPressed(GamepadKeys.Button.DPAD_UP) && speedCounter <= 1.0){
             speedCounter += 0.1;
         }
         if (driver.wasJustPressed(GamepadKeys.Button.DPAD_DOWN) && speedCounter > 0.0) {
