@@ -54,7 +54,7 @@ public class RedFarShootingAuto extends OpMode {
 
                 case Move_Off_Wall:
                     // Set Destination
-                    currentDestination.x = 0.0;
+                    currentDestination.x = 43.0;
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 121.0; //current value needs to be test, was -221
                     currentDestination.y_speed = 0.5;
@@ -71,7 +71,7 @@ public class RedFarShootingAuto extends OpMode {
                 case Aim:
                     // Set Destination
                     // Turns our robot to face to the obelisk
-                    currentDestination.x = -43.0;
+                    currentDestination.x = -712.0;
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 121.0; //shouldn't change from the previous value
                     //current value needs to be test, was -221
@@ -116,7 +116,7 @@ public class RedFarShootingAuto extends OpMode {
                     break;
                 case Move_Off_White_Tape:
                     // Set Destination
-                    currentDestination.x = -115.0;
+                    currentDestination.x = -760.0;
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 622.0;
                     currentDestination.y_speed = 0.5;
@@ -132,7 +132,7 @@ public class RedFarShootingAuto extends OpMode {
                     break;
                 case Safe_Park:
                     // Set Destination
-                    currentDestination.x = -100.0; // makes if face the drive team, same facing as starting
+                    currentDestination.x = -760.0; // makes if face the drive team, same facing as starting
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 735.0;
                     currentDestination.y_speed = 0.5;
@@ -167,7 +167,7 @@ public class RedFarShootingAuto extends OpMode {
             joinedTelemetry.addData("Heading", pos.getHeading(AngleUnit.DEGREES));
             joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
             joinedTelemetry.addData("Destination X",currentDestination.x);
-            joinedTelemetry.addData("Destination Y",currentDestination.y);
+            joinedTelemetry.addData("Deqstination Y",currentDestination.y);
             joinedTelemetry.addData("shooter", driveTrain.shooter.getVelocity());
             joinedTelemetry.addData("shooter2", driveTrain.shooter2.getVelocity());
             joinedTelemetry.update();

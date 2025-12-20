@@ -55,7 +55,7 @@ public class BlueFarShootingAuto extends OpMode {
 
                 case Move_Off_Wall:
                     // Set Destination
-                    currentDestination.x = 0.0;
+                    currentDestination.x = -373.0; //testing, change back to 0.0 soon
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = -121.0; //current value needs to be test, was -221
                     currentDestination.y_speed = 0.5;
@@ -72,7 +72,7 @@ public class BlueFarShootingAuto extends OpMode {
                 case Aim:
                     // Set Destination
                     // Turns our robot to face to the obelisk
-                    currentDestination.x = 43.0;
+                    currentDestination.x = 373.0;// used to be 43.0
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = -121.0; //shouldn't change from the previous value
                     //current value needs to be test, was -221
@@ -114,7 +114,7 @@ public class BlueFarShootingAuto extends OpMode {
                     break;
                 case Move_Off_White_Tape:
                     // Set Destination
-                    currentDestination.x = 115.0;
+                    currentDestination.x = 445.0;
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = -622.0;
                     currentDestination.y_speed = 0.5;
@@ -130,7 +130,7 @@ public class BlueFarShootingAuto extends OpMode {
                     break;
                 case Safe_Park:
                     // Set Destination
-                    currentDestination.x = 100.0; // makes if face the drive team, same facing as starting
+                    currentDestination.x = 430.0; // makes if face the drive team, same facing as starting
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = -735.0;
                     currentDestination.y_speed = 0.5;
