@@ -54,11 +54,11 @@ public class RedFarShootingAuto extends OpMode {
 
                 case Move_Off_Wall:
                     // Set Destination
-                    currentDestination.x = 43.0;
+                    currentDestination.x = -250.0; // was 43.0
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 121.0; //current value needs to be test, was -221
                     currentDestination.y_speed = 0.5;
-                    currentDestination.facing = Constants.SOUTH;
+                    currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
                     if (!this.at_xy(currentDestination)) {
@@ -71,7 +71,7 @@ public class RedFarShootingAuto extends OpMode {
                 case Aim:
                     // Set Destination
                     // Turns our robot to face to the obelisk
-                    currentDestination.x = -712.0;
+                    currentDestination.x = -250.0;// was - 712.0 was 255
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 121.0; //shouldn't change from the previous value
                     //current value needs to be test, was -221
@@ -116,11 +116,11 @@ public class RedFarShootingAuto extends OpMode {
                     break;
                 case Move_Off_White_Tape:
                     // Set Destination
-                    currentDestination.x = -760.0;
+                    currentDestination.x = 360.0; //was -760
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 622.0;
                     currentDestination.y_speed = 0.5;
-                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE;
+                    currentDestination.facing = Constants.NORTH;// was FAR_AUTO_AIM_ANGLE
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
                     if (!this.at_xy(currentDestination)) {
@@ -131,12 +131,12 @@ public class RedFarShootingAuto extends OpMode {
                     }
                     break;
                 case Safe_Park:
-                    // Set Destination
-                    currentDestination.x = -760.0; // makes if face the drive team, same facing as starting
+                    // Set Destination      // x was -760 the was -260 was 260
+                    currentDestination.x = 360.0; // makes if face the drive team, same facing as starting
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 735.0;
                     currentDestination.y_speed = 0.5;
-                    currentDestination.facing = Constants.SOUTH;
+                    currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
                     if (!this.at_xy(currentDestination)) {
@@ -153,7 +153,7 @@ public class RedFarShootingAuto extends OpMode {
                     break;
                 case Done:
                 default:
-                    driveTrain.setFacing(Constants.SOUTH);
+                    driveTrain.setFacing(Constants.NORTH);
                     driveTrain.stop();
                     autoDone = true;
                     break;

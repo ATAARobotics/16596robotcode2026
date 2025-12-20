@@ -114,7 +114,7 @@ public class BlueFarShootingAuto extends OpMode {
                     break;
                 case Move_Off_White_Tape:
                     // Set Destination
-                    currentDestination.x = 445.0;
+                    currentDestination.x = 470.0;
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = -622.0;
                     currentDestination.y_speed = 0.5;

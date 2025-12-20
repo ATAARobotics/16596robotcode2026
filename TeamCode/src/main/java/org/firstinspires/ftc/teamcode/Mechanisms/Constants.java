@@ -30,11 +30,11 @@ public class Constants {
     public static double FLYWHEEL_FAR = 0.7767; // previously 0.85
     public static double FLYWHEEL_FAR_AUTO = 0.7767;
     public static double FLYWHEEL_MAX = 1600;
-    public static final double FLYWHEEL_RECOVERY = 0.9 * FLYWHEEL_MAX;
+    public static final double FLYWHEEL_RECOVERY = 5.0 * FLYWHEEL_MAX;
     public static double FLYWHEEL_KP = 0.1;
     public static double FLYWHEEL_KI = 0.01;
     public static double FLYWHEEL_KD = 0.0;// WAS 0.31
-    public static double FAR_AUTO_AIM_ANGLE = 112.67; //turn to face shooting
+    public static double FAR_AUTO_AIM_ANGLE = 111.67; //turn to face shooting  was 112.67
 
     public static final double AUTO_DRIVE_SPEED = 0.3;
   //  public static final double AUTO_STEP_DELAY = 2.0;
