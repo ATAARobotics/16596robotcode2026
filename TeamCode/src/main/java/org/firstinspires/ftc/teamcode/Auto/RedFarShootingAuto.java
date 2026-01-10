@@ -168,7 +168,7 @@ public class RedFarShootingAuto extends OpMode {
             joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
             joinedTelemetry.addData("Destination X",currentDestination.x);
             joinedTelemetry.addData("Deqstination Y",currentDestination.y);
-            joinedTelemetry.addData("shooter", driveTrain.shooter.getVelocity());
+           // joinedTelemetry.addData("shooter", driveTrain.shooter.getVelocity());
             joinedTelemetry.addData("shooter2", driveTrain.shooter2.getVelocity());
             joinedTelemetry.update();
 

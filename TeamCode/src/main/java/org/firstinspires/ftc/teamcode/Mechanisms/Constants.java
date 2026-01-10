@@ -23,14 +23,14 @@ public class Constants {
     public static final double TURN_RATIO = 1.0; // use this to slow turn rate1q
     //
     // ========== Intake, Shooter and Feeder Speeds
-    /// /
+
     public static double INTAKE_SPEED = 0.95; //changed from 1.0 used for both auto and teleop
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
-    public static double FLYWHEEL_NEAR = 0.7; // previously 0.67
-    public static double FLYWHEEL_FAR = 0.7767; // previously 0.85
-    public static double FLYWHEEL_FAR_AUTO = 0.7767;
+    public static double FLYWHEEL_NEAR = 0.575; // previously 0.67
+    public static double FLYWHEEL_FAR = 0.9; // previously 0.85
+    public static double FLYWHEEL_FAR_AUTO = 0.82;
     public static double FLYWHEEL_MAX = 1600;
-    public static final double FLYWHEEL_RECOVERY = 5.0 * FLYWHEEL_MAX;
+    public static final double FLYWHEEL_RECOVERY = 0.6 * FLYWHEEL_MAX; //chnage back to 0.9
     public static double FLYWHEEL_KP = 0.1;
     public static double FLYWHEEL_KI = 0.01;
     public static double FLYWHEEL_KD = 0.0;// WAS 0.31

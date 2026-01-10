@@ -187,8 +187,10 @@ test_chassis extends OpMode {
         else {
             driveTrain.feed1.setPower(0);
         }
-        //  check that flywheel is back up to speed before allowing operator to shoot
-        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) && driveTrain.canLaunch(shootingspeed)){
+          //check that flywheel is back up to speed before allowing operator to shoot
+
+        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) )//&& driveTrain.canLaunch(shootingspeed))
+        {
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
         }
         else {
