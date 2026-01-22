@@ -52,6 +52,8 @@ public class DriveTrainBasic {
 
     public double headingSetPoint = Constants.FORWARD;
     public double heading;
+    // Set drive mode
+    private boolean drivemodefieldcentric = true; // True for fieldcentric False for robotcentric
 
     private boolean autoEnabled = false;
 
@@ -62,7 +64,8 @@ public class DriveTrainBasic {
     double xSpeed = 0.0;
     double ySpeed = 0.0;
     public double headingError;
-
+    public double turnSpeed = 0.0;
+    private double maxTurnSpeed = 1.0;
 
 
     public DriveTrainBasic(HardwareMap hwMap)
@@ -149,12 +152,17 @@ public class DriveTrainBasic {
         if (headingError <= Constants.HEADING_ERROR_Tolerance) {
             headingCorrection = 0;
         }
-        driveBase.driveFieldCentric(
-                xSpeed,// strafe
-                ySpeed,//forward
-                headingCorrection,// turn
-                heading,// heading
-                false);
+        if (drivemodefieldcentric) {
+            driveBase.driveFieldCentric(
+                    xSpeed,// strafe
+                    ySpeed,//forward
+                    headingCorrection,// turn
+                    heading,// heading
+                    false);
+        }
+        else {
+            driveBase.driveRobotCentric(xSpeed,ySpeed,turnSpeed);
+        }
     }// end of loop()
 
 //    public boolean atTarget() { // Pythagorean theorem to get the distance from target as a number.
@@ -244,5 +252,21 @@ public class DriveTrainBasic {
             return 360.0 - angle;
         }
         return Math.abs(angle);
+    }
+    public void setDrivemodefieldcentric(){
+        this.drivemodefieldcentric = true;
+    }
+    public void setDrivemoderobotcentric(){
+        this.drivemodefieldcentric = false;
+    }
+    public void turn(double turnDirection){
+        // Check turnDirection speed for max
+        if ((Math.abs(turnDirection) <= this.maxTurnSpeed)) {
+            this.turnSpeed = turnDirection;
+        } else if (turnDirection >= 0.0) {
+            this.turnSpeed = this.maxTurnSpeed;
+        } else {
+            this.turnSpeed = -this.maxTurnSpeed;
+        }
     }
 }
