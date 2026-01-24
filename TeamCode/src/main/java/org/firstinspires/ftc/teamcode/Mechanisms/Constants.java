@@ -26,6 +26,7 @@ public class Constants {
 
     public static double INTAKE_SPEED = 0.95; //changed from 1.0 used for both auto and teleop
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
+    public static double FLYWHEEL_IDLE_SPEED = 0.3; // idle speed to start in init
     public static double FLYWHEEL_NEAR = 0.575; // previously 0.67
     public static double FLYWHEEL_FAR = 0.9; // previously 0.85
     public static double FLYWHEEL_FAR_AUTO = 0.82;
