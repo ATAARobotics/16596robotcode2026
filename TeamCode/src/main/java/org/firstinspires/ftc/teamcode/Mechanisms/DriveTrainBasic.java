@@ -31,8 +31,8 @@ public class DriveTrainBasic {
     private final Motor rightBackDrive;
     // Shooter Motors
     public final MotorEx shooter; //port 0-expansion hub
-    public final MotorEx shooter2; //port 2-expansion-hub
-    public final MotorGroup flywheel; // assigned shooter and shooter2
+   // public final MotorEx shooter2; //port 2-expansion-hub
+    //public final MotorGroup flywheel; // assigned shooter and shooter2
     // Intake Motor
     public final Motor intake; //port 1-expansion hub
     // Servos
@@ -79,8 +79,8 @@ public class DriveTrainBasic {
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         // Flywheel assignment
         shooter = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        shooter2 = new MotorEx(hwMap, "shooter2");
-        flywheel = new MotorGroup(shooter, shooter2);
+       // shooter2 = new MotorEx(hwMap, "shooter2");
+       // flywheel = new MotorGroup(shooter, shooter2);
         // Intake assignment
         intake = new Motor(hwMap, "intake");
         // Servo assignment
@@ -114,12 +114,12 @@ public class DriveTrainBasic {
         //set up for two shooter motors
         shooter.setRunMode(Motor.RunMode.VelocityControl);
         shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        shooter2.setRunMode(Motor.RunMode.VelocityControl);
-        shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        shooter2.setInverted(true);
+       // shooter2.setRunMode(Motor.RunMode.VelocityControl);
+      //  shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+       // shooter2.setInverted(true);
         // configuring flywheel mo
-        flywheel.setRunMode(Motor.RunMode.VelocityControl);// motor group of the 2 shooter motors
-        flywheel.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
+       // flywheel.setRunMode(Motor.RunMode.VelocityControl);// motor group of the 2 shooter motors
+        shooter.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
     }// end of init()
 
     public void start() {
@@ -161,7 +161,7 @@ public class DriveTrainBasic {
                     false);
         }
         else {
-            driveBase.driveRobotCentric(xSpeed,ySpeed,turnSpeed);
+            driveBase.driveRobotCentric(-xSpeed,-ySpeed,turnSpeed);
         }
     }// end of loop()
 
@@ -209,7 +209,7 @@ public class DriveTrainBasic {
     public void stop() {
         xSpeed = 0.0;
         ySpeed = 0.0;
-        flywheel.set(0.0);
+        shooter.set(0.0);
         feed1.setPower(0.0);
         feed2.setPower(0.0);
         intake.set(0);
@@ -218,11 +218,11 @@ public class DriveTrainBasic {
     }
     public void stopFlyWheel(){
         shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+       // shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         shooter.set(0.0);
-        shooter2.set(0.0);
+       // shooter2.set(0.0);
         shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        //shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
     }
     public void printTelemetry(Telemetry telemetry) {
         //telemetry.addData("actual heading:", "%5.2f", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));

@@ -98,22 +98,22 @@ test_chassis extends OpMode {
         driver.readButtons();  // enable 'was just pressed' methods
         operator.readButtons();
         driveTrain.loop(); // Current elbow
-        speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
+        speed = driveTrain.shooter.getVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
-        speed2 = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
-        joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
+       // speed2 = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
+       // joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
        // flywheelspeed = driveTrain.flywheel.getCorrectedVelocity();// what is corrected velocity??
        // joinedTelemetry.addData("Flywheel Speed",flywheelspeed); //telemetry shooter speed
         joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
         joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
         joinedTelemetry.addData("heading", driveTrain.heading);
-        joinedTelemetry.addData("I am in Real",driveTrain.heading);
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
         double forwardSpeed = driver.getLeftY() * Constants.SPEED_RATIO;
         joinedTelemetry.addData("strafe Speed",strafeSpeed);
         joinedTelemetry.addData("forward Speed",forwardSpeed);
+        joinedTelemetry.addData("Turning X",driver.getRightX());
 
         // ===== DRIVETRAIN CONTROLS =====
         driveTrain.drive(forwardSpeed, strafeSpeed);
@@ -126,10 +126,10 @@ test_chassis extends OpMode {
             shootingspeed = Constants.FLYWHEEL_NEAR;
         }
         if(operator.isDown(GamepadKeys.Button.A)) {
-            driveTrain.flywheel.set(shootingspeed);
+            driveTrain.shooter.set(shootingspeed);
         }
        else  {
-           driveTrain.flywheel.set(0);
+           driveTrain.shooter.set(0);
         }
         // ===== Indicator control =====
         if (driveTrain.canLaunch(shootingspeed)) {
@@ -140,6 +140,7 @@ test_chassis extends OpMode {
         // ===============  Intake controls
         if(operator.isDown(GamepadKeys.Button.B)) {
         driveTrain.intake.set(Constants.INTAKE_SPEED);
+
         }
        else {
            driveTrain.intake.set(0);

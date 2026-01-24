@@ -123,10 +123,10 @@ robot_drive extends OpMode {
             shootingspeed = Constants.FLYWHEEL_NEAR;
         }
         if(operator.isDown(GamepadKeys.Button.A)) {
-            driveTrain.flywheel.set(shootingspeed);
+            driveTrain.shooter.set(shootingspeed);
         }
        else  {
-           driveTrain.flywheel.set(0);
+           driveTrain.shooter.set(0);
         }
         // ===== Indicator control =====
         if (driveTrain.canLaunch(shootingspeed)) {
