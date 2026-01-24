@@ -78,7 +78,7 @@ public class DriveTrainBasic {
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         // Flywheel assignment
-        shooter = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        shooter = new MotorEx(hwMap, "shooter2");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
        // shooter2 = new MotorEx(hwMap, "shooter2");
        // flywheel = new MotorGroup(shooter, shooter2);
         // Intake assignment
@@ -114,6 +114,7 @@ public class DriveTrainBasic {
         //set up for two shooter motors
         shooter.setRunMode(Motor.RunMode.VelocityControl);
         shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        shooter.setInverted(true);
        // shooter2.setRunMode(Motor.RunMode.VelocityControl);
       //  shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
        // shooter2.setInverted(true);

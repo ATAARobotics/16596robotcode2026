@@ -29,7 +29,7 @@ public class Constants {
     public static double FLYWHEEL_NEAR = 0.575; // previously 0.67
     public static double FLYWHEEL_FAR = 0.9; // previously 0.85
     public static double FLYWHEEL_FAR_AUTO = 0.82;
-    public static double FLYWHEEL_MAX = 1600;
+    public static double FLYWHEEL_MAX = 6000;
     public static final double FLYWHEEL_RECOVERY = 0.6 * FLYWHEEL_MAX; //chnage back to 0.9
     public static double FLYWHEEL_KP = 0.1;
     public static double FLYWHEEL_KI = 0.01;
