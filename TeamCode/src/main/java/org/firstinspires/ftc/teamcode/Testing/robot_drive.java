@@ -89,6 +89,8 @@ robot_drive extends OpMode {
         driver = new GamepadEx(gamepad1); // This controls the movement of the robot
         operator = new GamepadEx(gamepad2); // This controls the movement of items on the robot
         runtime.reset();
+        // Uncomment the line below to test idle speed
+//        driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
     }
 
     @Override
@@ -98,8 +100,8 @@ robot_drive extends OpMode {
         driveTrain.loop(); // Current elbow
         speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
-        speed2 = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
-        joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
+//        speed2 = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
+//        joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
        // flywheelspeed = driveTrain.flywheel.getCorrectedVelocity();// what is corrected velocity??
        // joinedTelemetry.addData("Flywheel Speed",flywheelspeed); //telemetry shooter speed
         joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
@@ -127,6 +129,8 @@ robot_drive extends OpMode {
         }
        else  {
            driveTrain.shooter.set(0);
+           // Uncomment out the line before to test idle speed and comment the line above
+           // driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
         }
         // ===== Indicator control =====
         if (driveTrain.canLaunch(shootingspeed)) {
