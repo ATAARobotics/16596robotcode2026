@@ -26,23 +26,25 @@ public class Constants {
 
     public static double INTAKE_SPEED = 0.67; //changed from 1.0 used for both auto and teleop
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
-    public static double FLYWHEEL_FUDGE_FACTOR = 2300.0;
+    public static double FLYWHEEL_FUDGE_FACTOR = 2100.0;
     public static double FLYWHEEL_IDLE_SPEED = 0.3; // idle speed to start in init
     public static double FLYWHEEL_IDLE_TARGET = FLYWHEEL_IDLE_SPEED * FLYWHEEL_FUDGE_FACTOR;
-    public static double FLYWHEEL_NEAR = 0.6; // previously 0.67
+    public static double FLYWHEEL_NEAR = 0.62;
     public static double FLYWHEEL_NEAR_TARGET = FLYWHEEL_NEAR * FLYWHEEL_FUDGE_FACTOR;
 
-    public static double FLYWHEEL_FAR = 0.7; // previously 0.85
+    public static double FLYWHEEL_FAR = 0.78; // previously 0.85
     public static double FLYWHEEL_FAR_TARGET = FLYWHEEL_FAR * FLYWHEEL_FUDGE_FACTOR; // previously 0.85
     public static double REVERSE_FLYWHEEL = -0.3;
-    public static double FLYWHEEL_FAR_AUTO = 0.82;
+    public static double FLYWHEEL_FAR_AUTO = 0.8; //was 0.82
     public static double FLYWHEEL_MAX = FLYWHEEL_FUDGE_FACTOR;
     public static final double FLYWHEEL_RECOVERY = 0.6 * FLYWHEEL_MAX; //chnage back to 0.9
-    public static double FLYWHEEL_KP = 0.1;
-    public static double FLYWHEEL_KI = 0.01;
+    public static double FLYWHEEL_KP = 5.0;
+    public static double FLYWHEEL_KI = 0.00;
     public static double FLYWHEEL_KD = 0.0;// WAS 0.31
-    public static double FAR_AUTO_AIM_ANGLE = 111.67; //turn to face shooting  was 112.67
+    public static double FAR_AUTO_AIM_ANGLE_RED = 111.67;
+    public static double FAR_AUTO_AIM_ANGLE_BLUE = 111.67;//turn to face shooting  was 112.67
 
+    public static double BLUE_FAR_SHOOTING_MOVE_OFF_WALL_X = -90;
 
     public static final double AUTO_DRIVE_SPEED = 0.3;
   //  public static final double AUTO_STEP_DELAY = 2.0;

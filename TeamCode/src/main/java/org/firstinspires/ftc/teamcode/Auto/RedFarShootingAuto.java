@@ -76,7 +76,7 @@ public class RedFarShootingAuto extends OpMode {
                     currentDestination.y = 121.0; //shouldn't change from the previous value
                     //current value needs to be test, was -221
                     currentDestination.y_speed = 0.5;
-                    currentDestination.facing = -Constants.FAR_AUTO_AIM_ANGLE; //Turns to the obelisk, may need to be adjusted
+                    currentDestination.facing = -Constants.FAR_AUTO_AIM_ANGLE_RED; //Turns to the obelisk, may need to be adjusted
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
                  //  currentWayPoint = WayPoints.Far_Shot; // put back in for final

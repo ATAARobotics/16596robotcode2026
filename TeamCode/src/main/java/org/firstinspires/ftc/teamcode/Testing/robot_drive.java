@@ -145,8 +145,8 @@ robot_drive extends OpMode {
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
         }
         else if (operator_right_bumper) {
-            driveTrain.feed1.setPower(-1);
-            driveTrain.feed2.setPower(-1);
+            driveTrain.feed1.setPower(-Constants.FEED_SPEED);
+            driveTrain.feed2.setPower(-Constants.FEED_SPEED);
         }
         else {
             driveTrain.feed1.setPower(0);

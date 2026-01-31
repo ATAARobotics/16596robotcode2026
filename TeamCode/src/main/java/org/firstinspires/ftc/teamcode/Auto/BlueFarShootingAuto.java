@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
+import static org.firstinspires.ftc.teamcode.Mechanisms.Constants.BLUE_FAR_SHOOTING_MOVE_OFF_WALL_X;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.telemetry.JoinedTelemetry;
@@ -23,6 +25,7 @@ public class BlueFarShootingAuto extends OpMode {
     private Location currentDestination;
     private boolean autoDone;
     private WayPoints currentWayPoint = WayPoints.Move_Off_Wall;
+    public double speed = 0.0;
 
     @Override
     public void init() {
@@ -55,7 +58,7 @@ public class BlueFarShootingAuto extends OpMode {
 
                 case Move_Off_Wall:
                     // Set Destination
-                    currentDestination.x = -150.0; //testing, was -300
+                    currentDestination.x = BLUE_FAR_SHOOTING_MOVE_OFF_WALL_X;//move forward towards the tape
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = -121.0; //current value needs to be test, was -121
                     currentDestination.y_speed = 0.5;
@@ -77,7 +80,7 @@ public class BlueFarShootingAuto extends OpMode {
                     currentDestination.y = -121.0; //shouldn't change from the previous value
                     //current value needs to be test, was -221
                     currentDestination.y_speed = 0.5;
-                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE; //Turns to the obelisk, may need to be adjusted
+                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE_BLUE; //Turns to the obelisk, may need to be adjusted
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
                  //  currentWayPoint = WayPoints.Far_Shot; // put back in for final
@@ -118,7 +121,7 @@ public class BlueFarShootingAuto extends OpMode {
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = -622.0;
                     currentDestination.y_speed = 0.5;
-                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE;
+                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE_BLUE;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
                     if (!this.at_xy(currentDestination)) {
@@ -156,6 +159,8 @@ public class BlueFarShootingAuto extends OpMode {
                     break;
             }
             // Send data to telemetry
+            speed = driveTrain.shooter.getCorrectedVelocity();
+            joinedTelemetry.addData("Shooter Speed", speed);
             joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
             joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
             joinedTelemetry.addData("X-cord", driveTrain.odometer.getPosX());
@@ -194,6 +199,7 @@ public class BlueFarShootingAuto extends OpMode {
         // New Way to get there
         driveTrain.xControl.setSetPoint(targetLocation.x);
         driveTrain.yControl.setSetPoint(targetLocation.y);
+
         joinedTelemetry.addData("X Speed",driveTrain.xControl.calculate(driveTrain.getXPosition()) * Constants.AUTO_DRIVE_SPEED);
         joinedTelemetry.addData("Y Speed",driveTrain.yControl.calculate(driveTrain.getYPosition()) * Constants.AUTO_DRIVE_SPEED);
         driveTrain.drive(driveTrain.xControl.calculate(driveTrain.getXPosition()) * Constants.AUTO_DRIVE_SPEED, driveTrain.yControl.calculate(driveTrain.getYPosition()) * Constants.AUTO_DRIVE_SPEED);
