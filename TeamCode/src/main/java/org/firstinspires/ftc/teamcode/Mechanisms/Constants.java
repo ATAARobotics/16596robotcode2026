@@ -29,6 +29,7 @@ public class Constants {
     public static double FLYWHEEL_IDLE_SPEED = 0.3; // idle speed to start in init
     public static double FLYWHEEL_NEAR = 0.575; // previously 0.67
     public static double FLYWHEEL_FAR = 0.9; // previously 0.85
+    public static double REVERSE_FLYWHEEL = -0.3;
     public static double FLYWHEEL_FAR_AUTO = 0.82;
     public static double FLYWHEEL_MAX = 6000;
     public static final double FLYWHEEL_RECOVERY = 0.6 * FLYWHEEL_MAX; //chnage back to 0.9
@@ -36,6 +37,7 @@ public class Constants {
     public static double FLYWHEEL_KI = 0.01;
     public static double FLYWHEEL_KD = 0.0;// WAS 0.31
     public static double FAR_AUTO_AIM_ANGLE = 111.67; //turn to face shooting  was 112.67
+
 
     public static final double AUTO_DRIVE_SPEED = 0.3;
   //  public static final double AUTO_STEP_DELAY = 2.0;

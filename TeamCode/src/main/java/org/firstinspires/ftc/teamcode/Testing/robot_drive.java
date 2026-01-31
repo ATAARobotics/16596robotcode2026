@@ -132,6 +132,14 @@ robot_drive extends OpMode {
            // Uncomment out the line before to test idle speed and comment the line above
            // driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
         }
+        if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+           driveTrain.shooter.set(Constants.REVERSE_FLYWHEEL);
+           driveTrain.feed1.setPower(-1);
+        }
+        else  {
+            driveTrain.shooter.set(0);
+            driveTrain.feed1.setPower(0);
+        }
         // ===== Indicator control =====
         if (driveTrain.canLaunch(shootingspeed)) {
             indicator.setColor(Constants.RGB_Light.GREEN);
