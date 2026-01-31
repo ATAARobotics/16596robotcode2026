@@ -84,7 +84,7 @@ public class RedFarShootingAuto extends OpMode {
                     break;
                 case Far_Shot://Shoots the artifacts
                     // Currently not running as of Nov 22 2025
-                    driveTrain.flywheel.set(Constants.FLYWHEEL_FAR_AUTO);
+                    driveTrain.shooter.set(Constants.FLYWHEEL_FAR_AUTO);
                     if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR_AUTO)) {
                         indicator.setColor(Constants.RGB_Light.GREEN);
                         driveTrain.feed1.setPower(Constants.FEED_SPEED);
@@ -101,7 +101,7 @@ public class RedFarShootingAuto extends OpMode {
                     }
 
                     if (getRuntime() - startTime >= 16.7) {
-                        driveTrain.flywheel.set(0.0); //this doesnt stop at the end either-we need it to stop
+                        driveTrain.shooter.set(0.0); //this doesnt stop at the end either-we need it to stop
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
                         driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
@@ -142,7 +142,7 @@ public class RedFarShootingAuto extends OpMode {
                     if (!this.at_xy(currentDestination)) {
                         this.goto_xy(currentDestination);
                         //stops everything
-                      driveTrain.flywheel.set(0.0);
+                      driveTrain.shooter.set(0.0);
          //               driveTrain.feed1.setPower(0.0);
           //              driveTrain.feed2.setPower(0.0);
                       driveTrain.intake.set(0);
@@ -169,7 +169,7 @@ public class RedFarShootingAuto extends OpMode {
             joinedTelemetry.addData("Destination X",currentDestination.x);
             joinedTelemetry.addData("Deqstination Y",currentDestination.y);
            // joinedTelemetry.addData("shooter", driveTrain.shooter.getVelocity());
-            joinedTelemetry.addData("shooter2", driveTrain.shooter2.getVelocity());
+            joinedTelemetry.addData("shooter2", driveTrain.shooter.getVelocity());
             joinedTelemetry.update();
 
         }
