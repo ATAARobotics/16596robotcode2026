@@ -64,6 +64,11 @@ robot_drive extends OpMode {
 
     public double shootingspeed = 0.0;
 
+    public boolean operator_d_down;
+    public boolean operator_a_button;
+    public boolean operator_right_bumper;
+    public boolean operator_left_bumper;
+
     /* private double heading; */
     @Override
     public void init() {
@@ -90,7 +95,7 @@ robot_drive extends OpMode {
         operator = new GamepadEx(gamepad2); // This controls the movement of items on the robot
         runtime.reset();
         // Uncomment the line below to test idle speed
-//        driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
+        driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
     }
 
     @Override
@@ -118,6 +123,10 @@ robot_drive extends OpMode {
         driveTrain.drive(forwardSpeed, strafeSpeed);
         // =========  Flywheel control ===========
         // Set shooting speed
+        operator_d_down = operator.isDown(GamepadKeys.Button.DPAD_DOWN);
+        operator_a_button = operator.isDown(GamepadKeys.Button.A);
+        operator_right_bumper = operator.isDown(GamepadKeys.Button.RIGHT_BUMPER);
+
         if(operator.isDown(GamepadKeys.Button.DPAD_DOWN)){
             shootingspeed = Constants.FLYWHEEL_FAR;
         }
@@ -127,19 +136,13 @@ robot_drive extends OpMode {
         if(operator.isDown(GamepadKeys.Button.A)) {
             driveTrain.shooter.set(shootingspeed);
         }
-       else  {
-           driveTrain.shooter.set(0);
-           // Uncomment out the line before to test idle speed and comment the line above
-           // driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
-        }
-        if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-           driveTrain.shooter.set(Constants.REVERSE_FLYWHEEL);
-           driveTrain.feed1.setPower(-1);
-        }
-        else  {
-            driveTrain.shooter.set(0);
-            driveTrain.feed1.setPower(0);
-        }
+       else if (operator_right_bumper) {
+            driveTrain.shooter.set(Constants.REVERSE_FLYWHEEL);
+       }
+       else {
+           driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
+       }
+
         // ===== Indicator control =====
         if (driveTrain.canLaunch(shootingspeed)) {
             indicator.setColor(Constants.RGB_Light.GREEN);
@@ -190,17 +193,13 @@ robot_drive extends OpMode {
 //            driveTrain.flywheel.set(0);
 //        }
         // =================  Servo Control ===========================================
-        if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-            driveTrain.feed1.setPower(Constants.FEED_SPEED);
-        }
-        else {
-            driveTrain.feed1.setPower(0);
-        }
-          //check that flywheel is back up to speed before allowing operator to shoot
-
-        if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) )//&& driveTrain.canLaunch(shootingspeed))
+        if (operator_left_bumper)
+        //if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) )//&& driveTrain.canLaunch(shootingspeed))
         {
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
+        }
+        else if (operator_right_bumper) {
+            driveTrain.feed2.setPower(-1);
         }
         else {
             driveTrain.feed2.setPower(0);
