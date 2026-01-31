@@ -57,6 +57,8 @@ public class BlueFarShootingAuto extends OpMode {
             switch (currentWayPoint) {
 
                 case Move_Off_Wall:
+                    driveTrain.feed1.setPower(-Constants.FEED_SPEED);
+                    driveTrain.feed2.setPower(-Constants.FEED_SPEED);
                     // Set Destination
                     currentDestination.x = BLUE_FAR_SHOOTING_MOVE_OFF_WALL_X;//move forward towards the tape
                     currentDestination.x_speed = 0.5;
@@ -153,7 +155,7 @@ public class BlueFarShootingAuto extends OpMode {
                 case Done:
                 default:
                     driveTrain.setFacing(Constants.NORTH);
-                    driveTrain.shooter.stopMotor();
+                    //driveTrain.shooter.stopMotor();
                     driveTrain.stop();
                     autoDone = true;
                     break;
