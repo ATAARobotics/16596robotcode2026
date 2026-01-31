@@ -55,9 +55,9 @@ public class BlueFarShootingAuto extends OpMode {
 
                 case Move_Off_Wall:
                     // Set Destination
-                    currentDestination.x = -373.0; //testing, change back to 0.0 soon
+                    currentDestination.x = -150.0; //testing, was -300
                     currentDestination.x_speed = 0.5;
-                    currentDestination.y = -121.0; //current value needs to be test, was -221
+                    currentDestination.y = -121.0; //current value needs to be test, was -121
                     currentDestination.y_speed = 0.5;
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location

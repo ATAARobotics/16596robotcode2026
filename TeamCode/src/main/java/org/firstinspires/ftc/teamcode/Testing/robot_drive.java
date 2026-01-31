@@ -68,6 +68,7 @@ robot_drive extends OpMode {
     public boolean operator_a_button;
     public boolean operator_right_bumper;
     public boolean operator_left_bumper;
+    public double targetSpeed = Constants.FLYWHEEL_NEAR_TARGET;
 
     /* private double heading; */
     @Override
@@ -103,15 +104,6 @@ robot_drive extends OpMode {
         driver.readButtons();  // enable 'was just pressed' methods
         operator.readButtons();
         driveTrain.loop(); // Current elbow
-        speed = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
-        joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
-//        speed2 = driveTrain.shooter.getCorrectedVelocity();// what is corrected velocity??
-//        joinedTelemetry.addData("Shooter2 Speed", speed2); //telemetry shooter speed
-       // flywheelspeed = driveTrain.flywheel.getCorrectedVelocity();// what is corrected velocity??
-       // joinedTelemetry.addData("Flywheel Speed",flywheelspeed); //telemetry shooter speed
-        joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
-        joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
-        joinedTelemetry.addData("turnspeed", driveTrain.turnSpeed);
         //======= get human inputs for drive=============
 
         double strafeSpeed = -driver.getLeftX() * Constants.SPEED_RATIO;
@@ -126,12 +118,14 @@ robot_drive extends OpMode {
         operator_d_down = operator.isDown(GamepadKeys.Button.DPAD_DOWN);
         operator_a_button = operator.isDown(GamepadKeys.Button.A);
         operator_right_bumper = operator.isDown(GamepadKeys.Button.RIGHT_BUMPER);
-
+        speed = driveTrain.shooter.getCorrectedVelocity();
         if(operator.isDown(GamepadKeys.Button.DPAD_DOWN)){
             shootingspeed = Constants.FLYWHEEL_FAR;
+            targetSpeed = Constants.FLYWHEEL_FAR_TARGET;
         }
         else {
             shootingspeed = Constants.FLYWHEEL_NEAR;
+            targetSpeed = Constants.FLYWHEEL_NEAR_TARGET;
         }
 
         if(operator.isDown(GamepadKeys.Button.A)) {
@@ -143,9 +137,25 @@ robot_drive extends OpMode {
        else {
            driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
        }
+        // =================  Servo Control ===========================================
+        if (operator_left_bumper || driveTrain.canLaunch(shootingspeed))
+        //if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) )//&& driveTrain.canLaunch(shootingspeed))
+        {
+            driveTrain.feed1.setPower(Constants.FEED_SPEED);
+            driveTrain.feed2.setPower(Constants.FEED_SPEED);
+        }
+        else if (operator_right_bumper) {
+            driveTrain.feed1.setPower(-1);
+            driveTrain.feed2.setPower(-1);
+        }
+        else {
+            driveTrain.feed1.setPower(0);
+            driveTrain.feed2.setPower(0);
+        }
 
         // ===== Indicator control =====
-        if (driveTrain.canLaunch(shootingspeed)) {
+        if (driveTrain.canLaunch(shootingspeed)){
+        //if (speed > targetSpeed) {
             indicator.setColor(Constants.RGB_Light.GREEN);
         } else {
             indicator.setColor(Constants.RGB_Light.RED);
@@ -193,21 +203,7 @@ robot_drive extends OpMode {
 //        else  {
 //            driveTrain.flywheel.set(0);
 //        }
-        // =================  Servo Control ===========================================
-        if (operator_left_bumper)
-        //if(operator.isDown(GamepadKeys.Button.LEFT_BUMPER) )//&& driveTrain.canLaunch(shootingspeed))
-        {
-            driveTrain.feed1.setPower(Constants.FEED_SPEED);
-            driveTrain.feed2.setPower(Constants.FEED_SPEED);
-        }
-        else if (operator_right_bumper) {
-            driveTrain.feed1.setPower(-1);
-            driveTrain.feed2.setPower(-1);
-        }
-        else {
-            driveTrain.feed1.setPower(0);
-            driveTrain.feed2.setPower(0);
-        }
+
         driveTrain.turn(driver.getRightX());
 //Select N, S, E, W
 //        if (driver.getRightX() <= -Constants.JOYSTICK_TOLERANCE) {
@@ -238,7 +234,12 @@ robot_drive extends OpMode {
 //           indicator.setColor(Constants.RGB_Light.GREEN);
 //        }
 
+
         // Send data to telemetry
+        joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
+        joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
+        joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
+        joinedTelemetry.addData("turnspeed", driveTrain.turnSpeed);
         joinedTelemetry.update();
     }
 

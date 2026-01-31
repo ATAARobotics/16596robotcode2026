@@ -78,7 +78,7 @@ public class DriveTrainBasic {
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         // Flywheel assignment
-        shooter = new MotorEx(hwMap, "shooter2");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        shooter = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
        // shooter2 = new MotorEx(hwMap, "shooter2");
        // flywheel = new MotorGroup(shooter, shooter2);
         // Intake assignment
@@ -245,7 +245,8 @@ public class DriveTrainBasic {
         }
     }
     public boolean canLaunch(double launchSpeed){
-        return shooter.getVelocity() >= (0.8 * launchSpeed * Constants.FLYWHEEL_MAX);
+        //speed = driveTrain.shooter.getCorrectedVelocity();
+        return shooter.getCorrectedVelocity() >= launchSpeed * Constants.FLYWHEEL_MAX;
         //return true;// need to fix for comp
     }
     public double convert360(double angle){
