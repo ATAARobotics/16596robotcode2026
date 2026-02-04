@@ -48,9 +48,10 @@ public class Constants {
     public static double FAR_AUTO_AIM_ANGLE_RED = 111.67;
     public static double FAR_AUTO_AIM_ANGLE_BLUE = 111.67;//turn to face shooting  was 112.67
 
-    public static double BLUE_FAR_SHOOTING_MOVE_OFF_WALL_X = -90;
+    public static double BLUE_FAR_SHOOTING_MOVE_OFF_WALL_X = -100;
 
     public static final double AUTO_DRIVE_SPEED = 0.3;
+    public static final double AUTO_WAIT_TIME = 10.0;
   //  public static final double AUTO_STEP_DELAY = 2.0;
     public static final double FEED_SPEED = -1.0;
     public static final double FEED_SPEED_AUTO = -0.5;
