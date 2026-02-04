@@ -68,7 +68,7 @@ robot_drive extends OpMode {
     public boolean operator_a_button;
     public boolean operator_right_bumper;
     public boolean operator_left_bumper;
-    public double targetSpeed = Constants.FLYWHEEL_NEAR_TARGET;
+    public double targetSpeed = 0.0;
 
     /* private double heading; */
     @Override
@@ -121,11 +121,11 @@ robot_drive extends OpMode {
         speed = driveTrain.shooter.getCorrectedVelocity();
         if(operator.isDown(GamepadKeys.Button.DPAD_DOWN)){
             shootingspeed = Constants.FLYWHEEL_FAR;
-            targetSpeed = Constants.FLYWHEEL_FAR_TARGET;
+//            targetSpeed = Constants.FLYWHEEL_FAR_TARGET;
         }
         else {
             shootingspeed = Constants.FLYWHEEL_NEAR;
-            targetSpeed = Constants.FLYWHEEL_NEAR_TARGET;
+  //          targetSpeed = Constants.FLYWHEEL_NEAR_TARGET;
         }
 
         if(operator.isDown(GamepadKeys.Button.A)) {
