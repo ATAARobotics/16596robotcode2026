@@ -98,7 +98,7 @@ public class BlueFarShootingAuto extends OpMode {
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
                     }
-                    if (getRuntime() - startTime >= 16.7)
+                    if (getRuntime() - startTime >= Constants.AUTO_WAIT_TIME)
                     {
                         driveTrain.shooter.set(0.0); //this doesnt stop at the end either-we need it to stop
                         driveTrain.stopFlyWheel();
