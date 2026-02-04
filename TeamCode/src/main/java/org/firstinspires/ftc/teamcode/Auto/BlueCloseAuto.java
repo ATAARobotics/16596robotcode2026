@@ -84,16 +84,16 @@ public class BlueCloseAuto extends OpMode {
 //                    break;
                 case Close_Shot://Shoots the artifacts
                     // Currently not running as of Nov 22 2025
-                    driveTrain.shooter.set(Constants.FLYWHEEL_FAR_AUTO);
-                    if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR_AUTO)) {
+                    driveTrain.shooter.set(Constants.FLYWHEEL_NEAR_AUTO);
+                    if (driveTrain.canLaunch(Constants.FLYWHEEL_NEAR_AUTO))
+                    {
                         indicator.setColor(Constants.RGB_Light.GREEN);
                         driveTrain.feed1.setPower(Constants.FEED_SPEED);
                         driveTrain.feed2.setPower(Constants.FEED_SPEED);
                         // creates an if statement based on the flywheel recovery speed so it only shoots when it's up to speed
-                        if(Constants.FLYWHEEL_FAR_AUTO >= Constants.FLYWHEEL_RECOVERY){
-                            driveTrain.feed2.setPower(Constants.FEED_SPEED);
-                        }
-                    } else {
+
+                    } else
+                    {
                         indicator.setColor(Constants.RGB_Light.RED);
                     }
 
@@ -106,7 +106,7 @@ public class BlueCloseAuto extends OpMode {
                         currentWayPoint = WayPoints.Safe_Park;
                     }
                         else{ //rechecks constantly if under that amount of time
-                        if(Constants.FLYWHEEL_FAR_AUTO >= Constants.FLYWHEEL_RECOVERY) {
+                        if(driveTrain.canLaunch(Constants.FLYWHEEL_NEAR_AUTO)) {
                             driveTrain.feed2.setPower(Constants.FEED_SPEED);
                         }
                     }
