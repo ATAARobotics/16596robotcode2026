@@ -18,26 +18,30 @@ public class Constants {
     //
     // ========== Setting
     //
-    public static final double TICKS_TO_INCHES = Math.PI * 48 / (25.4 * 2000);                      // for use in Odometry
+    //public static final double TICKS_TO_INCHES = Math.PI * 48 / (25.4 * 2000);                      // for use in Odometry
     public static final double SPEED_RATIO = 1.0;  // Use this to slow down robot
     public static final double TURN_RATIO = 1.0; // use this to slow turn rate1q
     //
     // ========== Intake, Shooter and Feeder Speeds
 
-    public static double INTAKE_SPEED = 0.67; //changed from 1.0 used for both auto and teleop
+    public static double INTAKE_SPEED = 0.70; //changed from 1.0 used for both auto and teleop
+    public static double INTAKE_SPEED_AUTO = 0.6;
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
-    public static double FLYWHEEL_FUDGE_FACTOR = 2100.0;
+    //public static double FLYWHEEL_FUDGE_FACTOR = 2100.0;
     public static double FLYWHEEL_IDLE_SPEED = 0.3; // idle speed to start in init
-    public static double FLYWHEEL_IDLE_TARGET = FLYWHEEL_IDLE_SPEED * FLYWHEEL_FUDGE_FACTOR;
+    //public static double FLYWHEEL_IDLE_TARGET = FLYWHEEL_IDLE_SPEED * FLYWHEEL_FUDGE_FACTOR;
     public static double FLYWHEEL_NEAR = 0.62;
-    public static double FLYWHEEL_NEAR_TARGET = FLYWHEEL_NEAR * FLYWHEEL_FUDGE_FACTOR;
+    public static double FLYWHEEL_NEAR_AUTO = 0.58;
+    //public static double FLYWHEEL_NEAR_TARGET = FLYWHEEL_NEAR * FLYWHEEL_FUDGE_FACTOR;
 
     public static double FLYWHEEL_FAR = 0.78; // previously 0.85
-    public static double FLYWHEEL_FAR_TARGET = FLYWHEEL_FAR * FLYWHEEL_FUDGE_FACTOR; // previously 0.85
+    public static double FLYWHEEL_FAR_AUTO = 0.82; //was 0.82
+
+    //public static double FLYWHEEL_FAR_TARGET = FLYWHEEL_FAR * FLYWHEEL_FUDGE_FACTOR; // previously 0.85
     public static double REVERSE_FLYWHEEL = -0.3;
-    public static double FLYWHEEL_FAR_AUTO = 0.8; //was 0.82
-    public static double FLYWHEEL_MAX = FLYWHEEL_FUDGE_FACTOR;
-    public static final double FLYWHEEL_RECOVERY = 0.6 * FLYWHEEL_MAX; //chnage back to 0.9
+
+    public static double FLYWHEEL_MAX = 2100;
+    //public static final double FLYWHEEL_RECOVERY = 0.6 * FLYWHEEL_MAX; //chnage back to 0.9
     public static double FLYWHEEL_KP = 5.0;
     public static double FLYWHEEL_KI = 0.00;
     public static double FLYWHEEL_KD = 0.0;// WAS 0.31
