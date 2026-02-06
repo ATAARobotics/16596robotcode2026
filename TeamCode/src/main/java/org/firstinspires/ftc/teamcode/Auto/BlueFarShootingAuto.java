@@ -22,6 +22,7 @@ public class BlueFarShootingAuto extends OpMode {
     private boolean autoDone;
     private WayPoints currentWayPoint = WayPoints.Move_Off_Wall;
     public double speed = 0.0;
+    private double shotStartTime = -1.0;
 
     @Override
     public void init() {
@@ -48,12 +49,97 @@ public class BlueFarShootingAuto extends OpMode {
     public void loop() {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
+        
         if (!autoDone) {
-            driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
+
+            //Condition Motor control
+            //Waypoints:  Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park, Done
+            
+            //INTAKE
+            if (currentWayPoint == WayPoints.Move_Off_Wall || currentWayPoint == WayPoints.Aim || currentWayPoint == WayPoints.Far_Shot) {
+                driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
+            } 
+            else 
+            {
+                driveTrain.intake.set(0);
+            }
+            
+            //FEEDS
+            if (currentWayPoint == WayPoints.Move_Off_Wall || currentWayPoint == WayPoints.Aim) 
+            {
+                driveTrain.feed1.setPower(-Constants.FEED_SPEED);
+                driveTrain.feed2.setPower(-Constants.FEED_SPEED);
+            } 
+            else if (currentWayPoint == WayPoints.Far_Shot && driveTrain.canLaunch(Constants.FLYWHEEL_FAR_AUTO))
+            {
+                driveTrain.feed1.setPower(Constants.FEED_SPEED);
+                driveTrain.feed2.setPower(Constants.FEED_SPEED);
+            }
+            else
+            {
+                driveTrain.feed1.setPower(0.0);
+                driveTrain.feed2.setPower(0.0);
+            }
+            
+            //SHOOTER
+            if (currentWayPoint == WayPoints.Far_Shot) 
+            {
+                    //Shooter Timer Test - If this works, replace shooter time with constant                    
+                    // Get runtime when shooter starts shooting
+                    if (shotStartTime < 0) shotStartTime = getRuntime();
+                    if (getRuntime() - shotStartTime < 5.0)
+                    {
+                        driveTrain.shooter.set(Constants.FLYWHEEL_FAR_AUTO);
+                    }
+                    else
+                    {
+                        driveTrain.shooter.set(0.0);
+                    }
+            }
+            else
+            {
+                driveTrain.shooter.set(0.0);
+            }
+            
+            //INDICATOR
+            if (currentWayPoint == WayPoints.Move_Off_Wall) 
+            {
+                indicator.setColor(Constants.RGB_Light.ORANGE);
+            }
+            else if (currentWayPoint == WayPoints.Aim) 
+            {
+                indicator.setColor(Constants.RGB_Light.YELLOW);
+            }
+            else if (currentWayPoint == WayPoints.Far_Shot) 
+            {
+                if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR_AUTO))
+                {
+                    indicator.setColor(Constants.RGB_Light.GREEN);
+                }
+                else
+                {
+                    indicator.setColor(Constants.RGB_Light.RED);
+                }
+            }
+            else if (currentWayPoint == WayPoints.Move_Off_White_Tape) 
+            {
+                indicator.setColor(Constants.RGB_Light.BLUE);
+            }
+            else if (currentWayPoint == WayPoints.Safe_Park) 
+            {
+                indicator.setColor(Constants.RGB_Light.VIOLET);
+            }
+            else if (currentWayPoint == WayPoints.Done) 
+            {
+                indicator.setColor(Constants.RGB_Light.WHITE);
+            }  
+            else
+            {
+                indicator.setColor(Constants.RGB_Light.OFF);
+            }
+            
             switch (currentWayPoint) {
                 case Move_Off_Wall:
-                    driveTrain.feed1.setPower(-Constants.FEED_SPEED);
-                    driveTrain.feed2.setPower(-Constants.FEED_SPEED);
                     // Set Destination
                     currentDestination.x = Constants.BLUE_FAR_SHOOTING_MOVE_OFF_WALL_X;//move forward towards the tape
                     currentDestination.x_speed = 0.5;
@@ -62,52 +148,42 @@ public class BlueFarShootingAuto extends OpMode {
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination)) 
+                    {
                         this.goto_xy(currentDestination);
-                    } else {
+                    } 
+                    else 
+                    {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Aim;
                     }
                     break;
+                    
                 case Aim:
                     // Set Destination
                     // Turns our robot to face to the obelisk
                     currentDestination.x = 373.0;// used to be 43.0
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = -121.0; //shouldn't change from the previous value
-                    //current value needs to be test, was -221
                     currentDestination.y_speed = 0.5;
                     currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE_BLUE; //Turns to the obelisk, may need to be adjusted
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                 //  currentWayPoint = WayPoints.Far_Shot; // put back in for final
                     currentWayPoint = WayPoints.Far_Shot;
                     break;
+                    
                 case Far_Shot://Shoots the artifacts
-                    // Currently not running as of Nov 22 2025
-                    driveTrain.shooter.set(Constants.FLYWHEEL_FAR_AUTO);
-                    if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR_AUTO))
+                    if (shotStartTime < 0) shotStartTime = getRuntime();
+                    driveTrain.drive(0.0, 0.0);
+                    //Shooter Timer Test - If this works, replace shooter time with constant
+                    if (getRuntime() - shotStartTime >= 6.0)
                     {
-                        indicator.setColor(Constants.RGB_Light.GREEN);
-                        driveTrain.feed1.setPower(Constants.FEED_SPEED);
-                        driveTrain.feed2.setPower(Constants.FEED_SPEED);
-                    }
-                    else
-                    {
-                        indicator.setColor(Constants.RGB_Light.RED);
-                        driveTrain.feed1.setPower(0.0);
-                        driveTrain.feed2.setPower(0.0);
-                    }
-                    if (getRuntime() - startTime >= Constants.AUTO_WAIT_TIME)
-                    {
-                        driveTrain.shooter.set(0.0); //this doesnt stop at the end either-we need it to stop
                         driveTrain.stopFlyWheel();
-                        driveTrain.feed1.setPower(0.0);
-                        driveTrain.feed2.setPower(0.0);
-                        driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
                         currentWayPoint = WayPoints.Move_Off_White_Tape;
+                        shotStartTime = -1;
                     }
                     break;
+                    
                 case Move_Off_White_Tape:
                     // Set Destination
                     currentDestination.x = 470.0;
@@ -117,13 +193,17 @@ public class BlueFarShootingAuto extends OpMode {
                     currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE_BLUE;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination)) 
+                    {
                         this.goto_xy(currentDestination);
-                    } else {
+                    } 
+                    else 
+                    {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Safe_Park;
                     }
                     break;
+                    
                 case Safe_Park:
                     // Set Destination
                     currentDestination.x = 430.0; // makes if face the drive team, same facing as starting
@@ -133,18 +213,17 @@ public class BlueFarShootingAuto extends OpMode {
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination)) 
+                    {
                         this.goto_xy(currentDestination);
-                        //stops everything
-                      driveTrain.shooter.set(0.0);
-         //               driveTrain.feed1.setPower(0.0);
-          //              driveTrain.feed2.setPower(0.0);
-                      driveTrain.intake.set(0);
-                    } else {
+                    } 
+                    else 
+                    {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Done;
                     }
                     break;
+                    
                 case Done:
                 default:
                     driveTrain.setFacing(Constants.NORTH);
@@ -152,6 +231,8 @@ public class BlueFarShootingAuto extends OpMode {
                     autoDone = true;
                     break;
             }
+
+            
             // Send data to telemetry
             speed = driveTrain.shooter.getCorrectedVelocity();
             joinedTelemetry.addData("Shooter Speed", speed);
@@ -174,11 +255,15 @@ public class BlueFarShootingAuto extends OpMode {
     }
 
     public boolean at_x(double targetX) {
-        return (Math.abs(targetX) - Math.abs(driveTrain.getXPosition())) <= Constants.AUTO_X_DISTANCE_ERROR;
+        //return (Math.abs(targetX) - Math.abs(driveTrain.getXPosition())) <= Constants.AUTO_X_DISTANCE_ERROR;
+        //BlueAuto uses negative setpoints, using absolute value of position can cause incorrect readings.
+        return (Math.abs(targetX - driveTrain.getXPosition())) <= Constants.AUTO_X_DISTANCE_ERROR;
     }
 
     public boolean at_y(double targetY) {
-        return (Math.abs(targetY) - Math.abs(driveTrain.getYPosition())) <= Constants.AUTO_Y_DISTANCE_ERROR;
+        //return (Math.abs(targetY) - Math.abs(driveTrain.getYPosition())) <= Constants.AUTO_Y_DISTANCE_ERROR;
+        //BlueAuto uses negative setpoints, using absolute value of position can cause incorrect readings.
+        return (Math.abs(targetY - driveTrain.getYPosition())) <= Constants.AUTO_Y_DISTANCE_ERROR;
     }
 
     public static class Location {
