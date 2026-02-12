@@ -43,13 +43,17 @@ public class RedCloseAuto extends OpMode {
     }
 
     @Override
-    public void start(){startTime = getRuntime();}
+    public void start(){
+        startTime = getRuntime();
+        driveTrain.feed1.setPower(-Constants.FEED_SPEED);
+        driveTrain.feed2.setPower(-Constants.FEED_SPEED);
+    }
     @Override
     public void loop() {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
         if (!autoDone) {
-            driveTrain.intake.set(Constants.INTAKE_SPEED);
+
             switch (currentWayPoint) {
 
                 case Move_Off_Wall:
@@ -84,6 +88,7 @@ public class RedCloseAuto extends OpMode {
 //                    break;
                 case Close_Shot://Shoots the artifacts
                     // Currently not running as of Nov 22 2025
+                    driveTrain.intake.set(Constants.INTAKE_SPEED);
                     driveTrain.shooter.set(Constants.FLYWHEEL_NEAR_AUTO);
                     if (driveTrain.canLaunch(Constants.FLYWHEEL_NEAR_AUTO))
                     {

@@ -43,15 +43,18 @@ public class BlueCloseAuto extends OpMode {
     }
 
     @Override
-    public void start(){startTime = getRuntime();}
+    public void start(){
+        startTime = getRuntime();
+        driveTrain.feed1.setPower(-Constants.FEED_SPEED);
+        driveTrain.feed2.setPower(-Constants.FEED_SPEED);
+    }
     @Override
     public void loop() {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
-        if (!autoDone) {
-            driveTrain.intake.set(Constants.INTAKE_SPEED);
-            switch (currentWayPoint) {
+        if (!autoDone && (getRuntime() - startTime > 0.5)) {
 
+            switch (currentWayPoint) {
                 case Move_Off_Wall:
                     // Set Destination
                     currentDestination.x = 1000.0; //testing, change back to 0.0 soon
@@ -84,6 +87,7 @@ public class BlueCloseAuto extends OpMode {
 //                    break;
                 case Close_Shot://Shoots the artifacts
                     // Currently not running as of Nov 22 2025
+                    driveTrain.intake.set(Constants.INTAKE_SPEED);
                     driveTrain.shooter.set(Constants.FLYWHEEL_NEAR_AUTO);
                     if (driveTrain.canLaunch(Constants.FLYWHEEL_NEAR_AUTO))
                     {
@@ -97,7 +101,7 @@ public class BlueCloseAuto extends OpMode {
                         indicator.setColor(Constants.RGB_Light.RED);
                     }
 
-                    if (getRuntime() - startTime >= 16.7) {
+                    if (getRuntime() - startTime >= Constants.AUTO_WAIT_TIME) {
                         driveTrain.shooter.set(0.0); //this doesnt stop at the end either-we need it to stop
                         driveTrain.shooter.stopMotor();
                         driveTrain.feed1.setPower(0.0);
@@ -163,6 +167,7 @@ public class BlueCloseAuto extends OpMode {
             joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
             joinedTelemetry.addData("Destination X",currentDestination.x);
             joinedTelemetry.addData("Destination Y",currentDestination.y);
+            joinedTelemetry.addData("Shooter Speed",driveTrain.shooter.getCorrectedVelocity());
             joinedTelemetry.addData("Run Time",getRuntime());
             joinedTelemetry.addData("Time Diff",getRuntime() - startTime);
             joinedTelemetry.update();

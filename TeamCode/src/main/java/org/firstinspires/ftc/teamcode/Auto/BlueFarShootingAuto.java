@@ -176,7 +176,7 @@ public class BlueFarShootingAuto extends OpMode {
                     if (shotStartTime < 0) shotStartTime = getRuntime();
                     driveTrain.drive(0.0, 0.0);
                     //Shooter Timer Test - If this works, replace shooter time with constant
-                    if (getRuntime() - shotStartTime >= 6.0)
+                    if (getRuntime() - shotStartTime >= Constants.AUTO_WAIT_TIME)
                     {
                         driveTrain.stopFlyWheel();
                         currentWayPoint = WayPoints.Move_Off_White_Tape;
