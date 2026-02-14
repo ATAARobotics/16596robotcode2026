@@ -81,7 +81,6 @@ public class RedFarShootingAuto extends OpMode {
                     currentDestination.facing = -Constants.FAR_AUTO_AIM_ANGLE_RED; //Turns to the obelisk, may need to be adjusted
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                 //  currentWayPoint = WayPoints.Far_Shot; // put back in for final
                     currentWayPoint = WayPoints.Far_Shot;
                     break;
                 case Far_Shot://Shoots the artifacts
@@ -106,12 +105,15 @@ public class RedFarShootingAuto extends OpMode {
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
                         driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
-                        if(secondAim){
+                        if(secondAim)
+                        {
                             currentWayPoint = WayPoints.Safe_Park;
-                        }else{
+                        }
+                        else
+                        {
                         currentWayPoint = WayPoints.Move_Off_White_Tape;
                         startTime = startTime + Constants.AUTO_WAIT_TIME;
-                    }
+                        }
                     }
                     break;
                 case Move_Off_White_Tape:
@@ -131,7 +133,6 @@ public class RedFarShootingAuto extends OpMode {
                         currentWayPoint = WayPoints.Pick_Up;
                     }
                     break;
-
                 case Pick_Up:
                     currentDestination.x = 360.0; //was -760
                     currentDestination.x_speed = 0.0;
@@ -141,16 +142,18 @@ public class RedFarShootingAuto extends OpMode {
                     driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination))
+                    {
                         this.goto_xy(currentDestination);
-                    } else {
+                    }
+                    else
+                    {
                         driveTrain.drive(0.0, 0.0);
-                      secondAim = true;
+                        secondAim = true;
                         currentWayPoint = WayPoints.Aim;
                     }
                     break;
-
-                    case Safe_Park:
+                case Safe_Park:
                     // Set Destination      // x was -760 the was -260 was 260
                     currentDestination.x = 360.0; // makes if face the drive team, same facing as starting
                     currentDestination.x_speed = 0.4;
@@ -159,14 +162,15 @@ public class RedFarShootingAuto extends OpMode {
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination))
+                    {
                         this.goto_xy(currentDestination);
                         //stops everything
-                      driveTrain.shooter.set(0.0);
-         //               driveTrain.feed1.setPower(0.0);
-          //              driveTrain.feed2.setPower(0.0);
-                      driveTrain.intake.set(0);
-                    } else {
+                        driveTrain.shooter.set(0.0);
+                        driveTrain.intake.set(0);
+                    }
+                    else
+                    {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Done;
                     }
@@ -226,6 +230,6 @@ public class RedFarShootingAuto extends OpMode {
 
     // ===== Enum Data Type for waypoint switch
     enum WayPoints {
-        Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park,Pick_Up, Done
+        Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park, Pick_Up, Done
     }
 }
