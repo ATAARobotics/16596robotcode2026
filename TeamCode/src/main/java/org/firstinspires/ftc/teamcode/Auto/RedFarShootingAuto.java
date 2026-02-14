@@ -63,9 +63,12 @@ public class RedFarShootingAuto extends OpMode {
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination))
+                    {
                         this.goto_xy(currentDestination);
-                    } else {
+                    }
+                    else
+                    {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Aim;
                     }
@@ -126,9 +129,12 @@ public class RedFarShootingAuto extends OpMode {
                     driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination))
+                    {
                         this.goto_xy(currentDestination);
-                    } else {
+                    }
+                    else
+                    {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Pick_Up;
                     }
