@@ -54,6 +54,7 @@ public class RedFarShootingAuto extends OpMode {
                 case Move_Off_Wall:
                     driveTrain.feed1.setPower(-Constants.FEED_SPEED);
                     driveTrain.feed2.setPower(-Constants.FEED_SPEED);
+                    driveTrain.feeder.set(-Constants.FEEDER_SPEED);
                     // Set Destination
                     currentDestination.x = -250.0; // was 43.0
                     currentDestination.x_speed = 0.5;
@@ -93,12 +94,14 @@ public class RedFarShootingAuto extends OpMode {
                         indicator.setColor(Constants.RGB_Light.GREEN);
                         driveTrain.feed1.setPower(Constants.FEED_SPEED);
                         driveTrain.feed2.setPower(Constants.FEED_SPEED);
+                        driveTrain.feeder.set(Constants.FEEDER_SPEED);
                     }
                     else
                     {
                         indicator.setColor(Constants.RGB_Light.RED);
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
+                        driveTrain.feeder.set(0.0);
                     }
                     if (getRuntime() - startTime >= Constants.AUTO_WAIT_TIME)
                     {
@@ -106,6 +109,7 @@ public class RedFarShootingAuto extends OpMode {
                         driveTrain.stopFlyWheel();
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
+                        driveTrain.feeder.set(0.0);
                         driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
                         if(secondAim)
                         {
@@ -190,6 +194,7 @@ public class RedFarShootingAuto extends OpMode {
             // Send data to telemetry
             speed = driveTrain.shooter.getCorrectedVelocity();
             joinedTelemetry.addData("Shooter Speed", speed);
+            joinedTelemetry.addData("Feeder Speed", driveTrain.feeder.getVelocity());
             joinedTelemetry.addData("X-cord",driveTrain.getXPosition());
             joinedTelemetry.addData("Y-cord",driveTrain.getYPosition());
             joinedTelemetry.addData("Odometer X-cord", driveTrain.odometer.getPosX());
