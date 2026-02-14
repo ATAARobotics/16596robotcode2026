@@ -102,7 +102,7 @@ public class RedFarShootingAuto extends OpMode {
                     }
                     if (getRuntime() - startTime >= Constants.AUTO_WAIT_TIME)
                     {
-                        driveTrain.shooter.set(0.0); //this doesnt stop at the end either-we need it to stop
+                        driveTrain.shooter.set(0.0); //this doesn't stop at the end either-we need it to stop
                         driveTrain.stopFlyWheel();
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
@@ -190,10 +190,10 @@ public class RedFarShootingAuto extends OpMode {
             // Send data to telemetry
             speed = driveTrain.shooter.getCorrectedVelocity();
             joinedTelemetry.addData("Shooter Speed", speed);
-            joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
-            joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
-            joinedTelemetry.addData("X-cord", driveTrain.odometer.getPosX());
-            joinedTelemetry.addData("Y-cord", driveTrain.odometer.getPosY());
+            joinedTelemetry.addData("X-cord",driveTrain.getXPosition());
+            joinedTelemetry.addData("Y-cord",driveTrain.getYPosition());
+            joinedTelemetry.addData("Odometer X-cord", driveTrain.odometer.getPosX());
+            joinedTelemetry.addData("Odometer Y-cord", driveTrain.odometer.getPosY());
             joinedTelemetry.addData("Heading", pos.getHeading(AngleUnit.DEGREES));
             joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
             joinedTelemetry.addData("Destination X",currentDestination.x);
