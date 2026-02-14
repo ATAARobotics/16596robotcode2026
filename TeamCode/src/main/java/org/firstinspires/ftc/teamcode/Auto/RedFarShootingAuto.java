@@ -22,6 +22,7 @@ public class RedFarShootingAuto extends OpMode {
     private boolean autoDone;
     private WayPoints currentWayPoint = WayPoints.Move_Off_Wall;
     public double speed = 0.0;
+    private boolean secondAim  = false;
 
     @Override
     public void init() {
@@ -72,7 +73,7 @@ public class RedFarShootingAuto extends OpMode {
                 case Aim:
                     // Set Destination
                     // Turns our robot to face to the obelisk
-                    currentDestination.x = -250.0;// was - 712.0 was 255
+                    currentDestination.x = -200.0;// was - 712.0 was 255
                     currentDestination.x_speed = 0.5;
                     currentDestination.y = 121.0; //shouldn't change from the previous value
                     //current value needs to be test, was -221
@@ -105,31 +106,56 @@ public class RedFarShootingAuto extends OpMode {
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
                         driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
+                        if(secondAim){
+                            currentWayPoint = WayPoints.Safe_Park;
+                        }else{
                         currentWayPoint = WayPoints.Move_Off_White_Tape;
+                        startTime = startTime + Constants.AUTO_WAIT_TIME;
+                    }
                     }
                     break;
                 case Move_Off_White_Tape:
                     // Set Destination
                     currentDestination.x = 360.0; //was -760
-                    currentDestination.x_speed = 0.5;
-                    currentDestination.y = 622.0;
-                    currentDestination.y_speed = 0.5;
+                    currentDestination.x_speed = 0.3;
+                    currentDestination.y = 735.0;
+                    currentDestination.y_speed = 0.3;
                     currentDestination.facing = Constants.NORTH;// was FAR_AUTO_AIM_ANGLE
+                    driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
                     if (!this.at_xy(currentDestination)) {
                         this.goto_xy(currentDestination);
                     } else {
                         driveTrain.drive(0.0, 0.0);
-                        currentWayPoint = WayPoints.Safe_Park;
+                        currentWayPoint = WayPoints.Pick_Up;
                     }
                     break;
-                case Safe_Park:
+
+                case Pick_Up:
+                    currentDestination.x = 360.0; //was -760
+                    currentDestination.x_speed = 0.0;
+                    currentDestination.y = 775.0;
+                    currentDestination.y_speed = 0.25;
+                    currentDestination.facing = Constants.NORTH;// was FAR_AUTO_AIM_ANGLE
+                    driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
+                    // Move to Location
+                    driveTrain.setFacing(currentDestination.facing);
+                    if (!this.at_xy(currentDestination)) {
+                        this.goto_xy(currentDestination);
+                    } else {
+                        driveTrain.drive(0.0, 0.0);
+                      secondAim = true;
+                        currentWayPoint = WayPoints.Aim;
+                    }
+                    break;
+
+                    case Safe_Park:
                     // Set Destination      // x was -760 the was -260 was 260
                     currentDestination.x = 360.0; // makes if face the drive team, same facing as starting
-                    currentDestination.x_speed = 0.5;
+                    currentDestination.x_speed = 0.4;
                     currentDestination.y = 735.0;
-                    currentDestination.y_speed = 0.5;
+                    currentDestination.y_speed = 0.4;
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
@@ -200,6 +226,6 @@ public class RedFarShootingAuto extends OpMode {
 
     // ===== Enum Data Type for waypoint switch
     enum WayPoints {
-        Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park, Done
+        Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park,Pick_Up, Done
     }
 }
