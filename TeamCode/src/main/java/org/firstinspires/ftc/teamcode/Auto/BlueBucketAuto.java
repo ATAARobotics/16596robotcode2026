@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 
-@Autonomous(name = "BlueFarBucketAuto")
+//@Autonomous(name = "BlueFarBucketAuto")
 public class BlueBucketAuto extends OpMode {
     private DriveTrainBasic driveTrain;
 

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "NAZ_TEST_AUTO",group = "Testing")
+//@Autonomous(name = "NAZ_TEST_AUTO",group = "Testing")
 public class Naz_TEST extends OpMode {
     private DriveTrainBasic driveTrain;
     public LightIndicatorSubsystem indicator;
