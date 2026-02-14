@@ -114,8 +114,8 @@ public class RedFarShootingAuto extends OpMode {
                         }
                         else
                         {
-                        currentWayPoint = WayPoints.Move_Off_White_Tape;
-                        startTime = startTime + Constants.AUTO_WAIT_TIME;
+                            currentWayPoint = WayPoints.Move_Off_White_Tape;
+                            startTime = startTime + Constants.AUTO_WAIT_TIME;
                         }
                     }
                     break;
