@@ -1,21 +1,13 @@
 package org.firstinspires.ftc.teamcode.Mechanisms;
 
-import static java.lang.Runtime.getRuntime;
-
-import android.widget.Spinner;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
-
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -31,7 +23,7 @@ public class DriveTrainBasic {
     private final Motor rightBackDrive;
     // Shooter Motors
     public final MotorEx shooter; //port 0-expansion hub
-   // public final MotorEx shooter2; //port 2-expansion-hub
+    public final MotorEx feeder; //port 2-expansion-hub
     //public final MotorGroup flywheel; // assigned shooter and shooter2
     // Intake Motor
     public final Motor intake; //port 1-expansion hub
@@ -79,7 +71,7 @@ public class DriveTrainBasic {
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         // Flywheel assignment
         shooter = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-       // shooter2 = new MotorEx(hwMap, "shooter2");
+        feeder = new MotorEx(hwMap, "shooter2");
        // flywheel = new MotorGroup(shooter, shooter2);
         // Intake assignment
         intake = new Motor(hwMap, "intake");
@@ -115,9 +107,11 @@ public class DriveTrainBasic {
         shooter.setRunMode(Motor.RunMode.VelocityControl);
         shooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         shooter.setInverted(true);
-       // shooter2.setRunMode(Motor.RunMode.VelocityControl);
-      //  shooter2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-       // shooter2.setInverted(true);
+        // setup feeder motor
+        feeder.setRunMode(Motor.RunMode.VelocityControl);
+        feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        feeder.setInverted(true);
+        feeder.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
         // configuring flywheel mo
        // flywheel.setRunMode(Motor.RunMode.VelocityControl);// motor group of the 2 shooter motors
         shooter.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd

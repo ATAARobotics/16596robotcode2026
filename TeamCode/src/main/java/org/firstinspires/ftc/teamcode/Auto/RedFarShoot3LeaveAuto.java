@@ -12,16 +12,17 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "RedCloseAuto",group = "Testing")
-public class RedCloseAuto extends OpMode {
+@Autonomous(name = "RedFarShoot3LeaveAuto")
+public class RedFarShoot3LeaveAuto extends OpMode {
     private DriveTrainBasic driveTrain;
     public LightIndicatorSubsystem indicator;
-
     private JoinedTelemetry joinedTelemetry;
     private double startTime;
     private Location currentDestination;
     private boolean autoDone;
     private WayPoints currentWayPoint = WayPoints.Move_Off_Wall;
+    public double speed = 0.0;
+    private boolean secondAim  = false;
 
     @Override
     public void init() {
@@ -43,110 +44,125 @@ public class RedCloseAuto extends OpMode {
     }
 
     @Override
-    public void start(){
-        startTime = getRuntime();
-        driveTrain.feed1.setPower(-Constants.FEED_SPEED);
-        driveTrain.feed2.setPower(-Constants.FEED_SPEED);
-    }
+    public void start(){startTime = getRuntime();}
     @Override
     public void loop() {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
         if (!autoDone) {
-
+            driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
             switch (currentWayPoint) {
-
                 case Move_Off_Wall:
+                    driveTrain.feed1.setPower(-Constants.FEED_SPEED);
+                    driveTrain.feed2.setPower(-Constants.FEED_SPEED);
+                    driveTrain.feeder.set(-Constants.FEEDER_SPEED);
                     // Set Destination
-                    currentDestination.x = 1000.0; //testing, change back to 0.0 soon
+                    currentDestination.x = -250.0; // was 43.0
                     currentDestination.x_speed = 0.5;
-                    currentDestination.y = 0.0; //current value needs to be test, was -221
+                    currentDestination.y = 121.0; //current value needs to be test, was -221
                     currentDestination.y_speed = 0.5;
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination))
+                    {
                         this.goto_xy(currentDestination);
-                    } else {
+                    }
+                    else
+                    {
                         driveTrain.drive(0.0, 0.0);
-                        currentWayPoint = WayPoints.Close_Shot;
+                        currentWayPoint = WayPoints.Aim;
                     }
                     break;
-//                case Aim:
-//                    // Set Destination
-//                    // Turns our robot to face to the obelisk
-//                    currentDestination.x = 373.0;// used to be 43.0
-//                    currentDestination.x_speed = 0.5;
-//                    currentDestination.y = -121.0; //shouldn't change from the previous value
-//                    //current value needs to be test, was -221
-//                    currentDestination.y_speed = 0.5;
-//                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE; //Turns to the obelisk, may need to be adjusted
-//                    // Move to Location
-//                    driveTrain.setFacing(currentDestination.facing);
-//                 //  currentWayPoint = WayPoints.Far_Shot; // put back in for final
-//                    currentWayPoint = WayPoints.Far_Shot;
-//                    break;
-                case Close_Shot://Shoots the artifacts
+                case Aim:
+                    // Set Destination
+                    // Turns our robot to face to the obelisk
+                    currentDestination.x = -200.0;// was - 712.0 was 255
+                    currentDestination.x_speed = 0.5;
+                    currentDestination.y = 121.0; //shouldn't change from the previous value
+                    //current value needs to be test, was -221
+                    currentDestination.y_speed = 0.5;
+                    currentDestination.facing = -Constants.FAR_AUTO_AIM_ANGLE_RED; //Turns to the obelisk, may need to be adjusted
+                    // Move to Location
+                    driveTrain.setFacing(currentDestination.facing);
+                    currentWayPoint = WayPoints.Far_Shot;
+                    break;
+
+                case Far_Shot://Shoots the artifacts
                     // Currently not running as of Nov 22 2025
-                    driveTrain.intake.set(Constants.INTAKE_SPEED);
-                    driveTrain.shooter.set(Constants.FLYWHEEL_NEAR_AUTO);
-                    if (driveTrain.canLaunch(Constants.FLYWHEEL_NEAR_AUTO))
+                    driveTrain.shooter.set(Constants.FLYWHEEL_FAR_AUTO);
+                    if (driveTrain.canLaunch(Constants.FLYWHEEL_FAR_AUTO))
                     {
                         indicator.setColor(Constants.RGB_Light.GREEN);
                         driveTrain.feed1.setPower(Constants.FEED_SPEED);
                         driveTrain.feed2.setPower(Constants.FEED_SPEED);
-                        // creates an if statement based on the flywheel recovery speed so it only shoots when it's up to speed
-
-                    } else
+                        driveTrain.feeder.set(Constants.FEEDER_SPEED);
+                    }
+                    else
                     {
                         indicator.setColor(Constants.RGB_Light.RED);
-                    }
-
-                    if (getRuntime() - startTime >= 16.7) {
-                        driveTrain.shooter.set(0.0); //this doesnt stop at the end either-we need it to stop
-                        driveTrain.shooter.stopMotor();
                         driveTrain.feed1.setPower(0.0);
                         driveTrain.feed2.setPower(0.0);
-                        driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
-                        currentWayPoint = WayPoints.Safe_Park;
+                        driveTrain.feeder.set(0.0);
                     }
-                        else{ //rechecks constantly if under that amount of time
-                        if(driveTrain.canLaunch(Constants.FLYWHEEL_NEAR_AUTO)) {
-                            driveTrain.feed2.setPower(Constants.FEED_SPEED);
+                    if (getRuntime() - startTime >= Constants.AUTO_WAIT_TIME)
+                    {
+                        driveTrain.shooter.set(0.0); //this doesn't stop at the end either-we need it to stop
+                        driveTrain.stopFlyWheel();
+                        driveTrain.feed1.setPower(0.0);
+                        driveTrain.feed2.setPower(0.0);
+                        driveTrain.feeder.set(0.0);
+                        driveTrain.intake.set(0); //this doesn't stop at the end- we need it to stop
+                        if(secondAim)
+                        {
+                            currentWayPoint = WayPoints.Safe_Park;
+                        }
+                        else
+                        {
+                            currentWayPoint = WayPoints.Move_Off_White_Tape;
+                            startTime = startTime + Constants.AUTO_WAIT_TIME;
                         }
                     }
                     break;
-//                case Move_Off_White_Tape:
-//                    // Set Destination
-//                    currentDestination.x = 470.0;
-//                    currentDestination.x_speed = 0.5;
-//                    currentDestination.y = -622.0;
-//                    currentDestination.y_speed = 0.5;
-//                    currentDestination.facing = Constants.FAR_AUTO_AIM_ANGLE;
-//                    // Move to Location
-//                    driveTrain.setFacing(currentDestination.facing);
-//                    if (!this.at_xy(currentDestination)) {
-//                        this.goto_xy(currentDestination);
-//                    } else {
-//                        driveTrain.drive(0.0, 0.0);
-//                        currentWayPoint = WayPoints.Safe_Park;
-//                    }
-//                    break;
-                case Safe_Park:
+                case Move_Off_White_Tape:
                     // Set Destination
-                    currentDestination.x = 430.0; // makes if face the drive team, same facing as starting
-                    currentDestination.x_speed = 0.5;
-                    currentDestination.y = 735.0;
-                    currentDestination.y_speed = 0.5;
+                    currentDestination.x = 0.0; //was -760 now was 360
+                    currentDestination.x_speed = 0.3;
+                    currentDestination.y = 700.0; // was 735
+                    currentDestination.y_speed = 0.3;
+                    currentDestination.facing = Constants.NORTH;// was FAR_AUTO_AIM_ANGLE
+                    driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
+                    // Move to Location
+                    driveTrain.setFacing(currentDestination.facing);
+                    if (!this.at_xy(currentDestination))
+                    {
+                        this.goto_xy(currentDestination);
+                    }
+                    else
+                    {
+                        driveTrain.drive(0.0, 0.0);
+                        currentWayPoint = WayPoints.Pick_Up;
+                    }
+                    break;
+
+                case Safe_Park:
+                    // Set Destination      // x was -760 the was -260 was 260
+                    currentDestination.x = 0.0; // makes if face the drive team, same facing as starting
+                    currentDestination.x_speed = 0.4;
+                    currentDestination.y = 700.0;
+                    currentDestination.y_speed = 0.4;
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
-                    if (!this.at_xy(currentDestination)) {
+                    if (!this.at_xy(currentDestination))
+                    {
                         this.goto_xy(currentDestination);
                         //stops everything
-                      driveTrain.shooter.set(0.0);
-                      driveTrain.intake.set(0);
-                    } else {
+                        driveTrain.shooter.set(0.0);
+                        driveTrain.intake.set(0);
+                    }
+                    else
+                    {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Done;
                     }
@@ -154,16 +170,18 @@ public class RedCloseAuto extends OpMode {
                 case Done:
                 default:
                     driveTrain.setFacing(Constants.NORTH);
-                    driveTrain.shooter.stopMotor();
                     driveTrain.stop();
                     autoDone = true;
                     break;
             }
             // Send data to telemetry
-            joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
-            joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
-            joinedTelemetry.addData("X-cord", driveTrain.odometer.getPosX());
-            joinedTelemetry.addData("Y-cord", driveTrain.odometer.getPosY());
+            speed = driveTrain.shooter.getCorrectedVelocity();
+            joinedTelemetry.addData("Shooter Speed", speed);
+            joinedTelemetry.addData("Feeder Speed", driveTrain.feeder.getVelocity());
+            joinedTelemetry.addData("X-cord",driveTrain.getXPosition());
+            joinedTelemetry.addData("Y-cord",driveTrain.getYPosition());
+            joinedTelemetry.addData("Odometer X-cord", driveTrain.odometer.getPosX());
+            joinedTelemetry.addData("Odometer Y-cord", driveTrain.odometer.getPosY());
             joinedTelemetry.addData("Heading", pos.getHeading(AngleUnit.DEGREES));
             joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
             joinedTelemetry.addData("Destination X",currentDestination.x);
@@ -205,6 +223,6 @@ public class RedCloseAuto extends OpMode {
 
     // ===== Enum Data Type for waypoint switch
     enum WayPoints {
-        Move_Off_Wall, Aim, Close_Shot, Move_Off_White_Tape, Safe_Park, Done
+        Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park, Pick_Up, Done
     }
 }

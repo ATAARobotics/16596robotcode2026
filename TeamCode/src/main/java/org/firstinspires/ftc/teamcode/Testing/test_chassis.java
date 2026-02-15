@@ -184,9 +184,11 @@ test_chassis extends OpMode {
         // =================  Servo Control ===========================================
         if(operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
             driveTrain.feed1.setPower(Constants.FEED_SPEED);
+            driveTrain.feeder.set(Constants.FEEDER_SPEED);
         }
         else {
             driveTrain.feed1.setPower(0);
+            driveTrain.feeder.set(0.0);
         }
           //check that flywheel is back up to speed before allowing operator to shoot
 
