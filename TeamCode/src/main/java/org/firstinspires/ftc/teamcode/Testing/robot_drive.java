@@ -48,7 +48,7 @@ import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 // need to use dashboard to change PID gains; comment out for competition
 @Configurable
-@TeleOp(name = "RobotDrive")
+@TeleOp(name = "RobotDrive",group = "_0A")
 public class
 robot_drive extends OpMode {
     private final ElapsedTime runtime = new ElapsedTime();
@@ -132,7 +132,7 @@ robot_drive extends OpMode {
             driveTrain.shooter.set(shootingspeed);
         }
        else if (operator_right_bumper) {
-            driveTrain.shooter.set(Constants.REVERSE_FLYWHEEL);
+            driveTrain.shooter.set(Constants.FLYWHEEL_REVERSE);
        }
        else {
            driveTrain.shooter.set(Constants.FLYWHEEL_IDLE_SPEED);
@@ -143,14 +143,18 @@ robot_drive extends OpMode {
         {
             driveTrain.feed1.setPower(Constants.FEED_SPEED);
             driveTrain.feed2.setPower(Constants.FEED_SPEED);
+            driveTrain.feeder.set(Constants.FEEDER_SPEED);
         }
         else if (operator_right_bumper) {
             driveTrain.feed1.setPower(-Constants.FEED_SPEED);
             driveTrain.feed2.setPower(-Constants.FEED_SPEED);
+            driveTrain.feeder.set(Constants.FEEDER_SPEED_REVERSE);
+            //driveTrain.shooter.set(Constants.FLYWHEEL_REVERSE_EXTRA);
         }
         else {
             driveTrain.feed1.setPower(0);
             driveTrain.feed2.setPower(0);
+            driveTrain.feeder.set(0);
         }
 
         // ===== Indicator control =====
