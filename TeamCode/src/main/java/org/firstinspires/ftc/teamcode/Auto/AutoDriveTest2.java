@@ -1,0 +1,373 @@
+package org.firstinspires.ftc.teamcode.Auto;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.bylazar.telemetry.JoinedTelemetry;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.Mechanisms.C2;
+import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
+import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
+
+@Autonomous(name = "AutoDriveTest2",group = "Testing")
+public class AutoDriveTest2 extends OpMode {
+    private double atTargetStartTime = -1;
+    private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)
+
+    private DriveTrainBasic2 driveTrain;
+    public LightIndicatorSubsystem indicator;
+    private JoinedTelemetry joinedTelemetry;
+    public double startTime = 0.0;
+    public double currentTime = 0.0;
+    //private Location currentDestination;
+    private boolean autoDone = false;
+    private WayPoints currentWayPoint = WayPoints.Reverse;
+    public double speed = 0.0;
+    private WayPoints lastWayPoint = null;
+    private double wayPointStartTime = 0.0;
+    double xOut = 0.0;
+    double yOut = 0.0;
+    //Waypoints:  Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park, Done
+    // -x = Forward (mm) Distance from start (0,0)
+    // +x = Reverse (mm) Distance from start (0,0)
+    // -y = Strafe Left (mm) Distance from start (0,0)
+    // +y = Strafe Right (mm) Distance from start (0,0)
+    // -f = Turn Right/Clockwise (deg)
+    // +f = Turn Left/Counterclockwise (deg)
+    // When heading = 0/-180 then Y=STRAFE
+    // When heading = 90/-90 the X=STRAFE
+    //Define Locations relative to start
+    private static final Location startLocation = new Location(0.0,0.0,0.0);
+    private static final Location reverseTile2 = new Location(500,0,-90);
+    private static final Location reversePickup = new Location(500,-550,-90);
+    private static final Location returnTile2 = new Location(500,0,0);
+
+    //Create Location object for currentLocation variable to hold current position read by odometry
+    private Location currentLocation = new Location(0.0,0.0,0.0);
+    private Location currentDestination = new Location(0.0,0.0,0.0);
+
+    @Override
+    public void init() {
+        driveTrain = new DriveTrainBasic2(hardwareMap);
+        driveTrain.init();
+        driveTrain.odometer.resetPosAndIMU();
+        // Initializing indicator
+        indicator = new LightIndicatorSubsystem(hardwareMap);
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+        // Update Telemetry
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
+        // Join them together
+        this.joinedTelemetry = new JoinedTelemetry(telemetry, panelsTelemetry.getTelemetry().getWrapper(), dashboard.getTelemetry());
+        joinedTelemetry.update();
+        //currentDestination = new Location();
+    }
+
+    @Override
+    public void start() {
+        startTime = getRuntime();
+        currentDestination = startLocation;
+    }
+
+    @Override
+    public void loop() {
+        updateCurrentLocation(driveTrain.odometer.getPosition());
+        currentTime = getRuntime();
+        driveTrain.setNow(currentTime);
+        updateWayPointTimer();
+        driveTrain.loop();
+        //Pose2D pos = driveTrain.odometer.getPosition();
+
+        if (!autoDone) {
+
+            // setCurrentDestination(x,y,direction,speed,timeout,nextwaypoint,turnDelay)
+            switch (currentWayPoint) {
+                case Reverse:
+                    // Set Shooter Mode
+                    //driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                    currentDestination = reverseTile2;
+
+
+
+//                    setCurrentDestination(500.0,0.0, C2.NORTH,1.0, 4.0, WayPoints.Forward, 1.0);
+//                    currentDestination.x = 500.0;
+//                    currentDestination.y = 00.0;
+//                    currentDestination.facing = C2.NORTH;
+
+                    driveTrain.setFacing(currentDestination.facing);
+                    if (this.at_xy(currentDestination) || wayPointActiveFor(4)) {
+                        driveTrain.drive(0.0, 0.0);
+                        currentWayPoint = WayPoints.ReversePickup;
+                    } else {
+                        //this.goto_xy(currentDestination);
+                        goto_xy(currentDestination, C2.AUTO_DRIVE_SPEED);
+                    }
+                    break;
+                    
+                case ReversePickup:
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;// Set Shooter Mode
+                    //driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                    // Set Destination
+                    currentDestination = reversePickup;
+//                    currentDestination.x = 0.0;
+//                    currentDestination.y = 0.0;
+//                    currentDestination.facing = C2.NORTH;
+                    // Move to Location
+                    driveTrain.setFacing(currentDestination.facing);
+                    if (this.at_xy(currentDestination) || wayPointActiveFor(4)) {
+                        driveTrain.drive(0.0, 0.0);
+                        currentWayPoint = WayPoints.returnTile2;
+                    } else {
+                        //this.goto_xy(currentDestination);
+                        goto_xy(currentDestination, C2.AUTO_DRIVE_SPEED_PICKUP);
+                    }
+                    break;
+                    
+                case returnTile2:
+                    //driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;// Set Shooter Mode
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                    // Set Destination
+                    currentDestination = returnTile2;
+//                    currentDestination.x = 0.0;
+//                    currentDestination.y = 0.0;
+//                    currentDestination.facing = C2.NORTH;
+                    // Move to Location
+                    driveTrain.setFacing(currentDestination.facing);
+                    //if (this.at_xy(currentDestination) || wayPointActiveFor(5)) {
+                    //if (wayPointActiveFor(6.7)){
+                    if (wayPointActiveFor(1.2)){
+                        if (wayPointActiveFor(6)){
+                            driveTrain.drive(0.0, 0.0);
+                            currentWayPoint = WayPoints.ReturnStart;
+                        } else {
+                            //this.goto_xy(currentDestination);
+                            //driveTrain.drive(0.0, 0.0);
+                            goto_xy(currentDestination, C2.AUTO_DRIVE_SPEED);
+                        }
+                    }
+                    break;
+                case ReturnStart:
+                    // Set Shooter Mode
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                    // Set Destination
+                    currentDestination = startLocation;
+//                    currentDestination.x = 0.0;
+//                    currentDestination.y = 0.0;
+//                    currentDestination.facing = 0.0;
+//                            //Constants2.NORTH;
+                    // Move to Location
+                    driveTrain.setFacing(currentDestination.facing);
+                    if (this.at_xy(currentDestination) || wayPointActiveFor(5)) {
+                        driveTrain.drive(0.0, 0.0);
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;
+                        if (wayPointActiveFor(12)){
+                            driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                            currentWayPoint = WayPoints.Done;
+                        }
+                    } else {
+                        //this.goto_xy(currentDestination);
+                        goto_xy(currentDestination, C2.AUTO_DRIVE_SPEED);
+                    }
+                    break;
+
+                case Done:
+                default:
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                    driveTrain.stop();
+                    autoDone = true;
+                    break;
+            }
+
+
+            // Send data to telemetry
+            speed = driveTrain.Flywheel.getCorrectedVelocity();
+            //joinedTelemetry.addData("Shooter Speed", speed);
+            joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
+            joinedTelemetry.addData("Ycor",driveTrain.getYPosition());
+            joinedTelemetry.addData("Heading", currentLocation.facing); //pos.getHeading(AngleUnit.DEGREES));
+            joinedTelemetry.addData("----", "-------");
+            joinedTelemetry.addData("X-error",Math.abs(currentDestination.x - driveTrain.getXPosition()));
+            joinedTelemetry.addData("Y-error",Math.abs(currentDestination.y - driveTrain.getYPosition()));
+            joinedTelemetry.addData("H-error", driveTrain.headingError);
+            joinedTelemetry.addData("----", "-------");
+            joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
+            joinedTelemetry.addData("Destination X",currentDestination.x);
+            joinedTelemetry.addData("Destination Y",currentDestination.y);
+            joinedTelemetry.addData("Run Time",getRuntime());
+            joinedTelemetry.addData("Time Diff",getRuntime() - startTime);
+            joinedTelemetry.update();
+        }else {
+            driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+            driveTrain.stop();
+        }
+        updateWayPointTimer();
+        updateIndicator();
+        driveTrain.ShooterControlLoop();
+    }  // END LOOP
+
+    public void updateCurrentLocation(Pose2D pos) {
+        currentLocation.x = -pos.getX(DistanceUnit.MM);
+        currentLocation.y = -pos.getY(DistanceUnit.MM);
+        currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
+    }
+    public boolean at_xy(Location currentLocation) {
+
+    boolean withinTolerance =
+            at_x(currentLocation.x) && at_y(currentLocation.y) && driveTrain.onHeading;
+    if (withinTolerance) {
+        // First time entering tolerance
+        if (atTargetStartTime < 0) {
+            atTargetStartTime = getRuntime();
+        }
+        // Have we stayed long enough?
+        return (getRuntime() - atTargetStartTime) >= AT_TARGET_HOLD_TIME;
+    } else {
+        // Left tolerance — reset timer
+        atTargetStartTime = -1;
+    }
+
+    return false;
+}
+
+    public boolean at_x(double targetX) {
+        return (Math.abs(targetX - driveTrain.getXPosition())) <= C2.AUTO_X_DISTANCE_ERROR;
+    }
+
+    public boolean at_y(double targetY) {
+        return (Math.abs(targetY - driveTrain.getYPosition())) <= C2.AUTO_Y_DISTANCE_ERROR;
+    }
+
+//    public static class Location {
+//        public double x = 0.0;
+//        //public double x_speed = 0.0;
+//        public double y = 0.0;
+//        //public double y_speed = 0.0;
+//        public double facing;
+//    }
+    public static class Location {
+        public double x;
+        public double y;
+        public double facing;
+
+        public Location(double x, double y, double facing) {
+            this.x = x;
+            this.y = y;
+            this.facing = facing;
+        }
+    }
+
+    // setCurrentDestination(x,y,direction,speed,timeout,nextWayPoint,turnDelay)
+    public void setCurrentDestination(Location currentLocation, Location destinationLocation,
+                                      double speed, double timeout, WayPoints nextWayPoint, double turnDelay) {
+        if (Math.abs(destinationLocation.y - currentLocation.y) <= C2.AUTO_Y_DISTANCE_ERROR &&
+                Math.abs(destinationLocation.x - currentLocation.x) <= C2.AUTO_Y_DISTANCE_ERROR) {
+            currentWayPoint = nextWayPoint;
+
+        }
+        if (this.at_xy(currentDestination) || wayPointActiveFor(timeout)) {
+            driveTrain.drive(0.0, 0.0);
+            currentWayPoint = nextWayPoint;
+            driveTrain.setFacing(currentDestination.facing);
+        } else {
+            //this.goto_xy(currentDestination, currentDestination.x_speed, currentDestination.y_speed);
+        }
+
+    }
+    private double applyKS(double output, double kS) {
+        if (Math.abs(output) < 1e-6) return 0;   // true zero stays zero
+        return Math.signum(output) * Math.max(Math.abs(output), kS);
+    }
+    public void goto_xy(Location targetLocation, double AutoDriveSpeed) {
+        driveTrain.xControl.setSetPoint(targetLocation.x);
+        driveTrain.yControl.setSetPoint(targetLocation.y);
+        xOut = driveTrain.xControl.calculate(driveTrain.getXPosition());
+        yOut = driveTrain.yControl.calculate(driveTrain.getYPosition());
+
+        xOut *= AutoDriveSpeed;
+        yOut *= AutoDriveSpeed;
+
+        double kS_x = C2.AUTO_DRIVE_SPEED_MIN;
+        double kS_y = C2.AUTO_DRIVE_SPEED_MIN;
+        // When heading = 0/-180 then Y=STRAFE
+        // When heading = 90/-90 the X=STRAFE
+        if ((currentLocation.facing < 15 && currentLocation.facing > -15) || (currentLocation.facing > 145 || currentLocation.facing < -145)) {
+            //kS_x = C2.AUTO_DRIVE_SPEED_MIN;
+            kS_y = C2.AUTO_DRIVE_SPEED_MIN * C2.AUTO_DRIVE_SPEED_MIN_STRAFEFACTOR;
+        } else if ((currentLocation.facing < 105 && currentLocation.facing > 75) || (currentLocation.facing > -105 && currentLocation.facing < -75)) {
+            kS_x = C2.AUTO_DRIVE_SPEED_MIN * C2.AUTO_DRIVE_SPEED_MIN_STRAFEFACTOR;
+            //kS_y = C2.AUTO_DRIVE_SPEED_MIN;
+        }
+
+        if (!at_x(targetLocation.x))
+            xOut = applyKS(xOut, kS_x);
+        else
+            xOut = 0;
+
+        if (!at_y(targetLocation.y))
+            yOut = applyKS(yOut, kS_y);
+        else
+            yOut = 0;
+
+        driveTrain.drive(xOut, yOut);
+        joinedTelemetry.addData("X Speed",driveTrain.xControl.calculate(driveTrain.getXPosition()) * C2.AUTO_DRIVE_SPEED);
+        joinedTelemetry.addData("Y Speed",driveTrain.yControl.calculate(driveTrain.getYPosition()) * C2.AUTO_DRIVE_SPEED);
+
+    }
+
+    // ===== Enum Data Type for waypoint switch
+    public enum WayPoints {
+        Reverse, ReturnStart, Far_Shot, ReversePickup, returnTile2, Done
+    }
+
+    private void updateIndicator() {
+        // INDICATOR CASES
+        switch (currentWayPoint) {
+            case Reverse:
+                indicator.setColor(C2.RGB_Light.VIOLET);
+                break;
+            case ReturnStart:
+                indicator.setColor(C2.RGB_Light.YELLOW);
+                break;
+            case Far_Shot:
+                if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR)) {
+                    indicator.setColor(C2.RGB_Light.GREEN);
+                } else {
+                    indicator.setColor(C2.RGB_Light.RED);
+                }
+                break;
+            case ReversePickup:
+                indicator.setColor(C2.RGB_Light.BLUE);
+                break;
+            case returnTile2:
+                indicator.setColor(C2.RGB_Light.ORANGE);
+                break;
+            case Done:
+            default:
+                indicator.setColor(C2.RGB_Light.WHITE);
+        }
+    }
+    private void updateWayPointTimer() {
+        if (currentWayPoint != lastWayPoint) {
+            driveTrain.xControl.reset();
+            driveTrain.yControl.reset();
+            driveTrain.headingControl.reset();
+            wayPointStartTime = getRuntime();   // capture when we ENTER the waypoint
+            lastWayPoint = currentWayPoint;
+        }
+    }
+
+    private boolean wayPointActiveFor(double seconds) {
+        return (getRuntime() - wayPointStartTime) >= seconds;
+    }
+
+    private double wayPointTime() {
+        return getRuntime() - wayPointStartTime;
+    }
+
+}
