@@ -45,7 +45,7 @@ public class AutoDriveTest2redFar extends OpMode {
     // When heading = 90/-90 the X=STRAFE
     //Define Locations relative to start
     private static final Location destMoveOffWall = new Location(-260,105,0);
-    private static final Location destAimLongRed = new Location(-220,105,-113);
+    private static final Location destAimLongRed = new Location(-220,105,-108);
     private static final Location destMoveOffWhite = new Location(100,735,0);
     private static final Location destPickupFarRow = new Location(850,735,0.0);
     private static final Location destSafePark = new Location(360,735,0);
