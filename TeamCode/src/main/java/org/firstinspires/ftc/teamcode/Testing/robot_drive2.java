@@ -99,7 +99,7 @@ robot_drive2 extends OpMode {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;
         }
         if (operator.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-            driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfar;
+            driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarRed;
         }
         if (operator.wasJustPressed(GamepadKeys.Button.X)) {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterCORRECTING;
@@ -221,8 +221,9 @@ robot_drive2 extends OpMode {
                 indicator.setColor(C2.RGB_Light.YELLOW);
                 break;
             case shooterSHOOTINGnear:
-            case shooterSHOOTINGfar:
-                if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR)) {
+            case shooterSHOOTINGfarRed:
+            case shooterSHOOTINGfarBlue:
+                if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR_BLUE)) {
                     indicator.setColor(C2.RGB_Light.GREEN);
                 } else {
                     indicator.setColor(C2.RGB_Light.RED);

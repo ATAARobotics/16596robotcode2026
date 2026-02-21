@@ -44,11 +44,11 @@ public class AutoBlueFar2 extends OpMode {
     // When heading = 0/-180 then Y=STRAFE
     // When heading = 90/-90 the X=STRAFE
     //Define Locations relative to start
-    private static final Location destMoveOffWall = new Location(260,105,0);
-    private static final Location destAimLongRed = new Location(220,105,108);
-    private static final Location destMoveOffWhite = new Location(-100,735,0);
-    private static final Location destPickupFarRow = new Location(-850,735,0.0);
-    private static final Location destSafePark = new Location(-360,735,0);
+    private static final Location destMoveOffWall = new Location(-260,-105,0);
+    private static final Location destAimLongRed = new Location(-220,-105,108);
+    private static final Location destMoveOffWhite = new Location(100,-735,0);
+    private static final Location destPickupFarRow = new Location(870,-735,0.0);
+    private static final Location destSafePark = new Location(360,-735,0);
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
     private driveMode dmPrecise = new driveMode(0.5567,4.670,4.670,1.50);
@@ -113,7 +113,7 @@ public class AutoBlueFar2 extends OpMode {
                     currentDriveMode = dmPrecise;
                     if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(3)) {
                         driveTrain.drive(0.0, 0.0);
-                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfar;
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarBlue;
                         if (wayPointActiveFor(9)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
@@ -315,14 +315,14 @@ public class AutoBlueFar2 extends OpMode {
             case PickupFarRow:
                 indicator.setColor(C2.RGB_Light.YELLOW);
                 break;
-            case Far_Shot:
-                if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR)) {
+            case AimLongRedShoot:
+                if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR_BLUE+C2.FLYWHEEL_SPD_FAR_BLUE_EXTRA)) {
                     indicator.setColor(C2.RGB_Light.GREEN);
                 } else {
                     indicator.setColor(C2.RGB_Light.RED);
                 }
                 break;
-            case AimLongRedShoot:
+            case Far_Shot:
                 indicator.setColor(C2.RGB_Light.BLUE);
                 break;
             case MoveOffWhite:

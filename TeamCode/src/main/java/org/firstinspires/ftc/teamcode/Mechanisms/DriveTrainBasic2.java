@@ -236,8 +236,12 @@ public class DriveTrainBasic2 {
             telemetry.update();
         }
     }
+
+    public boolean canLaunch(double launchSpeed,  double FudgeFactor){
+        return Flywheel.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX) + FudgeFactor;
+    }
     public boolean canLaunch(double launchSpeed){
-        return Flywheel.getCorrectedVelocity() >= launchSpeed * C2.FLYWHEEL_MAX;
+        return Flywheel.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX);
     }
 
     public void setDrivemodefieldcentric(){
@@ -257,7 +261,7 @@ public class DriveTrainBasic2 {
         }
     }
     public enum ShooterMode {
-        shooterSHOOTINGfar, shooterSHOOTINGnear, shooterPICKUP, shooterCORRECTING, shooterHOLDING, shooterOFF
+        shooterSHOOTINGfarBlue, shooterSHOOTINGfarRed, shooterSHOOTINGnear, shooterPICKUP, shooterCORRECTING, shooterHOLDING, shooterOFF
     }
 
     public void ShooterControlLoop() {
@@ -269,17 +273,26 @@ public class DriveTrainBasic2 {
 
         switch (CurrentShooterMode) {
             // shooterMotors: flywheelSpeed intakeSpeed feederSpeed feed1/2Speed
-            case shooterSHOOTINGfar:
+            case shooterSHOOTINGfarBlue:
                 // shooter delayed for feeder reverse to correct ball position
                 if (!shooterModeActiveFor(C2.CORRECTION_DELAY)) { // input delay seconds
                     shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
                 } else {
-                    shooterMotors(C2.FLYWHEEL_SPD_FAR, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                    if (canLaunch(C2.FLYWHEEL_SPD_FAR)) {
-                        shooterMotors(C2.FLYWHEEL_SPD_FAR, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_FAR, C2.FEED_SPD_FWD);
+                    shooterMotors(C2.FLYWHEEL_SPD_FAR_BLUE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
+                    if (canLaunch(C2.FLYWHEEL_SPD_FAR_BLUE,C2.FLYWHEEL_SPD_FAR_BLUE_EXTRA)) {
+                        shooterMotors(C2.FLYWHEEL_SPD_FAR_BLUE, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_FAR, C2.FEED_SPD_FWD);
                     }
                 } break;
-
+            case shooterSHOOTINGfarRed:
+                // shooter delayed for feeder reverse to correct ball position
+                if (!shooterModeActiveFor(C2.CORRECTION_DELAY)) { // input delay seconds
+                    shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
+                } else {
+                    shooterMotors(C2.FLYWHEEL_SPD_FAR_RED, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
+                    if (canLaunch(C2.FLYWHEEL_SPD_FAR_RED)) {
+                        shooterMotors(C2.FLYWHEEL_SPD_FAR_BLUE, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_FAR, C2.FEED_SPD_FWD);
+                    }
+                } break;
             case shooterSHOOTINGnear:
                 // shooter delayed for feeder reverse to correct ball position
                 if (!shooterModeActiveFor(C2.CORRECTION_DELAY)) { // input delay seconds

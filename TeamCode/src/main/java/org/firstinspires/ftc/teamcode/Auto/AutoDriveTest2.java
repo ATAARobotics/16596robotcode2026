@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.Auto;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -334,7 +333,7 @@ public class AutoDriveTest2 extends OpMode {
                 indicator.setColor(C2.RGB_Light.YELLOW);
                 break;
             case Far_Shot:
-                if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR)) {
+                if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR_BLUE)) {
                     indicator.setColor(C2.RGB_Light.GREEN);
                 } else {
                     indicator.setColor(C2.RGB_Light.RED);

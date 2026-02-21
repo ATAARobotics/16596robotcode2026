@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Mechanisms.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "AutoRedFar2")
-public class AutoRedFar2 extends OpMode {
+//@Autonomous(name = "Blue Near 2")
+public class AutoBlueNear2 extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)
 
@@ -44,11 +44,11 @@ public class AutoRedFar2 extends OpMode {
     // When heading = 0/-180 then Y=STRAFE
     // When heading = 90/-90 the X=STRAFE
     //Define Locations relative to start
-    private static final Location destMoveOffWall = new Location(-260,105,0);
-    private static final Location destAimLongRed = new Location(-220,105,-108);
-    private static final Location destMoveOffWhite = new Location(100,735,0);
-    private static final Location destPickupFarRow = new Location(850,735,0.0);
-    private static final Location destSafePark = new Location(360,735,0);
+    private static final Location destMoveOffWall = new Location(1000.0,0.0,0);
+    private static final Location Close_Shot = new Location(1000.0,0.0,0);
+    //private static final Location destMoveOffWhite = new Location(100,-735,0);
+    //private static final Location destPickupFarRow = new Location(850,-735,0.0);
+    private static final Location destSafePark = new Location(430,-735,0);
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
     private driveMode dmPrecise = new driveMode(0.5567,4.670,4.670,1.50);
@@ -82,7 +82,6 @@ public class AutoRedFar2 extends OpMode {
     @Override
     public void start() {
         startTime = getRuntime();
-        currentDestination = destPickupFarRow;
     }
 
     @Override
@@ -100,24 +99,25 @@ public class AutoRedFar2 extends OpMode {
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destMoveOffWall;
                     currentDriveMode = dmRough;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(1)) {
                         driveTrain.drive(0.0, 0.0);
-                        currentWayPoint = WayPoints.AimLongRedShoot;
+                        currentWayPoint = WayPoints.Close_Shot;
                     }
                     driveTrain.setFacing(currentDestination.facing);
                     break;
                     
-                case AimLongRedShoot:
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;// Set Shooter Mode
-                    currentDestination = destAimLongRed;
+                case Close_Shot:
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
+                    currentDestination = Close_Shot;
                     currentDriveMode = dmPrecise;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(3)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(1)) {
                         driveTrain.drive(0.0, 0.0);
-                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarRed;
-                        if (wayPointActiveFor(9)) {
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;
+                        if (wayPointActiveFor(6)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
-                                currentWayPoint = WayPoints.MoveOffWhite;
+                                //currentWayPoint = WayPoints.MoveOffWhite;
+                                currentWayPoint = WayPoints.SafePark;
                                 shotCount += 1;
                             } else {
                                 currentWayPoint = WayPoints.SafePark;
@@ -127,37 +127,37 @@ public class AutoRedFar2 extends OpMode {
                     driveTrain.setFacing(currentDestination.facing);
                     break;
                     
-                case MoveOffWhite:
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
-                    currentDestination = destMoveOffWhite;
-                    currentDriveMode = dmRough;
-                    driveTrain.setFacing(currentDestination.facing);
-                    if (wayPointActiveFor(0.5)) {
-                        if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2.5)) {
-                            driveTrain.drive(0.0, 0.0);
-                            currentWayPoint = WayPoints.PickupFarRow;
-                        }
-                    }
-                    break;
+//                case MoveOffWhite:
+//                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+//                    currentDestination = destMoveOffWhite;
+//                    currentDriveMode = dmRough;
+//                    driveTrain.setFacing(currentDestination.facing);
+//                    if (wayPointActiveFor(0.5)) {
+//                        if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2.5)) {
+//                            driveTrain.drive(0.0, 0.0);
+//                            currentWayPoint = WayPoints.PickupFarRow;
+//                        }
+//                    }
+//                    break;
 
-                case PickupFarRow:
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;
-                    currentDestination = destPickupFarRow;
-                    currentDriveMode = dmPrecise;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(5)) {
-                        driveTrain.drive(0.0, 0.0);
-                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;
-                        currentWayPoint = WayPoints.MoveOffWall;
-                    }
-                    driveTrain.setFacing(currentDestination.facing);
-                    break;
+//                case PickupFarRow:
+//                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;
+//                    currentDestination = destPickupFarRow;
+//                    currentDriveMode = dmPrecise;
+//                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(5)) {
+//                        driveTrain.drive(0.0, 0.0);
+//                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;
+//                        currentWayPoint = WayPoints.MoveOffWall;
+//                    }
+//                    driveTrain.setFacing(currentDestination.facing);
+//                    break;
 
                 case SafePark:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                     currentDestination = destSafePark;
                     currentDriveMode = dmRough;
                     driveTrain.setFacing(currentDestination.facing);
-                    if (wayPointActiveFor(0.1)) {
+                    if (wayPointActiveFor(1)) {
                         if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
                             driveTrain.drive(0.0, 0.0);
                             currentWayPoint = WayPoints.Done;
@@ -303,7 +303,7 @@ public class AutoRedFar2 extends OpMode {
 
     // ===== Enum Data Type for waypoint switch
     public enum WayPoints {
-        MoveOffWall, PickupFarRow, Far_Shot, AimLongRedShoot, MoveOffWhite, SafePark, Done
+        MoveOffWall, PickupFarRow, Far_Shot, Close_Shot, MoveOffWhite, SafePark, Done
     }
 
     private void updateIndicator() {
@@ -322,7 +322,7 @@ public class AutoRedFar2 extends OpMode {
                     indicator.setColor(C2.RGB_Light.RED);
                 }
                 break;
-            case AimLongRedShoot:
+            case Close_Shot:
                 indicator.setColor(C2.RGB_Light.BLUE);
                 break;
             case MoveOffWhite:
