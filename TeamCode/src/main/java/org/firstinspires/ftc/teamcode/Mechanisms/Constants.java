@@ -28,7 +28,7 @@ public class Constants {
     public static double INTAKE_SPEED_AUTO = 0.55;
     public static  double FLYWHEEL_SPEED = 0.85;// in RPM --this needs to be verified; only far was test on Oct 25 -CBW
     //public static double FLYWHEEL_FUDGE_FACTOR = 2100.0;
-    public static double FLYWHEEL_IDLE_SPEED = 0.3; // idle speed to start in init
+    public static double FLYWHEEL_IDLE_SPEED = -0.3; // idle speed to start in init
     //public static double FLYWHEEL_IDLE_TARGET = FLYWHEEL_IDLE_SPEED * FLYWHEEL_FUDGE_FACTOR;
     public static double FLYWHEEL_NEAR = 0.62;
     public static double FLYWHEEL_NEAR_AUTO = 0.58;
@@ -57,6 +57,7 @@ public class Constants {
   //  public static final double AUTO_STEP_DELAY = 2.0;
     public static final double FEED_SPEED = -1.0;
     public static final double FEEDER_SPEED = 0.25;
+    public static final double FEEDER_SPEED_REVERSE = -0.25;
     public static final double FEED_SPEED_AUTO = -0.5;
     //
     // ========== Define Drive constants.  Make them public so they CAN be used by the calling OpMode

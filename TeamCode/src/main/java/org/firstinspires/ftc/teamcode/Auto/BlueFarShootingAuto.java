@@ -104,7 +104,7 @@ public class BlueFarShootingAuto extends OpMode {
             //INDICATOR
             if (currentWayPoint == WayPoints.Move_Off_Wall) 
             {
-                indicator.setColor(Constants.RGB_Light.ORANGE);
+                indicator.setColor(Constants.RGB_Light.VIOLET);
             }
             else if (currentWayPoint == WayPoints.Aim) 
             {
@@ -127,7 +127,7 @@ public class BlueFarShootingAuto extends OpMode {
             }
             else if (currentWayPoint == WayPoints.Safe_Park) 
             {
-                indicator.setColor(Constants.RGB_Light.VIOLET);
+                indicator.setColor(Constants.RGB_Light.ORANGE);
             }
             else if (currentWayPoint == WayPoints.Done) 
             {

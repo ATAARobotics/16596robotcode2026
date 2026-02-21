@@ -22,11 +22,11 @@ public class DriveTrainBasic {
     private final Motor leftBackDrive;
     private final Motor rightBackDrive;
     // Shooter Motors
-    public final MotorEx shooter; //port 0-expansion hub
-    public final MotorEx feeder; //port 2-expansion-hub
+    public final MotorEx shooter; //port 1-expansion hub
+    public final MotorEx feeder; //port 0-expansion-hub
     //public final MotorGroup flywheel; // assigned shooter and shooter2
     // Intake Motor
-    public final Motor intake; //port 1-expansion hub
+    public final Motor intake; //port 2-expansion hub
     // Servos
     public CRServo feed1;   //port 1
     public CRServo feed2;   //port 0
@@ -109,8 +109,8 @@ public class DriveTrainBasic {
         shooter.setInverted(true);
         // setup feeder motor
         feeder.setRunMode(Motor.RunMode.VelocityControl);
-        feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        feeder.setInverted(true);
+        feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        //feeder.setInverted(true);
         feeder.setVeloCoefficients(Constants.FLYWHEEL_KP,Constants.FLYWHEEL_KI, Constants.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
         // configuring flywheel mo
        // flywheel.setRunMode(Motor.RunMode.VelocityControl);// motor group of the 2 shooter motors
