@@ -30,15 +30,15 @@ public class Constants {
     //public static double FLYWHEEL_FUDGE_FACTOR = 2100.0;
     public static double FLYWHEEL_IDLE_SPEED = -0.3; // idle speed to start in init
     //public static double FLYWHEEL_IDLE_TARGET = FLYWHEEL_IDLE_SPEED * FLYWHEEL_FUDGE_FACTOR;
-    public static double FLYWHEEL_NEAR = 0.62;
+    public static double FLYWHEEL_NEAR = 0.6;
     public static double FLYWHEEL_NEAR_AUTO = 0.58;
     //public static double FLYWHEEL_NEAR_TARGET = FLYWHEEL_NEAR * FLYWHEEL_FUDGE_FACTOR;
 
-    public static double FLYWHEEL_FAR = 0.78; // previously 0.85
-    public static double FLYWHEEL_FAR_AUTO = 0.82; //was 0.82
+    public static double FLYWHEEL_FAR = 0.73; // previously 0.85
+    public static double FLYWHEEL_FAR_AUTO = 0.73; //was 0.82
 
     //public static double FLYWHEEL_FAR_TARGET = FLYWHEEL_FAR * FLYWHEEL_FUDGE_FACTOR; // previously 0.85
-    public static double FLYWHEEL_REVERSE = -0.3;
+    public static double FLYWHEEL_REVERSE = -0.5;
     public static double FLYWHEEL_REVERSE_EXTRA = -0.5;
 
     public static double FLYWHEEL_MAX = 2100;
@@ -56,9 +56,12 @@ public class Constants {
 
     public static final double AUTO_INTAKE_TIME = 6.7;
   //  public static final double AUTO_STEP_DELAY = 2.0;
-    public static final double FEED_SPEED = -1.0;
-    public static final double FEEDER_SPEED = 0.25;
-    public static final double FEEDER_SPEED_REVERSE = -0.25;
+
+    public static double FEEDER_SPEED = 0.25;
+    public static double FEEDER_SPEED_REVERSE = -0.19;
+
+    //SERVO SPEED SETPOINTS
+    public static double FEED_SPEED = -1.0;
     public static final double FEED_SPEED_AUTO = -0.5;
     //
     // ========== Define Drive constants.  Make them public so they CAN be used by the calling OpMode
