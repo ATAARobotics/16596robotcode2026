@@ -8,6 +8,7 @@ import com.bylazar.configurables.annotations.Configurable;
 @Configurable // Needed for Panels
 
 public class C2 {
+    // Speed Ratio Settings
     public static final double SPEED_RATIO = 1.0;  // Use this to slow down robot
     public static final double OPER_SPEED_RATIO = SPEED_RATIO * 0.567;
     public static final double TURN_RATIO = 1.0; // use this to slow turn rate1q
