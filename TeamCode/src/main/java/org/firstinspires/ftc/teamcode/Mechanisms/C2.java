@@ -21,12 +21,12 @@ public class C2 {
     public static double FEEDER_SPD_HOLDING = -0.1;
     public static double FEEDER_SPD_PICKUP = -0.1;
     public static double FEEDER_SPD_NEAR = 0.75;
-    public static double FEEDER_SPD_FAR = 0.60;
+    public static double FEEDER_SPD_FAR = 0.58;
     //public static double FLYWHEEL_IDLE_SPEED = 0.3; // might not use this anymore
     //public static double FLYWHEEL_NEAR = 0.62;
     public static double FLYWHEEL_SPD_NEAR = 0.58;
     //public static double FLYWHEEL_FAR = 0.78; // previously 0.85
-    public static double FLYWHEEL_SPD_FAR = 0.78; //was 0.82
+    public static double FLYWHEEL_SPD_FAR = 0.75; //was 0.82
     public static double FLYWHEEL_SPD_REVERSE = -0.5;
     public static double FLYWHEEL_MAX = 2100; // Used for calculating speed feedback for at speed setpoint
     public static double FLYWHEEL_KP = 5.0;

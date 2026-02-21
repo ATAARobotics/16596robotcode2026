@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "RedFarShootingAuto")
+//@Autonomous(name = "RedFarShootingAuto")
 public class RedFarShootingAuto extends OpMode {
     private DriveTrainBasic driveTrain;
     public LightIndicatorSubsystem indicator;
