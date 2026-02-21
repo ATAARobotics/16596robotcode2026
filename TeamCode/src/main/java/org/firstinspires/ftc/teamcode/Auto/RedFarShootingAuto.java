@@ -58,7 +58,7 @@ public class RedFarShootingAuto extends OpMode {
                     // Set Destination
                     double distanceTarget = get_distance(currentDestination);
                     currentDestination.x = -250.0; // was 43.0
-                    double speed = 0.1 + Math.min(distanceTarget / 100.0,1.0);
+                    double speed = 0.1 + Math.min(distanceTarget / 100.0,Constants.AUTO_DRIVE_SPEED);
                      currentDestination.x_speed = speed;
                     // currentDestination.x_speed = 0.5;
                     currentDestination.y = 121.0; //current value needs to be test, was -221
@@ -81,10 +81,10 @@ public class RedFarShootingAuto extends OpMode {
                     // Set Destination
                     // Turns our robot to face to the obelisk
                     currentDestination.x = -200.0;// was - 712.0 was 255
-                    currentDestination.x_speed = 0.5;
+                    currentDestination.x_speed = Constants.AUTO_DRIVE_SPEED;
                     currentDestination.y = 121.0; //shouldn't change from the previous value
                     //current value needs to be test, was -221
-                    currentDestination.y_speed = 0.5;
+                    currentDestination.y_speed = Constants.AUTO_DRIVE_SPEED;
                     currentDestination.facing = -Constants.FAR_AUTO_AIM_ANGLE_RED; //Turns to the obelisk, may need to be adjusted
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
@@ -132,9 +132,9 @@ public class RedFarShootingAuto extends OpMode {
                 case Move_Off_White_Tape:
                     // Set Destination
                     currentDestination.x = 360.0; //was -760
-                    currentDestination.x_speed = 0.1;
+                    currentDestination.x_speed = Constants.AUTO_DRIVE_SPEED;
                     currentDestination.y = 735.0;
-                    currentDestination.y_speed = 0.1;
+                    currentDestination.y_speed = Constants.AUTO_DRIVE_SPEED;
                     currentDestination.facing = Constants.NORTH;// was FAR_AUTO_AIM_ANGLE
                     driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
                     // Move to Location
@@ -151,9 +151,9 @@ public class RedFarShootingAuto extends OpMode {
                     break;
                 case Pick_Up:
                     currentDestination.x = 800.0; //was -760 //was 870
-                    currentDestination.x_speed = 0.1;//was 0.0
+                    currentDestination.x_speed = Constants.AUTO_DRIVE_SPEED;//was 0.0
                     currentDestination.y = 735.0;// 735
-                    currentDestination.y_speed = 0.1;
+                    currentDestination.y_speed = Constants.AUTO_DRIVE_SPEED;
                     currentDestination.facing = Constants.NORTH;// was FAR_AUTO_AIM_ANGLE
                     driveTrain.intake.set(Constants.INTAKE_SPEED_AUTO);
                     // Move to Location
@@ -175,9 +175,9 @@ public class RedFarShootingAuto extends OpMode {
                 case Safe_Park:
                     // Set Destination      // x was -760 the was -260 was 260
                     currentDestination.x = 360.0; // makes if face the drive team, same facing as starting
-                    currentDestination.x_speed = 0.4;
+                    currentDestination.x_speed = Constants.AUTO_DRIVE_SPEED;
                     currentDestination.y = 735.0;
-                    currentDestination.y_speed = 0.4;
+                    currentDestination.y_speed = Constants.AUTO_DRIVE_SPEED;
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
                     driveTrain.setFacing(currentDestination.facing);
@@ -245,9 +245,12 @@ public class RedFarShootingAuto extends OpMode {
         // New Way to get there
         driveTrain.xControl.setSetPoint(targetLocation.x);
         driveTrain.yControl.setSetPoint(targetLocation.y);
-        joinedTelemetry.addData("X Speed",driveTrain.xControl.calculate(driveTrain.getXPosition()) * Constants.AUTO_DRIVE_SPEED);
-        joinedTelemetry.addData("Y Speed",driveTrain.yControl.calculate(driveTrain.getYPosition()) * Constants.AUTO_DRIVE_SPEED);
-        driveTrain.drive(driveTrain.xControl.calculate(driveTrain.getXPosition()) * Constants.AUTO_DRIVE_SPEED, driveTrain.yControl.calculate(driveTrain.getYPosition()) * Constants.AUTO_DRIVE_SPEED);
+//        joinedTelemetry.addData("X Speed",driveTrain.xControl.calculate(driveTrain.getXPosition()) * Constants.AUTO_DRIVE_SPEED);
+//        joinedTelemetry.addData("Y Speed",driveTrain.yControl.calculate(driveTrain.getYPosition()) * Constants.AUTO_DRIVE_SPEED);
+        joinedTelemetry.addData("X Speed",driveTrain.xControl.calculate(driveTrain.getXPosition()) * targetLocation.x_speed);
+        joinedTelemetry.addData("Y Speed",driveTrain.yControl.calculate(driveTrain.getYPosition()) * targetLocation.y_speed);
+        driveTrain.drive(driveTrain.xControl.calculate(driveTrain.getXPosition()) * targetLocation.y_speed, driveTrain.yControl.calculate(driveTrain.getYPosition()) * targetLocation.y_speed);
+//        driveTrain.drive(driveTrain.xControl.calculate(driveTrain.getXPosition()) * Constants.AUTO_DRIVE_SPEED, driveTrain.yControl.calculate(driveTrain.getYPosition()) * Constants.AUTO_DRIVE_SPEED);
     }
 
     // ===== Enum Data Type for waypoint switch
