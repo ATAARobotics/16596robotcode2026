@@ -58,7 +58,7 @@ public class RedFarShootingAuto extends OpMode {
                     // Set Destination
                     double distanceTarget = get_distance(currentDestination);
                     currentDestination.x = -250.0; // was 43.0
-                    double speed = Math.max(0.1, Math.min(distanceTarget / 100.0,Constants.AUTO_DRIVE_SPEED));
+                    double speed = Math.max(0.1, Math.min(distanceTarget / 10.0,Constants.AUTO_DRIVE_SPEED));
                      currentDestination.x_speed = speed;
                     // currentDestination.x_speed = 0.5;
                     currentDestination.y = 121.0; //current value needs to be test, was -221
@@ -131,7 +131,7 @@ public class RedFarShootingAuto extends OpMode {
                     break;
                 case Move_Off_White_Tape:
                     // Set Destination
-                    currentDestination.x = 360.0; //was -760
+                    currentDestination.x = 100.0; //was -760
                     currentDestination.x_speed = Constants.AUTO_DRIVE_SPEED;
                     currentDestination.y = 735.0;
                     currentDestination.y_speed = Constants.AUTO_DRIVE_SPEED;
