@@ -38,7 +38,7 @@ public class Constants {
     public static double FLYWHEEL_FAR_AUTO = 0.73; //was 0.82
 
     //public static double FLYWHEEL_FAR_TARGET = FLYWHEEL_FAR * FLYWHEEL_FUDGE_FACTOR; // previously 0.85
-    public static double REVERSE_FLYWHEEL = -0.5;
+    public static double FLYWHEEL_REVERSE = -0.5;
 
     public static double FLYWHEEL_MAX = 2100;
     //public static final double FLYWHEEL_RECOVERY = 0.6 * FLYWHEEL_MAX; //chnage back to 0.9
