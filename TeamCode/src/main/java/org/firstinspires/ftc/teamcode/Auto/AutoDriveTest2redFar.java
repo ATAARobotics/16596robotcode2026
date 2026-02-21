@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 @Autonomous(name = "AutoDriveTest2",group = "Testing")
-public class AutoDriveTest2 extends OpMode {
+public class AutoDriveTest2redFar extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)
 
@@ -25,12 +25,15 @@ public class AutoDriveTest2 extends OpMode {
     public double currentTime = 0.0;
     //private Location currentDestination;
     private boolean autoDone = false;
-    private WayPoints currentWayPoint = WayPoints.Reverse;
+    private WayPoints currentWayPoint = WayPoints.MoveOffWall;
     public double speed = 0.0;
     private WayPoints lastWayPoint = null;
     private double wayPointStartTime = 0.0;
     double xOut = 0.0;
     double yOut = 0.0;
+    int shotCount = 0;
+
+
     //Waypoints:  Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park, Done
     // -x = Forward (mm) Distance from start (0,0)
     // +x = Reverse (mm) Distance from start (0,0)
@@ -41,20 +44,22 @@ public class AutoDriveTest2 extends OpMode {
     // When heading = 0/-180 then Y=STRAFE
     // When heading = 90/-90 the X=STRAFE
     //Define Locations relative to start
-    private static final Location startLocation = new Location(0.0,0.0,0.0);
-    private static final Location reverseTile2 = new Location(500,0,-90);
-    private static final Location reversePickup = new Location(500,-550,-90);
-    private static final Location returnTile2 = new Location(500,0,0);
+    private static final Location destMoveOffWall = new Location(-250,121,0);
+    private static final Location destAimLongRed = new Location(-200,121,111.67);
+    private static final Location destMoveOffWhite = new Location(270,735,0);
+    private static final Location destPickupFarRow = new Location(800,735,0.0);
+    private static final Location destSafePark = new Location(360,735,0);
+
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
     private driveMode dmPrecise = new driveMode(0.5567,4.670,4.670,1.50);
-    private driveMode dmRough = new driveMode(0.7,14.670,14.670,3.50);
+    private driveMode dmRough = new driveMode(0.7,17.670,17.670,4.50);
 
     //Create Location object for currentLocation variable to hold current position read by odometry
     private Location currentLocation = new Location(0.0,0.0,0.0);
     private Location currentDestination = new Location(0.0,0.0,0.0);
 
     // Holding object for current drive mode precision settings
-    private driveMode currentPrecision = new driveMode(0,0,0,0);
+    private driveMode currentDriveMode = new driveMode(0,0,0,0);
 
     @Override
     public void init() {
@@ -77,87 +82,88 @@ public class AutoDriveTest2 extends OpMode {
     @Override
     public void start() {
         startTime = getRuntime();
-        currentDestination = startLocation;
+        currentDestination = destPickupFarRow;
     }
 
     @Override
     public void loop() {
+        driveTrain.loop();
         updateCurrentLocation(driveTrain.odometer.getPosition());
         currentTime = getRuntime();
         driveTrain.setNow(currentTime);
         updateWayPointTimer();
-        driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
 
         if (!autoDone) {
-
-            // setCurrentDestination(x,y,direction,speed,timeout,nextwaypoint,turnDelay)
             switch (currentWayPoint) {
-                case Reverse:
-                    // Set Shooter Mode
-                    //driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
-                    currentDestination = reverseTile2;
-                    driveTrain.setFacing(currentDestination.facing);
-                    if (this.at_xy(currentDestination, dmPrecise) || wayPointActiveFor(4)) {
+                case MoveOffWall:
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
+                    currentDestination = destMoveOffWall;
+                    currentDriveMode = dmRough;
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
                         driveTrain.drive(0.0, 0.0);
-                        currentWayPoint = WayPoints.ReversePickup;
-                    } else {
-                        goto_xy(currentDestination, dmPrecise);
+                        currentWayPoint = WayPoints.AimLongRedShoot;
                     }
+                    driveTrain.setFacing(currentDestination.facing);
                     break;
                     
-                case ReversePickup:
+                case AimLongRedShoot:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;// Set Shooter Mode
-                    //driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
-                    // Set Destination
-                    currentDestination = reversePickup;
-                    driveTrain.setFacing(currentDestination.facing);
-                    if (this.at_xy(currentDestination, dmPrecise) || wayPointActiveFor(4)) {
+                    currentDestination = destAimLongRed;
+                    currentDriveMode = dmPrecise;
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(3)) {
                         driveTrain.drive(0.0, 0.0);
-                        currentWayPoint = WayPoints.returnTile2;
-                    } else {
-                        goto_xy(currentDestination, dmPrecise);
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfar;
+                        if (wayPointActiveFor(8)) {
+                            driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                            if (shotCount == 0) {
+                                currentWayPoint = WayPoints.MoveOffWhite;
+                                shotCount += 1;
+                            } else {
+                                currentWayPoint = WayPoints.SafePark;
+                            }
+                        }
                     }
+                    driveTrain.setFacing(currentDestination.facing);
                     break;
                     
-                case returnTile2:
-                    //driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;// Set Shooter Mode
+                case MoveOffWhite:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
-                    // Set Destination
-                    currentDestination = returnTile2;
+                    currentDestination = destMoveOffWhite;
+                    currentDriveMode = dmRough;
                     driveTrain.setFacing(currentDestination.facing);
-                    //if (this.at_xy(currentDestination) || wayPointActiveFor(5)) {
-                    //if (wayPointActiveFor(6.7)){
-                    if (wayPointActiveFor(1.2)){
-                        if (wayPointActiveFor(6)){
+                    if (wayPointActiveFor(0.5)) {
+                        if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2.5)) {
                             driveTrain.drive(0.0, 0.0);
-                            currentWayPoint = WayPoints.ReturnStart;
-                        } else {
-                            //this.goto_xy(currentDestination);
-                            //driveTrain.drive(0.0, 0.0);
-                            goto_xy(currentDestination, dmPrecise);
+                            currentWayPoint = WayPoints.PickupFarRow;
                         }
                     }
                     break;
-                case ReturnStart:
-                    // Set Shooter Mode
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
-                    // Set Destination
-                    currentDestination = startLocation;
-                    driveTrain.setFacing(currentDestination.facing);
-                    if (this.at_xy(currentDestination, dmPrecise) || wayPointActiveFor(5)) {
+
+                case PickupFarRow:
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;
+                    currentDestination = destPickupFarRow;
+                    currentDriveMode = dmPrecise;
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(5)) {
                         driveTrain.drive(0.0, 0.0);
-                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;
-                        if (wayPointActiveFor(12)){
-                            driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;
+                        currentWayPoint = WayPoints.MoveOffWall;
+                    }
+                    driveTrain.setFacing(currentDestination.facing);
+                    break;
+
+                case SafePark:
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
+                    currentDestination = destSafePark;
+                    currentDriveMode = dmRough;
+                    driveTrain.setFacing(currentDestination.facing);
+                    if (wayPointActiveFor(0.1)) {
+                        if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
+                            driveTrain.drive(0.0, 0.0);
                             currentWayPoint = WayPoints.Done;
                         }
-                    } else {
-                        goto_xy(currentDestination, dmPrecise);
                     }
                     break;
-
                 case Done:
                 default:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
@@ -199,9 +205,9 @@ public class AutoDriveTest2 extends OpMode {
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
 
-    public boolean at_xy(Location currentLocation, driveMode driveMode) {
+    public boolean at_xy(Location destinationLocation, driveMode driveMode) {
     boolean withinTolerance =
-            at_x(currentLocation.x, driveMode) && at_y(currentLocation.y, driveMode) && driveTrain.onHeading;
+            at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && driveTrain.onHeading;
     if (withinTolerance) {
         // First time entering tolerance
         if (atTargetStartTime < 0) {
@@ -217,23 +223,16 @@ public class AutoDriveTest2 extends OpMode {
     return false;
 }
 
-    public boolean at_x(double targetX, driveMode driveMode) {
-        //return (Math.abs(targetX - driveTrain.getXPosition())) <= C2.AUTO_X_DISTANCE_ERROR;
-        return (Math.abs(targetX - driveTrain.getXPosition())) <= driveMode.xTolerance;
+    public boolean at_x(double destinationX, driveMode driveMode) {
+        //return (Math.abs(destinationX - driveTrain.getXPosition())) <= C2.AUTO_X_DISTANCE_ERROR;
+        return (Math.abs(destinationX - driveTrain.getXPosition())) <= driveMode.xTolerance;
     }
 
-    public boolean at_y(double targetY, driveMode driveMode) {
-        //return (Math.abs(targetY - driveTrain.getYPosition())) <= C2.AUTO_Y_DISTANCE_ERROR;
-        return (Math.abs(targetY - driveTrain.getYPosition())) <= driveMode.yTolerance;
+    public boolean at_y(double destinationY, driveMode driveMode) {
+        //return (Math.abs(destinationY - driveTrain.getYPosition())) <= C2.AUTO_Y_DISTANCE_ERROR;
+        return (Math.abs(destinationY - driveTrain.getYPosition())) <= driveMode.yTolerance;
     }
 
-//    public static class Location {
-//        public double x = 0.0;
-//        //public double x_speed = 0.0;
-//        public double y = 0.0;
-//        //public double y_speed = 0.0;
-//        public double facing;
-//    }
     public static class Location {
         public double x;
         public double y;
@@ -261,28 +260,11 @@ public class AutoDriveTest2 extends OpMode {
     }
 
 
-    // setCurrentDestination(x,y,direction,speed,timeout,nextWayPoint,turnDelay)
-//    public void setCurrentDestination(Location currentLocation, Location destinationLocation,
-//                                      double speed, double timeout, WayPoints nextWayPoint, double turnDelay) {
-//        if (Math.abs(destinationLocation.y - currentLocation.y) <= C2.AUTO_Y_DISTANCE_ERROR &&
-//                Math.abs(destinationLocation.x - currentLocation.x) <= C2.AUTO_Y_DISTANCE_ERROR) {
-//            currentWayPoint = nextWayPoint;
-//
-//        }
-//        if (this.at_xy(currentDestination, C2.AUTO_X_DISTANCE_ERROR, C2.AUTO_Y_DISTANCE_ERROR) || wayPointActiveFor(timeout)) {
-//            driveTrain.drive(0.0, 0.0);
-//            currentWayPoint = nextWayPoint;
-//            driveTrain.setFacing(currentDestination.facing);
-//        } else {
-//            //this.goto_xy(currentDestination, currentDestination.x_speed, currentDestination.y_speed);
-//        }
-//
-//    }
     private double applyKS(double output, double kS) {
         if (Math.abs(output) < 1e-6) return 0;   // true zero stays zero
         return Math.signum(output) * Math.max(Math.abs(output), kS);
     }
-    public void goto_xy(Location targetLocation, driveMode driveMode) {
+    public boolean goto_xy(Location targetLocation, driveMode driveMode) {
         driveTrain.xControl.setSetPoint(targetLocation.x);
         driveTrain.yControl.setSetPoint(targetLocation.y);
         xOut = driveTrain.xControl.calculate(driveTrain.getXPosition());
@@ -314,23 +296,23 @@ public class AutoDriveTest2 extends OpMode {
             yOut = 0;
 
         driveTrain.drive(xOut, yOut);
-        joinedTelemetry.addData("X Speed",driveTrain.xControl.calculate(driveTrain.getXPosition()) * C2.AUTO_DRIVE_SPEED);
-        joinedTelemetry.addData("Y Speed",driveTrain.yControl.calculate(driveTrain.getYPosition()) * C2.AUTO_DRIVE_SPEED);
-
+        joinedTelemetry.addData("X Speed",xOut);
+        joinedTelemetry.addData("Y Speed",yOut);
+        return at_xy(targetLocation, driveMode);
     }
 
     // ===== Enum Data Type for waypoint switch
     public enum WayPoints {
-        Reverse, ReturnStart, Far_Shot, ReversePickup, returnTile2, Done
+        MoveOffWall, PickupFarRow, Far_Shot, AimLongRedShoot, MoveOffWhite, SafePark, Done
     }
 
     private void updateIndicator() {
         // INDICATOR CASES
         switch (currentWayPoint) {
-            case Reverse:
+            case MoveOffWall:
                 indicator.setColor(C2.RGB_Light.VIOLET);
                 break;
-            case ReturnStart:
+            case PickupFarRow:
                 indicator.setColor(C2.RGB_Light.YELLOW);
                 break;
             case Far_Shot:
@@ -340,10 +322,10 @@ public class AutoDriveTest2 extends OpMode {
                     indicator.setColor(C2.RGB_Light.RED);
                 }
                 break;
-            case ReversePickup:
+            case AimLongRedShoot:
                 indicator.setColor(C2.RGB_Light.BLUE);
                 break;
-            case returnTile2:
+            case MoveOffWhite:
                 indicator.setColor(C2.RGB_Light.ORANGE);
                 break;
             case Done:

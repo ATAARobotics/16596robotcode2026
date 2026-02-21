@@ -147,24 +147,6 @@ public class DriveTrainBasic2 {
             } else {
                 headingCorrection = 0.0;
             }
-
-//            // Because it's a double, can't check for exactly 180, so we check if it's almost 180 in either direction.
-//            if (Math.abs(Math.abs(headingSetPoint) - 180.0) < Constants2.HEADING_ERROR_Tolerance) {
-//                // "south" is special because it's around the 180/-180 toggle-point
-//                // Change set-point between 180/-180 depending on which is closer.
-//                if (heading < 0.0) {
-//                    headingSetPoint = -180;
-//                } else {
-//                    headingSetPoint = 180;
-//                }
-//            }
-//            headingControl.setSetPoint(headingSetPoint);
-//            headingCorrection = -headingControl.calculate(heading);// confirm if (-) is needed.
-//
-//            headingError = Math.abs(headingSetPoint - heading);
-//            if (headingError <= Constants2.HEADING_ERROR_Tolerance) {
-//                headingCorrection = 0;
-//            }
         }
 
         if (drivemodefieldcentric) {
@@ -212,17 +194,6 @@ public class DriveTrainBasic2 {
     }
     public void setFacing(double newHeading) { headingSetPoint = newHeading; }
 
-    public void driveTo(double speed, double xDist, double yDist, double facing) {
-        autoEnabled = true;
-        currentSpeed = speed;
-        currentXTarget = xDist;
-        currentYTarget = yDist;
-        setDirection(facing);
-
-        xControl.setSetPoint(currentXTarget);
-        yControl.setSetPoint(currentYTarget);
-
-    }
     public void drive(double forwardSpeed,  double strafeSpeed) {
         // tell ftclib its inputs  strafeSpeed,forwardSpeed,turn,heading
         // turn and heading are managed in loop with the heading control PID
@@ -268,12 +239,7 @@ public class DriveTrainBasic2 {
     public boolean canLaunch(double launchSpeed){
         return Flywheel.getCorrectedVelocity() >= launchSpeed * C2.FLYWHEEL_MAX;
     }
-    public double convert360(double angle){
-        if (angle > 0){
-            return 360.0 - angle;
-        }
-        return Math.abs(angle);
-    }
+
     public void setDrivemodefieldcentric(){
         this.drivemodefieldcentric = true;
     }
@@ -291,7 +257,7 @@ public class DriveTrainBasic2 {
         }
     }
     public enum ShooterMode {
-        shooterSHOOTINGfar, shooterSHOOTINGnear, shooterPICKUP, shooterCORRECTING, shooterOFF
+        shooterSHOOTINGfar, shooterSHOOTINGnear, shooterPICKUP, shooterCORRECTING, shooterHOLDING, shooterOFF
     }
 
     public void ShooterControlLoop() {
@@ -305,7 +271,7 @@ public class DriveTrainBasic2 {
             // shooterMotors: flywheelSpeed intakeSpeed feederSpeed feed1/2Speed
             case shooterSHOOTINGfar:
                 // shooter delayed for feeder reverse to correct ball position
-                if (!shooterModeActiveFor(2.0)) { // input delay seconds
+                if (!shooterModeActiveFor(C2.CORRECTION_DELAY)) { // input delay seconds
                     shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
                 } else {
                     shooterMotors(C2.FLYWHEEL_SPD_FAR, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
@@ -316,7 +282,7 @@ public class DriveTrainBasic2 {
 
             case shooterSHOOTINGnear:
                 // shooter delayed for feeder reverse to correct ball position
-                if (!shooterModeActiveFor(2.0)) { // input delay seconds
+                if (!shooterModeActiveFor(C2.CORRECTION_DELAY)) { // input delay seconds
                     shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
                 } else {
                     shooterMotors(C2.FLYWHEEL_SPD_NEAR, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
@@ -331,6 +297,10 @@ public class DriveTrainBasic2 {
 
             case shooterCORRECTING:
                 shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
+                break;
+
+            case shooterHOLDING:
+                shooterMotors(0.0, C2.INTAKE_SPD_HOLDING, C2.FEEDER_SPD_HOLDING, C2.FEED_SPD_REVERSE);
                 break;
 
             case shooterOFF:

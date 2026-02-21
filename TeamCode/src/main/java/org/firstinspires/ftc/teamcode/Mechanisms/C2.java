@@ -16,15 +16,17 @@ public class C2 {
     public static double INTAKE_SPD_PICKUP = 1.0;
     public static double INTAKE_SPD_SHOOTING = 0.83;
     public static double INTAKE_SPD_CORRECTING = 0.1;
+    public static double INTAKE_SPD_HOLDING = 0.1;
     public static double FEEDER_SPD_CORRECTING = -0.4;
+    public static double FEEDER_SPD_HOLDING = -0.1;
     public static double FEEDER_SPD_PICKUP = -0.1;
     public static double FEEDER_SPD_NEAR = 0.75;
     public static double FEEDER_SPD_FAR = 0.60;
     //public static double FLYWHEEL_IDLE_SPEED = 0.3; // might not use this anymore
     //public static double FLYWHEEL_NEAR = 0.62;
-    public static double FLYWHEEL_SPD_NEAR = 0.6;
+    public static double FLYWHEEL_SPD_NEAR = 0.58;
     //public static double FLYWHEEL_FAR = 0.78; // previously 0.85
-    public static double FLYWHEEL_SPD_FAR = 0.82; //was 0.82
+    public static double FLYWHEEL_SPD_FAR = 0.73; //was 0.82
     public static double FLYWHEEL_SPD_REVERSE = -0.5;
     public static double FLYWHEEL_MAX = 2100; // Used for calculating speed feedback for at speed setpoint
     public static double FLYWHEEL_KP = 5.0;
@@ -38,6 +40,7 @@ public class C2 {
   public static final double FEED_SPD_FWD = -1.0;
     public static final double FEED_SPD_REVERSE = 1.0;
     public static final double FEED_SPEED_AUTO = -0.5;
+    public static double CORRECTION_DELAY = 1.65;
     //
     // ========== Define Drive constants.  Make them public so they CAN be used by the calling OpMode
     //
