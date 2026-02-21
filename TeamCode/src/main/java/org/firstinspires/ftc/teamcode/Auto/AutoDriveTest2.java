@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "AutoDriveTest2",group = "Testing")
+//@Autonomous(name = "AutoDriveTest2",group = "Testing")
 public class AutoDriveTest2 extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)

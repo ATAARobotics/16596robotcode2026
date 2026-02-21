@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "AutoDriveTest2",group = "Testing")
+@Autonomous(name = "AutoDriveTest2redFar",group = "Testing")
 public class AutoDriveTest2redFar extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)
@@ -35,8 +35,8 @@ public class AutoDriveTest2redFar extends OpMode {
 
 
     //Waypoints:  Move_Off_Wall, Aim, Far_Shot, Move_Off_White_Tape, Safe_Park, Done
-    // -x = Forward (mm) Distance from start (0,0)
-    // +x = Reverse (mm) Distance from start (0,0)
+    // -x = Forward (mm) Distance from start (0,0) - red=left
+    // +x = Reverse (mm) Distance from start (0,0) - red=right
     // -y = Strafe Left (mm) Distance from start (0,0)
     // +y = Strafe Right (mm) Distance from start (0,0)
     // -f = Turn Right/Clockwise (deg)
@@ -44,10 +44,10 @@ public class AutoDriveTest2redFar extends OpMode {
     // When heading = 0/-180 then Y=STRAFE
     // When heading = 90/-90 the X=STRAFE
     //Define Locations relative to start
-    private static final Location destMoveOffWall = new Location(-250,121,0);
-    private static final Location destAimLongRed = new Location(-200,121,111.67);
-    private static final Location destMoveOffWhite = new Location(270,735,0);
-    private static final Location destPickupFarRow = new Location(800,735,0.0);
+    private static final Location destMoveOffWall = new Location(-260,105,0);
+    private static final Location destAimLongRed = new Location(-220,105,-113);
+    private static final Location destMoveOffWhite = new Location(100,735,0);
+    private static final Location destPickupFarRow = new Location(850,735,0.0);
     private static final Location destSafePark = new Location(360,735,0);
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
@@ -114,7 +114,7 @@ public class AutoDriveTest2redFar extends OpMode {
                     if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(3)) {
                         driveTrain.drive(0.0, 0.0);
                         driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfar;
-                        if (wayPointActiveFor(8)) {
+                        if (wayPointActiveFor(9)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
                                 currentWayPoint = WayPoints.MoveOffWhite;
