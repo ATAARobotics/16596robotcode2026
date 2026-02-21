@@ -71,7 +71,7 @@ public class DriveTrainBasic {
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         // Flywheel assignment
         shooter = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        feeder = new MotorEx(hwMap, "shooter2");
+        feeder = new MotorEx(hwMap, "feeder");
        // flywheel = new MotorGroup(shooter, shooter2);
         // Intake assignment
         intake = new Motor(hwMap, "intake");

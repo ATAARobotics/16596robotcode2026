@@ -54,7 +54,7 @@ public class RedFarShootingAuto extends OpMode {
                 case Move_Off_Wall:
                     driveTrain.feed1.setPower(-Constants.FEED_SPEED);
                     driveTrain.feed2.setPower(-Constants.FEED_SPEED);
-                    driveTrain.feeder.set(-Constants.FEEDER_SPEED);
+                    driveTrain.feeder.set(Constants.FEEDER_SPEED);
                     // Set Destination
                     double distanceTarget = get_distance(currentDestination);
                     currentDestination.x = -250.0; // was 43.0
@@ -99,7 +99,7 @@ public class RedFarShootingAuto extends OpMode {
                         indicator.setColor(Constants.RGB_Light.GREEN);
                         driveTrain.feed1.setPower(Constants.FEED_SPEED);
                         driveTrain.feed2.setPower(Constants.FEED_SPEED);
-                        driveTrain.feeder.set(Constants.FEEDER_SPEED);
+                        driveTrain.feeder.set(-Constants.FEEDER_SPEED);
                     }
                     else
                     {
