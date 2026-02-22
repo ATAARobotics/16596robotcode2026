@@ -51,16 +51,16 @@ public class AutoBlueNear9ball extends OpMode {
     private static double rowSeparationDistance = 431;
     private static final Location destMoveToMiddleRow = new Location(
             destMoveToCloseRow.x + rowSeparationDistance,
-            destMoveToCloseRow.y + rowSeparationDistance, -135);
+            destMoveToCloseRow.y - rowSeparationDistance, -135);
     private static final Location destPickupMiddleRow = new Location(
             destPickupCloseRow.x + rowSeparationDistance,
-            destPickupCloseRow.y + rowSeparationDistance,-135);
+            destPickupCloseRow.y - rowSeparationDistance,-135);
     private static final Location destMoveToFarRow = new Location(
             destPickupCloseRow.x + (rowSeparationDistance * 2),
-            destPickupCloseRow.y + (rowSeparationDistance * 2),-135);
+            destPickupCloseRow.y - (rowSeparationDistance * 2),-135);
     private static final Location destPickupFarRow = new Location(
             destPickupCloseRow.x + (rowSeparationDistance * 2),
-            destPickupCloseRow.y + (rowSeparationDistance * 2),-135);
+            destPickupCloseRow.y - (rowSeparationDistance * 2),-135);
     private static final Location destSafePark = new Location(430,-735,0);
 
 
