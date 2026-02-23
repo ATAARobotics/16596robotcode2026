@@ -42,7 +42,7 @@ public class C2 {
   public static final double FEED_SPD_FWD = -1.0;
     public static final double FEED_SPD_REVERSE = 1.0;
     public static final double FEED_SPEED_AUTO = -0.5;
-    public static double CORRECTION_DELAY = 1.65;
+    public static double CORRECTION_DELAY = 1.5;
     //
     // ========== Define Drive constants.  Make them public so they CAN be used by the calling OpMode
     //

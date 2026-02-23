@@ -261,7 +261,7 @@ public class DriveTrainBasic2 {
         }
     }
     public enum ShooterMode {
-        shooterSHOOTINGfarBlue, shooterSHOOTINGfarRed, shooterSHOOTINGnear, shooterPICKUP, shooterCORRECTING, shooterHOLDING, shooterOFF
+        shooterSHOOTINGfarBlue, shooterSHOOTINGfarRed, shooterSHOOTINGnear, shooterSHOOTINGnearNOcorrection, shooterPICKUP, shooterCORRECTING, shooterHOLDING, shooterOFF
     }
 
     public void ShooterControlLoop() {
@@ -303,6 +303,14 @@ public class DriveTrainBasic2 {
                         shooterMotors(C2.FLYWHEEL_SPD_NEAR, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_NEAR, C2.FEED_SPD_FWD);
                     }
                 } break;
+
+            case shooterSHOOTINGnearNOcorrection:
+                if (canLaunch(C2.FLYWHEEL_SPD_NEAR)) {
+                    shooterMotors(C2.FLYWHEEL_SPD_NEAR, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_NEAR, C2.FEED_SPD_FWD);
+                } else {
+                    shooterMotors(C2.FLYWHEEL_SPD_NEAR, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
+                }
+                 break;
 
             case shooterPICKUP:
                 shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_PICKUP, C2.FEEDER_SPD_PICKUP, C2.FEED_SPD_REVERSE);
