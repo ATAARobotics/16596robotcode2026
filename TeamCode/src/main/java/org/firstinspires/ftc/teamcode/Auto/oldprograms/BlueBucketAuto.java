@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.Auto.oldprograms;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -11,8 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 
-//@Autonomous(name = "RedFarBucketAuto")
-public class RedBucketAuto extends OpMode {
+//@Autonomous(name = "BlueFarBucketAuto")
+public class BlueBucketAuto extends OpMode {
     private DriveTrainBasic driveTrain;
 
     private JoinedTelemetry joinedTelemetry;
@@ -52,7 +51,7 @@ public class RedBucketAuto extends OpMode {
     }
     @Override
     public void start(){
-       // driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
+//      driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
     }
     @Override
     public void loop() {

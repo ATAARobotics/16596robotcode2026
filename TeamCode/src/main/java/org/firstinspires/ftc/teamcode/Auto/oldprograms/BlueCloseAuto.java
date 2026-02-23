@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.Auto.oldprograms;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.JoinedTelemetry;
@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "RedCloseAuto",group = "Testing")
-public class RedCloseAuto extends OpMode {
+//@Autonomous(name = "BlueCloseAuto",group = "Testing")
+public class BlueCloseAuto extends OpMode {
     private DriveTrainBasic driveTrain;
     public LightIndicatorSubsystem indicator;
 
@@ -52,10 +52,9 @@ public class RedCloseAuto extends OpMode {
     public void loop() {
         driveTrain.loop();
         Pose2D pos = driveTrain.odometer.getPosition();
-        if (!autoDone) {
+        if (!autoDone && (getRuntime() - startTime > 0.5)) {
 
             switch (currentWayPoint) {
-
                 case Move_Off_Wall:
                     // Set Destination
                     currentDestination.x = 1000.0; //testing, change back to 0.0 soon
@@ -102,7 +101,7 @@ public class RedCloseAuto extends OpMode {
                         indicator.setColor(Constants.RGB_Light.RED);
                     }
 
-                    if (getRuntime() - startTime >= 16.7) {
+                    if (getRuntime() - startTime >= Constants.AUTO_WAIT_TIME) {
                         driveTrain.shooter.set(0.0); //this doesnt stop at the end either-we need it to stop
                         driveTrain.shooter.stopMotor();
                         driveTrain.feed1.setPower(0.0);
@@ -136,7 +135,7 @@ public class RedCloseAuto extends OpMode {
                     // Set Destination
                     currentDestination.x = 430.0; // makes if face the drive team, same facing as starting
                     currentDestination.x_speed = 0.5;
-                    currentDestination.y = 735.0;
+                    currentDestination.y = -735.0;
                     currentDestination.y_speed = 0.5;
                     currentDestination.facing = Constants.NORTH;
                     // Move to Location
@@ -168,6 +167,7 @@ public class RedCloseAuto extends OpMode {
             joinedTelemetry.addData("Current Waypoint",currentWayPoint.toString());
             joinedTelemetry.addData("Destination X",currentDestination.x);
             joinedTelemetry.addData("Destination Y",currentDestination.y);
+            joinedTelemetry.addData("Shooter Speed",driveTrain.shooter.getCorrectedVelocity());
             joinedTelemetry.addData("Run Time",getRuntime());
             joinedTelemetry.addData("Time Diff",getRuntime() - startTime);
             joinedTelemetry.update();

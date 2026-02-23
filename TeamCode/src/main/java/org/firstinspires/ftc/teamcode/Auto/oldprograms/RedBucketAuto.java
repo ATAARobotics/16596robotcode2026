@@ -1,17 +1,17 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.Auto.oldprograms;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 
-//@Autonomous(name = "RedNearSimpleAuto")
-public class RedSimpleAuto extends OpMode {
+//@Autonomous(name = "RedFarBucketAuto")
+public class RedBucketAuto extends OpMode {
     private DriveTrainBasic driveTrain;
 
     private JoinedTelemetry joinedTelemetry;
@@ -40,9 +40,9 @@ public class RedSimpleAuto extends OpMode {
         this.wayPoints[0].facing = Constants.NORTH;
         // WayPoint 1
         this.wayPoints[1] = new WayPoint();
-        this.wayPoints[1].x = 0.0;
-        this.wayPoints[1].x_speed = 0.0;
-        this.wayPoints[1].y = 700.0;
+        this.wayPoints[1].x = -700.0;
+        this.wayPoints[1].x_speed = 0.5;
+        this.wayPoints[1].y = 0.0;
         this.wayPoints[1].y_speed = 0.5;
         this.wayPoints[1].facing = Constants.NORTH;
 

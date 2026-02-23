@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.Auto.oldprograms;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -13,8 +12,8 @@ import org.firstinspires.ftc.teamcode.Mechanisms.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-//@Autonomous(name = "Blue Near 2")
-public class AutoBlueNear2 extends OpMode {
+//@Autonomous(name = "Red Near 2")
+public class AutoRedNear2 extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)
 
@@ -48,7 +47,7 @@ public class AutoBlueNear2 extends OpMode {
     private static final Location Close_Shot = new Location(1000.0,0.0,0);
     //private static final Location destMoveOffWhite = new Location(100,-735,0);
     //private static final Location destPickupFarRow = new Location(850,-735,0.0);
-    private static final Location destSafePark = new Location(430,-735,0);
+    private static final Location destSafePark = new Location(430,735,0);
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
     private driveMode dmPrecise = new driveMode(0.5567,4.670,4.670,1.50);
