@@ -46,28 +46,17 @@ public class AutoBlueNear9ball extends OpMode {
     //Define Locations relative to start
     private static final Location destMoveOffWall = new Location(1000.0,0.0,0);
     private static final Location Close_Shot = new Location(1000.0,0.0,0);
-    private static final Location destMoveToCloseRow = new Location(1032,-349,-135.0);
-    private static final Location destPickupCloseRow = new Location(482,-843,-135.0);
-    private static double rowSeparationDistance = 431;
-    private static final Location destMoveToMiddleRow = new Location(
-            destMoveToCloseRow.x + rowSeparationDistance,
-            destMoveToCloseRow.y - rowSeparationDistance, -135);
-    private static final Location destPickupMiddleRow = new Location(
-            destPickupCloseRow.x + rowSeparationDistance,
-            destPickupCloseRow.y - rowSeparationDistance,-135);
-    private static final Location destMoveToFarRow = new Location(
-            destPickupCloseRow.x + (rowSeparationDistance * 2),
-            destPickupCloseRow.y - (rowSeparationDistance * 2),-135);
-    private static final Location destPickupFarRow = new Location(
-            destPickupCloseRow.x + (rowSeparationDistance * 2),
-            destPickupCloseRow.y - (rowSeparationDistance * 2),-135);
+    private static final Location destMoveToCloseRow = new Location(1032,-349,-140.6);
+    private static final Location destPickupCloseRow = new Location(482,-843,-140.6);
+    private static final Location destMoveToMiddleRow = new Location(1484,-805, -140.6);
+    private static final Location destPickupMiddleRow = new Location(770, -1457,-140.6);
     private static final Location destSafePark = new Location(430,-735,0);
 
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
-    private driveMode dmPrecise = new driveMode(0.5567,4.670,4.670,1.50);
+    private driveMode dmPrecise = new driveMode(0.6767,4.670,4.670,1.50);
     private driveMode dmPickupNear = new driveMode(0.4567,4.670,4.670,1.50);
-    private driveMode dmRough = new driveMode(0.7,17.670,17.670,4.50);
+    private driveMode dmRough = new driveMode(0.8,20.670,20.670,4.50);
 
     //Create Location object for currentLocation variable to hold current position read by odometry
     private Location currentLocation = new Location(0.0,0.0,0.0);
