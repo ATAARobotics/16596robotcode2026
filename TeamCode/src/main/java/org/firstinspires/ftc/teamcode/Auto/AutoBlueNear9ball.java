@@ -98,6 +98,7 @@ public class AutoBlueNear9ball extends OpMode {
         Pose2D pos = driveTrain.odometer.getPosition();
 
         if (!autoDone) {
+            overtimeOverride();
             switch (currentWayPoint) {
                 case MoveOffWall:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
@@ -230,12 +231,20 @@ public class AutoBlueNear9ball extends OpMode {
         driveTrain.ShooterControlLoop();
     }  // END LOOP
 
+
     public void updateCurrentLocation(Pose2D pos) {
         currentLocation.x = -pos.getX(DistanceUnit.MM);
         currentLocation.y = -pos.getY(DistanceUnit.MM);
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
-
+    //If we run out of time then goto safepark
+    public void overtimeOverride() {
+        if (currentTime > 28.0
+                && currentWayPoint != WayPoints.SafePark
+                && currentWayPoint != WayPoints.Done) {
+            currentWayPoint = WayPoints.SafePark;
+        }
+    }
     public boolean at_xy(Location destinationLocation, driveMode driveMode) {
         boolean withinTolerance =
                 at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && driveTrain.onHeading;
