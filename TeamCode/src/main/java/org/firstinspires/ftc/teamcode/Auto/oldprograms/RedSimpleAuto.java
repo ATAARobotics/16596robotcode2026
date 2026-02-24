@@ -1,24 +1,22 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package org.firstinspires.ftc.teamcode.Auto.oldprograms;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic;
 
-//@Autonomous(name = "BlueNearSimpleAuto")
-public class BlueSimpleAuto extends OpMode {
+//@Autonomous(name = "RedNearSimpleAuto")
+public class RedSimpleAuto extends OpMode {
     private DriveTrainBasic driveTrain;
 
     private JoinedTelemetry joinedTelemetry;
 
     private int current_step = 0;
-    private final int total_waypoints = 3;
+    private final int total_waypoints = 2;
     private WayPoint[] wayPoints;
     private boolean autoDone;
 
@@ -41,27 +39,18 @@ public class BlueSimpleAuto extends OpMode {
         this.wayPoints[0].facing = Constants.NORTH;
         // WayPoint 1
         this.wayPoints[1] = new WayPoint();
-        this.wayPoints[1].x = 0;
+        this.wayPoints[1].x = 0.0;
         this.wayPoints[1].x_speed = 0.0;
-        this.wayPoints[1].y = -1700.0; //previously the leave value was -700
+        this.wayPoints[1].y = 700.0;
         this.wayPoints[1].y_speed = 0.5;
         this.wayPoints[1].facing = Constants.NORTH;
-        //Waypoint 2
-        this.wayPoints[2] = new WayPoint();
-        this.wayPoints[2].x = 0;
-        this.wayPoints[2].x_speed = 0.0;
-        this.wayPoints[2].y = -700.0;
-        this.wayPoints[2].y_speed = 0.5;
-        this.wayPoints[2].facing = Constants.SOUTH_WEST; //this turns our robot to face the obelisk
-        
-
 
         this.current_step = 1;
         autoDone = false;
     }
     @Override
     public void start(){
-//      driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
+       // driveTrain.feed1.setPower(Constants.FEED_SPEED);  // to keep 3rd ball from 'falling' out
     }
     @Override
     public void loop() {
@@ -70,16 +59,6 @@ public class BlueSimpleAuto extends OpMode {
         if (!autoDone) {
             switch (this.current_step) {
                 case 1:
-                    driveTrain.setFacing(this.wayPoints[this.current_step].facing);
-
-                    if (!this.at_xy(this.wayPoints[this.current_step])) {
-                        this.goto_xy(this.wayPoints[this.current_step]);
-                    } else {
-                        driveTrain.drive(0.0, 0.0);
-                        this.current_step++;
-                    }
-                    break;
-                case 2:
                     driveTrain.setFacing(this.wayPoints[this.current_step].facing);
                     if (!this.at_xy(this.wayPoints[this.current_step])) {
                         this.goto_xy(this.wayPoints[this.current_step]);
