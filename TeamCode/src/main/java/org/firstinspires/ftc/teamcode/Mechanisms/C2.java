@@ -9,8 +9,8 @@ import com.bylazar.configurables.annotations.Configurable;
 
 public class C2 {
     // Speed Ratio Settings
-    public static final double SPEED_RATIO = 1.0;  // Use this to slow down robot
-    public static final double OPER_SPEED_RATIO = SPEED_RATIO * 0.567;
+    public static final double DRIVER_SPEED_RATIO = 0.8;  // Use this to slow down robot
+    public static final double OPER_SPEED_RATIO = DRIVER_SPEED_RATIO * 0.567;
     public static final double TURN_RATIO = 1.0; // use this to slow turn rate1q
     //
     // ========== Intake, Shooter and Feeder Speeds
@@ -21,7 +21,7 @@ public class C2 {
     //FEEDER
     public static double FEEDER_SPD_CORRECTING = -0.4;
     public static double FEEDER_SPD_HOLDING = -0.1;
-    public static double FEEDER_SPD_PICKUP = -0.1;
+    public static double FEEDER_SPD_PICKUP = -0.2;
     public static double FEEDER_SPD_NEAR = 0.75;
     public static double FEEDER_SPD_FAR = 0.58;
     //FLYWHEEL
@@ -30,6 +30,7 @@ public class C2 {
     public static double FLYWHEEL_SPD_FAR_BLUE_EXTRA = 5.0; // Adds to the feedback requirement
     public static double FLYWHEEL_SPD_FAR_RED = 0.75; //was 0.82
     public static double FLYWHEEL_SPD_REVERSE = -0.5;
+    public static double FLYWHEEL_SPD_HOLDING = 0.1;
     public static double FLYWHEEL_MAX = 2100; // Used for calculating speed feedback for at speed setpoint
     public static double FLYWHEEL_KP = 5.0;
     public static double FLYWHEEL_KI = 0.00;

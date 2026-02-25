@@ -84,10 +84,10 @@ robot_drive2 extends OpMode {
             double softLY = operator.getLeftY() * Math.abs(operator.getLeftY()) * C2.OPER_SPEED_RATIO;
             double softLX = operator.getLeftX() * Math.abs(operator.getLeftX()) * C2.OPER_SPEED_RATIO;
             driveTrain.drive(softLY, -softLX);
-            double softRX = operator.getRightX() * Math.abs(operator.getRightX()) * C2.SPEED_RATIO;
+            double softRX = operator.getRightX() * Math.abs(operator.getRightX()) * C2.DRIVER_SPEED_RATIO;
             driveTrain.turn(softRX);
         } else {
-            driveTrain.drive(driver.getLeftY() * C2.SPEED_RATIO, -driver.getLeftX() * C2.SPEED_RATIO);
+            driveTrain.drive(driver.getLeftY() * C2.DRIVER_SPEED_RATIO, -driver.getLeftX() * C2.DRIVER_SPEED_RATIO);
             driveTrain.turn(driver.getRightX());
         }
         // =========  Operator controls ===========
@@ -99,7 +99,7 @@ robot_drive2 extends OpMode {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;
         }
         if (operator.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-            driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarRed;
+            driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarRedWithCorrection;
         }
         if (operator.wasJustPressed(GamepadKeys.Button.X)) {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterCORRECTING;
@@ -221,7 +221,7 @@ robot_drive2 extends OpMode {
                 indicator.setColor(C2.RGB_Light.YELLOW);
                 break;
             case shooterSHOOTINGnear:
-            case shooterSHOOTINGfarRed:
+            case shooterSHOOTINGfarRedWithCorrection:
             case shooterSHOOTINGfarBlue:
                 if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR_BLUE)) {
                     indicator.setColor(C2.RGB_Light.GREEN);

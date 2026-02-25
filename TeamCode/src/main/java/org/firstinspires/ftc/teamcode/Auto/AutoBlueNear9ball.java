@@ -70,6 +70,8 @@ public class AutoBlueNear9ball extends OpMode {
         driveTrain = new DriveTrainBasic2(hardwareMap);
         driveTrain.init();
         driveTrain.odometer.resetPosAndIMU();
+        driveTrain.modeRED = false;
+        driveTrain.modeNEAR = true;
         // Initializing indicator
         indicator = new LightIndicatorSubsystem(hardwareMap);
         telemetry.addData("Status", "Initialized");
@@ -240,6 +242,7 @@ public class AutoBlueNear9ball extends OpMode {
         currentLocation.y = -pos.getY(DistanceUnit.MM);
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
+
     //If we run out of time then goto safepark
     public void overtimeOverride() {
         if (currentTime > 28.0

@@ -9,15 +9,19 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 @Configurable
-@TeleOp(name = "RobotDrive_Classic",group = "_0A")
+@TeleOp(name = "robot_drive_classic",group = "_0A")
 public class
 robot_drive_classic extends OpMode {
-    private boolean testMode = true;
+    private boolean testMode = true;  // Set to false during comp to disable dashboard and setpoints/config buttons
     private final ElapsedTime runtime = new ElapsedTime();
     private DriveTrainBasic2 driveTrain;
     public GamepadEx driver = null;
@@ -38,12 +42,12 @@ robot_drive_classic extends OpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         // Update Telemetry
-        if (testMode) {
+
             FtcDashboard dashboard = FtcDashboard.getInstance();
             PanelsTelemetry panelsTelemetry = PanelsTelemetry.INSTANCE;
             joinedTelemetry = new JoinedTelemetry(telemetry, panelsTelemetry.getTelemetry().getWrapper(), dashboard.getTelemetry());
             joinedTelemetry.update();
-        }
+
         // Initializing indicator
         indicator = new LightIndicatorSubsystem(hardwareMap);
         driveTrain.setDrivemoderobotcentric();
@@ -59,12 +63,29 @@ robot_drive_classic extends OpMode {
 
     @Override
     public void loop() {
+        readInputs();
+        DriverControls();
+        if (driveTrain.drivemodefieldcentric) {
+            DriverFieldCentricPresets();
+        }
+        OperatorControls();
+        if (testMode) {
+            MotorSetpointsAdjust();
+        }
+        driveTrain.loop();
+        driveTrain.ShooterControlLoop();
+        updateIndicator();
+        updateTelemetry();
+
+    }
+    private void readInputs() {
         currentTime = getRuntime();
         driveTrain.setNow(currentTime);
         driver.readButtons();
         operator.readButtons();
-        driveTrain.loop();
-
+        speed = driveTrain.Flywheel.getCorrectedVelocity();
+    }
+    private void DriverControls() {
         // ===== Driver Controls =====
         if (driveTrain.manual_FC_turning) {
             driveTrain.headingCorrection = driver.getRightX();
@@ -78,7 +99,7 @@ robot_drive_classic extends OpMode {
                 driveTrain.manual_FC_turning = true;
             }
         }
-        if (driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.9) {
+        if (driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.8) {
             driverSpeedRatio = 1.0;
         } else {
             driverSpeedRatio = C2.DRIVER_SPEED_RATIO;
@@ -99,7 +120,66 @@ robot_drive_classic extends OpMode {
             driveTrain.drive(driver.getLeftY() * driverSpeedRatio, -driver.getLeftX() * driverSpeedRatio);
             driveTrain.turn(driver.getRightX() * driverSpeedRatio);
         }
+        if (driver.wasJustPressed(GamepadKeys.Button.DPAD_UP) || driveTrain.autoEnabled) {
+            driveTrain.autoEnabled = true;
+            driveTrain.setDrivemodefieldcentric();
+            if (driveTrain.goto_xy(driveTrain.Location_Close_Shot,driveTrain.dmRough) ||
+                    Math.abs(driver.getLeftX()) > 0 ||
+                    Math.abs(driver.getLeftY()) > 0 ||
+                    Math.abs(driver.getRightX()) > 0) {
+                driveTrain.setDrivemoderobotcentric();
+                driveTrain.drive(0,0);
+                driveTrain.autoEnabled = false;
+            }
+        }
+    }
+    private void DriverFieldCentricPresets() {
+        //===============driving presets======================
 
+        //small  red shooting position
+        if(driver.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+            driveTrain.setFacing(C2.REDSMALL_SHOOT);
+        }
+
+        //small blue shooting position
+//      dont have a constant angle yet
+        if(driver.isDown(GamepadKeys.Button.LEFT_BUMPER)){
+            driveTrain.setFacing(C2.BLUESMALL_SHOOT);
+        }
+
+//        //big red shooting position
+        if(driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>= C2.TRIGGER_TOLERANCE)  {
+            driveTrain.setFacing(C2.REDBIG_SHOOT);
+        }
+        //big blue shooting position
+        if(driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>= C2.TRIGGER_TOLERANCE) {
+            driveTrain.setFacing(C2.BLUEBIG_SHOOT);
+        }
+        //Select N, S, E, W
+//        if (driver.getRightX() <= -Constants2.JOYSTICK_TOLERANCE) {
+//            driveTrain.setDirection(Constants2.WEST); // west
+//        } else if (driver.getRightX() >= Constants2.JOYSTICK_TOLERANCE) {
+//            driveTrain.setDirection(Constants2.EAST); // east
+//        } else if (driver.getRightY() >= Constants2.JOYSTICK_TOLERANCE) {
+//            driveTrain.setDirection(Constants2.SOUTH); // south
+//        } else if (driver.getRightY() <= -Constants2.JOYSTICK_TOLERANCE) {
+//            driveTrain.setDirection(Constants2.NORTH); // north
+//        }
+//
+//// Select Diagonal Directions (NE,SE,SW,NW)
+//        if (driver.getRightX() > Constants2.JOYSTICK_TOLERANCE & driver.getRightY() < -Constants2.JOYSTICK_TOLERANCE) {
+//            driveTrain.setDirection(Constants2.NORTH_EAST); // north east
+//        } else if (driver.getRightX() < -Constants2.JOYSTICK_TOLERANCE & driver.getRightY() < -Constants2.JOYSTICK_TOLERANCE) {
+//            driveTrain.setDirection(Constants2.NORTH_WEST); // north west
+//        } else if (driver.getRightX() < -Constants2.JOYSTICK_TOLERANCE & driver.getRightY() > Constants2.JOYSTICK_TOLERANCE) {
+//            driveTrain.setDirection(Constants2.SOUTH_WEST); // south west
+//        } else if (driver.getRightX() > Constants2.JOYSTICK_TOLERANCE & driver.getRightY() > Constants2.JOYSTICK_TOLERANCE) {
+//            driveTrain.setDirection(Constants2.SOUTH_EAST); // south east
+//        }
+
+
+    }
+    private void OperatorControls() {
 
         // =========  Operator controls ===========
         // Set shooting mode
@@ -117,7 +197,8 @@ robot_drive_classic extends OpMode {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;
         }
 
-
+    }
+    private void MotorSetpointsAdjust() {
         // - SP CONFIG FOR TESTING
         if (operator.isDown(GamepadKeys.Button.DPAD_RIGHT) && testMode){
             spMode = "Intake FWD";
@@ -141,73 +222,8 @@ robot_drive_classic extends OpMode {
                 C2.FLYWHEEL_SPD_REVERSE -= 0.1;
             }
         }
-
-        speed = driveTrain.Flywheel.getCorrectedVelocity();
-        updateIndicator();
-        driveTrain.ShooterControlLoop();
-
-      //===============driving presets======================
-
-        //small  red shooting position
-        if(driver.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-            driveTrain.setFacing(C2.REDSMALL_SHOOT);
-        }
-
-        //small blue shooting position
-//      dont have a constant angle yet
-        if(driver.isDown(GamepadKeys.Button.LEFT_BUMPER)){
-            driveTrain.setFacing(C2.BLUESMALL_SHOOT);
-        }
-
-//        //big red shooting position
-        if(driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>= C2.TRIGGER_TOLERANCE)  {
-            driveTrain.setFacing(C2.REDBIG_SHOOT);
-        }
-       //big blue shooting position
-        if(driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>= C2.TRIGGER_TOLERANCE) {
-            driveTrain.setFacing(C2.BLUEBIG_SHOOT);
-        }
-
-
-       //Set small shooting area angel
-//        if(driver.isDown(GamepadKeys.Button.DPAD_DOWN)){
-//            set.headingpos
-//        }
-//        else {
-//            shootingspeed = C2.FLYWHEEL_NEAR;
-//        }
-//        if(operator.isDown(GamepadKeys.Button.A)) {
-//            driveTrain.flywheel.set(shootingspeed);
-//        }
-//        else  {
-//            driveTrain.flywheel.set(0);
-//        }
-
-
-//Select N, S, E, W
-//        if (driver.getRightX() <= -Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.WEST); // west
-//        } else if (driver.getRightX() >= Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.EAST); // east
-//        } else if (driver.getRightY() >= Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.SOUTH); // south
-//        } else if (driver.getRightY() <= -Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.NORTH); // north
-//        }
-//
-//// Select Diagonal Directions (NE,SE,SW,NW)
-//        if (driver.getRightX() > Constants2.JOYSTICK_TOLERANCE & driver.getRightY() < -Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.NORTH_EAST); // north east
-//        } else if (driver.getRightX() < -Constants2.JOYSTICK_TOLERANCE & driver.getRightY() < -Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.NORTH_WEST); // north west
-//        } else if (driver.getRightX() < -Constants2.JOYSTICK_TOLERANCE & driver.getRightY() > Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.SOUTH_WEST); // south west
-//        } else if (driver.getRightX() > Constants2.JOYSTICK_TOLERANCE & driver.getRightY() > Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.SOUTH_EAST); // south east
-//        }
-
-
-
+    }
+    private void updateTelemetry() {
         // Send data to telemetry
         joinedTelemetry.addData("Shooter Speed", speed); //telemetry shooter speed
         joinedTelemetry.addData("Xcor",driveTrain.getXPosition());
@@ -221,7 +237,6 @@ robot_drive_classic extends OpMode {
         joinedTelemetry.addData("FlyWheel Reverse", C2.FLYWHEEL_SPD_REVERSE);
         joinedTelemetry.update();
     }
-
     private void updateIndicator() {
         // INDICATOR CASES
         switch (driveTrain.CurrentShooterMode) {
@@ -234,6 +249,8 @@ robot_drive_classic extends OpMode {
             case shooterSHOOTINGnear:
             case shooterSHOOTINGfarRedWithCorrection:
             case shooterSHOOTINGfarBlue:
+            case shooterSHOOTINGfarRedNOcorrection:
+            case shooterSHOOTINGnearNOcorrection:
                 if (driveTrain.canLaunch(C2.FLYWHEEL_SPD_FAR_BLUE)) {
                     indicator.setColor(C2.RGB_Light.GREEN);
                 } else {
@@ -245,6 +262,8 @@ robot_drive_classic extends OpMode {
                 indicator.setColor(C2.RGB_Light.WHITE);
         }
     }
+
+
 }
 
 
