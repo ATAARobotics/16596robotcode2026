@@ -226,8 +226,8 @@ public class AutoBlueNear9ball extends OpMode {
             joinedTelemetry.addData("Destination Y",currentDestination.y);
             joinedTelemetry.addData("Run Time",getRuntime());
             joinedTelemetry.addData("Time Diff",getRuntime() - startTime);
-            joinedTelemetry.addData("Shot Count",getRuntime() - shotCount);
-            joinedTelemetry.addData("Current Time",getRuntime() - currentTime);
+            joinedTelemetry.addData("Shot count",getRuntime() - shotCount);
+            joinedTelemetry.addData("Current time",getRuntime() - currentTime);
             joinedTelemetry.update();
         }else {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
