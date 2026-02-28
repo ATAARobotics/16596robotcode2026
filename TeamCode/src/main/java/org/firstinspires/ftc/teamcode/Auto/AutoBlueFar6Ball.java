@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Mechanisms.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "Blue Far 2")
-public class AutoBlueFar2 extends OpMode {
+@Autonomous(name = "Blue Far 6 Balls")
+public class AutoBlueFar6Ball extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)
 
@@ -100,7 +100,7 @@ public class AutoBlueFar2 extends OpMode {
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destMoveOffWall;
                     currentDriveMode = dmRough;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(1.0)) {
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.AimLongRedShoot;
                     }
@@ -108,17 +108,17 @@ public class AutoBlueFar2 extends OpMode {
                     break;
                     
                 case AimLongRedShoot:
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;// Set Shooter Mode
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destAimLongRed;
                     currentDriveMode = dmPrecise;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(3)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
                         driveTrain.drive(0.0, 0.0);
                         driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarBlue;
                         if (wayPointActiveFor(9)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
                                 currentWayPoint = WayPoints.MoveOffWhite;
-                                shotCount += 1;
+                                shotCount = 1;
                             } else {
                                 currentWayPoint = WayPoints.SafePark;
                             }

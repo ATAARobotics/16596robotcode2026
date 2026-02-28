@@ -94,7 +94,7 @@ public class AutoBlueNear9ball extends OpMode {
     public void loop() {
         driveTrain.loop();
         updateCurrentLocation(driveTrain.odometer.getPosition());
-        currentTime = getRuntime();
+        currentTime = getRuntime() - startTime;
         driveTrain.setNow(currentTime);
         updateWayPointTimer();
         Pose2D pos = driveTrain.odometer.getPosition();
@@ -127,10 +127,10 @@ public class AutoBlueNear9ball extends OpMode {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
                                 currentWayPoint = WayPoints.MoveToNearRow;
-                                shotCount += 1;
+                                shotCount = 1;
                             } else if (shotCount == 1) {
                                 currentWayPoint = WayPoints.MoveToMiddleRow;
-                                shotCount += 1;
+                                shotCount = 2;
                             } else {
                                 currentWayPoint = WayPoints.SafePark;
                             }
@@ -226,8 +226,8 @@ public class AutoBlueNear9ball extends OpMode {
             joinedTelemetry.addData("Destination Y",currentDestination.y);
             joinedTelemetry.addData("Run Time",getRuntime());
             joinedTelemetry.addData("Time Diff",getRuntime() - startTime);
-            joinedTelemetry.addData("Shot count",getRuntime() - shotCount);
-            joinedTelemetry.addData("Current time",getRuntime() - currentTime);
+            joinedTelemetry.addData("Shot Count",shotCount);
+            joinedTelemetry.addData("Current Time",currentTime);
             joinedTelemetry.update();
         }else {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;

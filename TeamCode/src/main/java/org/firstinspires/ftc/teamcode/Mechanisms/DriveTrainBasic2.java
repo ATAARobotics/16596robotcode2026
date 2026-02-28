@@ -100,9 +100,9 @@ public class DriveTrainBasic2 {
     }
 
     public void init() {
-        if (!modeRED && modeNEAR) {
+        //if (!modeRED && modeNEAR) {
             Location_Close_Shot = Blue_Near_Close_Shot;
-        }
+        //}
         //Drive Motor Configuration
         headingControl = new PIDController(headingpid.p, headingpid.i, headingpid.d);
         headingControl.setTolerance(C2.HEADING_ERROR_Tolerance);// was 3 increased to see if affects spinnning ..cbw

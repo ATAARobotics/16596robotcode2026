@@ -57,8 +57,8 @@ public class Constants {
     public static final double AUTO_INTAKE_TIME = 6.7;
   //  public static final double AUTO_STEP_DELAY = 2.0;
 
-    public static double FEEDER_SPEED = 0.25;
-    public static double FEEDER_SPEED_REVERSE = -0.19;
+    public static double FEEDER_SPEED = 0.2;
+    public static double FEEDER_SPEED_REVERSE = -0.15;
 
     //SERVO SPEED SETPOINTS
     public static double FEED_SPEED = -1.0;

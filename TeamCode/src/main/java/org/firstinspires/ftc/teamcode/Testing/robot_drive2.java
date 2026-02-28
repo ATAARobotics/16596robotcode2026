@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 @Configurable
-@TeleOp(name = "RobotDrive2",group = "_0A")
+//@TeleOp(name = "RobotDrive2",group = "_0A")
 public class
 robot_drive2 extends OpMode {
     private final ElapsedTime runtime = new ElapsedTime();

@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Mechanisms.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "Blue Near 3")
-public class AutoBlueNear3 extends OpMode {
+@Autonomous(name = "Red Near 6 Balls")
+public class AutoRedNear6Ball extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)
 
@@ -46,19 +46,16 @@ public class AutoBlueNear3 extends OpMode {
     //Define Locations relative to start
     private static final Location destMoveOffWall = new Location(1000.0,0.0,0);
     private static final Location Close_Shot = new Location(1000.0,0.0,0);
-    private static final Location destMoveOffWhite = new Location(1032,-349,-135.0);
-    private static final Location destPickupCloseRow = new Location(482,-843,-135.0);
-    private static final Location destSafePark = new Location(430,-735,0);
-    private static final Location destMoveOffWhiteMiddle = new Location(0,0,-135);
-    private static final Location destPickupMiddleRow = new Location(0,0,-135);
-
+    private static final Location destMoveOffWhite = new Location(1032,349,135.0);
+    private static final Location destPickupCloseRow = new Location(482,843,135.0);
+    private static final Location destSafePark = new Location(430,735,0);
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
     private driveMode dmPrecise = new driveMode(0.5567,4.670,4.670,1.50);
     private driveMode dmPickupNear = new driveMode(0.4567,4.670,4.670,1.50);
     private driveMode dmRough = new driveMode(0.7,17.670,17.670,4.50);
 
-    //Create Location object for currentLocation/Destination variable to hold current position read by odometry
+    //Create Location object for currentLocation variable to hold current position read by odometry
     private Location currentLocation = new Location(0.0,0.0,0.0);
     private Location currentDestination = new Location(0.0,0.0,0.0);
 
@@ -122,9 +119,6 @@ public class AutoBlueNear3 extends OpMode {
                             if (shotCount == 0) {
                                 currentWayPoint = WayPoints.MoveOffWhite;
                                 shotCount += 1;
-//                            } else if (shotCount == 1) {
-//                                currentWayPoint = WayPoints.MoveOffWhiteMiddle;
-//                                shotCount += 1;
                             } else {
                                 currentWayPoint = WayPoints.SafePark;
                             }
@@ -163,7 +157,7 @@ public class AutoBlueNear3 extends OpMode {
                     currentDestination = destSafePark;
                     currentDriveMode = dmRough;
                     driveTrain.setFacing(currentDestination.facing);
-                    if (wayPointActiveFor(1.0)) {
+                    if (wayPointActiveFor(1)) {
                         if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
                             driveTrain.drive(0.0, 0.0);
                             currentWayPoint = WayPoints.Done;
@@ -212,22 +206,22 @@ public class AutoBlueNear3 extends OpMode {
     }
 
     public boolean at_xy(Location destinationLocation, driveMode driveMode) {
-        boolean withinTolerance =
-                at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && driveTrain.onHeading;
-        if (withinTolerance) {
-            // First time entering tolerance
-            if (atTargetStartTime < 0) {
-                atTargetStartTime = getRuntime();
-            }
-            // Have we stayed long enough?
-            return (getRuntime() - atTargetStartTime) >= AT_TARGET_HOLD_TIME;
-        } else {
-            // Left tolerance — reset timer
-            atTargetStartTime = -1;
+    boolean withinTolerance =
+            at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && driveTrain.onHeading;
+    if (withinTolerance) {
+        // First time entering tolerance
+        if (atTargetStartTime < 0) {
+            atTargetStartTime = getRuntime();
         }
-
-        return false;
+        // Have we stayed long enough?
+        return (getRuntime() - atTargetStartTime) >= AT_TARGET_HOLD_TIME;
+    } else {
+        // Left tolerance — reset timer
+        atTargetStartTime = -1;
     }
+
+    return false;
+}
 
     public boolean at_x(double destinationX, driveMode driveMode) {
         //return (Math.abs(destinationX - driveTrain.getXPosition())) <= C2.AUTO_X_DISTANCE_ERROR;
@@ -309,7 +303,7 @@ public class AutoBlueNear3 extends OpMode {
 
     // ===== Enum Data Type for waypoint switch
     public enum WayPoints {
-        MoveOffWall, PickupFarRow, Far_Shot, Close_Shot, MoveOffWhite, SafePark, MoveOffWhiteMiddle, PickupMiddleRow, Done
+        MoveOffWall, PickupFarRow, Far_Shot, Close_Shot, MoveOffWhite, SafePark, Done
     }
 
     private void updateIndicator() {

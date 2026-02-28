@@ -49,8 +49,8 @@ public class AutoRedFar9Ball extends OpMode {
     private static final Location destMoveOffWhite = new Location(100,735,0);
     private static final Location destPickupFarRow = new Location(870,735,0.0);
     private static final Location destSafePark = new Location(360,735,0);
-    private static final Location destMoveOffWhiteMiddle = new Location(-19,-1263.6,0);
-    private static final Location destPickupMiddleRow = new Location(-920.5,-1263.6,0);
+    private static final Location destMoveOffWhiteMiddle = new Location(-19,1263.6,0);
+    private static final Location destPickupMiddleRow = new Location(-920.5,1263.6,0);
 
 
 
@@ -93,12 +93,13 @@ public class AutoRedFar9Ball extends OpMode {
     public void loop() {
         driveTrain.loop();
         updateCurrentLocation(driveTrain.odometer.getPosition());
-        currentTime = getRuntime();
+        currentTime = getRuntime() - startTime;
         driveTrain.setNow(currentTime);
         updateWayPointTimer();
         Pose2D pos = driveTrain.odometer.getPosition();
 
         if (!autoDone) {
+            overtimeOverride();
             switch (currentWayPoint) {
                 case MoveOffWall:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
@@ -112,13 +113,13 @@ public class AutoRedFar9Ball extends OpMode {
                     break;
                     
                 case AimLongRedShoot:
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;// Set Shooter Mode
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destAimLongRed;
                     currentDriveMode = dmPrecise;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(3)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(1)) {
                         driveTrain.drive(0.0, 0.0);
-                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarBlue;
-                        if (wayPointActiveFor(9)) {
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarRedWithCorrection;
+                        if (wayPointActiveFor(6)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
                                 currentWayPoint = WayPoints.MoveOffWhite;
@@ -237,6 +238,14 @@ public class AutoRedFar9Ball extends OpMode {
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
 
+    //If we run out of time then goto safepark
+    public void overtimeOverride() {
+        if (currentTime > 28.0
+                && currentWayPoint != WayPoints.SafePark
+                && currentWayPoint != WayPoints.Done) {
+            currentWayPoint = WayPoints.SafePark;
+        }
+    }
     public boolean at_xy(Location destinationLocation, driveMode driveMode) {
     boolean withinTolerance =
             at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && driveTrain.onHeading;
