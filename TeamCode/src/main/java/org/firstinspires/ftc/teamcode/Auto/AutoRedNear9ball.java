@@ -46,28 +46,17 @@ public class AutoRedNear9ball extends OpMode {
     //Define Locations relative to start
     private static final Location destMoveOffWall = new Location(1000.0,0.0,0);
     private static final Location Close_Shot = new Location(1000.0,0.0,0);
-    private static final Location destMoveToCloseRow = new Location(1032,349,135.0);
-    private static final Location destPickupCloseRow = new Location(482,843,135.0);
-    private static double rowSeparationDistance = 431;
-    private static final Location destMoveToMiddleRow = new Location(
-            destMoveToCloseRow.x + rowSeparationDistance,
-            destMoveToCloseRow.y - rowSeparationDistance, 135);
-    private static final Location destPickupMiddleRow = new Location(
-            destPickupCloseRow.x + rowSeparationDistance,
-            destPickupCloseRow.y - rowSeparationDistance,135);
-    private static final Location destMoveToFarRow = new Location(
-            destPickupCloseRow.x + (rowSeparationDistance * 2),
-            destPickupCloseRow.y - (rowSeparationDistance * 2),135);
-    private static final Location destPickupFarRow = new Location(
-            destPickupCloseRow.x + (rowSeparationDistance * 2),
-            destPickupCloseRow.y - (rowSeparationDistance * 2),135);
+    private static final Location destMoveToNearRow = new Location(1032,349,140.6);
+    private static final Location destPickupNearRow = new Location(429.9,856.7,140.6);
+    private static final Location destMoveToMiddleRow = new Location(1484,805, 140.6);
+    private static final Location destPickupMiddleRow = new Location(707, 1465.5,140.6);
     private static final Location destSafePark = new Location(430,735,0);
 
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
-    private driveMode dmPrecise = new driveMode(0.5567,4.670,4.670,1.50);
-    private driveMode dmPickupNear = new driveMode(0.4567,4.670,4.670,1.50);
-    private driveMode dmRough = new driveMode(0.7,17.670,17.670,4.50);
+    private driveMode dmPrecise = new driveMode(0.6767,4.670,4.670,1.50);
+    private driveMode dmPickup = new driveMode(0.4567,4.670,4.670,1.50);
+    private driveMode dmRough = new driveMode(0.8,20.670,20.670,4.50);
 
     //Create Location object for currentLocation variable to hold current position read by odometry
     private Location currentLocation = new Location(0.0,0.0,0.0);
@@ -81,6 +70,8 @@ public class AutoRedNear9ball extends OpMode {
         driveTrain = new DriveTrainBasic2(hardwareMap);
         driveTrain.init();
         driveTrain.odometer.resetPosAndIMU();
+        driveTrain.modeRED = false;
+        driveTrain.modeNEAR = true;
         // Initializing indicator
         indicator = new LightIndicatorSubsystem(hardwareMap);
         telemetry.addData("Status", "Initialized");
@@ -103,39 +94,43 @@ public class AutoRedNear9ball extends OpMode {
     public void loop() {
         driveTrain.loop();
         updateCurrentLocation(driveTrain.odometer.getPosition());
-        currentTime = getRuntime();
+        currentTime = getRuntime() - startTime;
         driveTrain.setNow(currentTime);
         updateWayPointTimer();
         Pose2D pos = driveTrain.odometer.getPosition();
 
         if (!autoDone) {
+            overtimeOverride();
             switch (currentWayPoint) {
                 case MoveOffWall:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destMoveOffWall;
                     currentDriveMode = dmRough;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(1)) {
-                        driveTrain.drive(0.0, 0.0);
+                    if (goto_xy(currentDestination, currentDriveMode) || waypointActiveForLessThan(1)) {
+                        //driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.Close_Shot;
                     }
                     driveTrain.setFacing(currentDestination.facing);
                     break;
 
                 case Close_Shot:
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
+                    if (shotCount == 0) {
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnearNOcorrection;
+                    } else {
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;
+                    }
                     currentDestination = Close_Shot;
                     currentDriveMode = dmPrecise;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(1)) {
+                    if (waypointActiveForLessThan(1.0) || goto_xy(currentDestination, currentDriveMode)) {
                         driveTrain.drive(0.0, 0.0);
-                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGnear;
-                        if (wayPointActiveFor(6)) {
+                        if (waypointActiveForLessThan(4.0)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
-                                currentWayPoint = WayPoints.MoveOffWhite;
-                                shotCount += 1;
+                                currentWayPoint = WayPoints.MoveToNearRow;
+                                shotCount = 1;
                             } else if (shotCount == 1) {
-                                currentWayPoint = WayPoints.MoveOffWhiteMiddle;
-                                shotCount += 1;
+                                currentWayPoint = WayPoints.MoveToMiddleRow;
+                                shotCount = 2;
                             } else {
                                 currentWayPoint = WayPoints.SafePark;
                             }
@@ -144,24 +139,24 @@ public class AutoRedNear9ball extends OpMode {
                     driveTrain.setFacing(currentDestination.facing);
                     break;
 
-                case MoveOffWhite:
+                case MoveToNearRow:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
-                    currentDestination = destMoveToCloseRow;
+                    currentDestination = destMoveToNearRow;
                     currentDriveMode = dmRough;
                     driveTrain.setFacing(currentDestination.facing);
-                    if (wayPointActiveFor(0.5)) {
-                        if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2.5)) {
+                    if (waypointActiveForLessThan(0.5)) {
+                        if (waypointActiveForLessThan(2.5) || goto_xy(currentDestination, currentDriveMode)) {
                             driveTrain.drive(0.0, 0.0);
-                            currentWayPoint = WayPoints.PickupFarRow;
+                            currentWayPoint = WayPoints.PickupNearRow;
                         }
                     }
                     break;
 
-                case PickupFarRow:
+                case PickupNearRow:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;
-                    currentDestination = destPickupCloseRow;
-                    currentDriveMode = dmPickupNear;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(5)) {
+                    currentDestination = destPickupNearRow;
+                    currentDriveMode = dmPickup;
+                    if (waypointActiveForLessThan(2.5) || goto_xy(currentDestination, currentDriveMode)) {
                         driveTrain.drive(0.0, 0.0);
                         driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;
                         currentWayPoint = WayPoints.MoveOffWall;
@@ -169,13 +164,13 @@ public class AutoRedNear9ball extends OpMode {
                     driveTrain.setFacing(currentDestination.facing);
                     break;
 
-                case MoveOffWhiteMiddle:
+                case MoveToMiddleRow:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                     currentDestination = destMoveToMiddleRow;
                     currentDriveMode = dmRough;
                     driveTrain.setFacing(currentDestination.facing);
-                    if (wayPointActiveFor(2.0)) {
-                        if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2.5)) {
+                    if (waypointActiveForLessThan(0.5)) {
+                        if (waypointActiveForLessThan(2.5) || goto_xy(currentDestination, currentDriveMode)) {
                             driveTrain.drive(0.0, 0.0);
                             currentWayPoint = WayPoints.PickupMiddleRow;
                         }
@@ -185,8 +180,8 @@ public class AutoRedNear9ball extends OpMode {
                 case PickupMiddleRow:
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;
                     currentDestination = destPickupMiddleRow;
-                    currentDriveMode = dmPickupNear;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(5)) {
+                    currentDriveMode = dmPickup;
+                    if (waypointActiveForLessThan(2.5) || goto_xy(currentDestination, currentDriveMode)) {
                         driveTrain.drive(0.0, 0.0);
                         driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;
                         currentWayPoint = WayPoints.MoveOffWall;
@@ -199,8 +194,8 @@ public class AutoRedNear9ball extends OpMode {
                     currentDestination = destSafePark;
                     currentDriveMode = dmRough;
                     driveTrain.setFacing(currentDestination.facing);
-                    if (wayPointActiveFor(1.0)) {
-                        if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
+                    if (waypointActiveForLessThan(1.0)) {
+                        if (waypointActiveForLessThan(2) || goto_xy(currentDestination, currentDriveMode)) {
                             driveTrain.drive(0.0, 0.0);
                             currentWayPoint = WayPoints.Done;
                         }
@@ -231,6 +226,8 @@ public class AutoRedNear9ball extends OpMode {
             joinedTelemetry.addData("Destination Y",currentDestination.y);
             joinedTelemetry.addData("Run Time",getRuntime());
             joinedTelemetry.addData("Time Diff",getRuntime() - startTime);
+            joinedTelemetry.addData("Shot Count",shotCount);
+            joinedTelemetry.addData("Current Time",currentTime);
             joinedTelemetry.update();
         }else {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
@@ -241,12 +238,21 @@ public class AutoRedNear9ball extends OpMode {
         driveTrain.ShooterControlLoop();
     }  // END LOOP
 
+
     public void updateCurrentLocation(Pose2D pos) {
         currentLocation.x = -pos.getX(DistanceUnit.MM);
         currentLocation.y = -pos.getY(DistanceUnit.MM);
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
 
+    //If we run out of time then goto safepark
+    public void overtimeOverride() {
+        if (currentTime > 28.0
+                && currentWayPoint != WayPoints.SafePark
+                && currentWayPoint != WayPoints.Done) {
+            currentWayPoint = WayPoints.SafePark;
+        }
+    }
     public boolean at_xy(Location destinationLocation, driveMode driveMode) {
         boolean withinTolerance =
                 at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && driveTrain.onHeading;
@@ -345,7 +351,7 @@ public class AutoRedNear9ball extends OpMode {
 
     // ===== Enum Data Type for waypoint switch
     public enum WayPoints {
-        MoveOffWall, PickupFarRow, Far_Shot, Close_Shot, MoveOffWhite, SafePark, MoveOffWhiteMiddle, PickupMiddleRow, Done
+        MoveOffWall, PickupNearRow, Far_Shot, Close_Shot, MoveToNearRow, SafePark, MoveToMiddleRow, PickupMiddleRow, Done
     }
 
     private void updateIndicator() {
@@ -354,7 +360,7 @@ public class AutoRedNear9ball extends OpMode {
             case MoveOffWall:
                 indicator.setColor(C2.RGB_Light.VIOLET);
                 break;
-            case PickupFarRow:
+            case PickupNearRow:
                 indicator.setColor(C2.RGB_Light.YELLOW);
                 break;
             case Far_Shot:
@@ -367,7 +373,7 @@ public class AutoRedNear9ball extends OpMode {
             case Close_Shot:
                 indicator.setColor(C2.RGB_Light.BLUE);
                 break;
-            case MoveOffWhite:
+            case MoveToNearRow:
                 indicator.setColor(C2.RGB_Light.ORANGE);
                 break;
             case Done:
@@ -385,7 +391,7 @@ public class AutoRedNear9ball extends OpMode {
         }
     }
 
-    private boolean wayPointActiveFor(double seconds) {
+    private boolean waypointActiveForLessThan(double seconds) {
         return (getRuntime() - wayPointStartTime) >= seconds;
     }
 
