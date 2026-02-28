@@ -96,7 +96,7 @@ public class AutoBlueFarPartnerPark extends OpMode {
     public void loop() {
         driveTrain.loop();
         updateCurrentLocation(driveTrain.odometer.getPosition());
-        currentTime = getRuntime();
+        currentTime = getRuntime() - startTime;
         driveTrain.setNow(currentTime);
         updateWayPointTimer();
         Pose2D pos = driveTrain.odometer.getPosition();
@@ -115,13 +115,13 @@ public class AutoBlueFarPartnerPark extends OpMode {
                     break;
 
                 case AimLongRedShoot:
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterPICKUP;// Set Shooter Mode
+                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destAimLongRed;
                     currentDriveMode = dmPrecise;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(3)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(1)) {
                         driveTrain.drive(0.0, 0.0);
-                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarBlue;
-                        if (wayPointActiveFor(9)) {
+                        driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarRedWithCorrection;
+                        if (wayPointActiveFor(6)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 10) {
                                 currentWayPoint = WayPoints.MoveOffWhite;

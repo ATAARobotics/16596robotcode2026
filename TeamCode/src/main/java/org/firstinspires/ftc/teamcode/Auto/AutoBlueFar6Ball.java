@@ -89,7 +89,7 @@ public class AutoBlueFar6Ball extends OpMode {
     public void loop() {
         driveTrain.loop();
         updateCurrentLocation(driveTrain.odometer.getPosition());
-        currentTime = getRuntime();
+        currentTime = getRuntime() - startTime;
         driveTrain.setNow(currentTime);
         updateWayPointTimer();
         Pose2D pos = driveTrain.odometer.getPosition();
@@ -205,6 +205,14 @@ public class AutoBlueFar6Ball extends OpMode {
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
 
+    //If we run out of time then goto safepark
+    public void overtimeOverride() {
+        if (currentTime > 28.0
+                && currentWayPoint != WayPoints.SafePark
+                && currentWayPoint != WayPoints.Done) {
+            currentWayPoint = WayPoints.SafePark;
+        }
+    }
     public boolean at_xy(Location destinationLocation, driveMode driveMode) {
     boolean withinTolerance =
             at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && driveTrain.onHeading;
