@@ -25,6 +25,8 @@ public class DriveTrainBasic2 {
     public boolean modeRED = false;
     public boolean modeNEAR = false;
     private static final Location Blue_Near_Close_Shot = new Location(1000.0,0.0,0);
+    public Location loc_Far_Shot = new Location(0,0,0);
+
     public Location Location_Close_Shot = new Location(0.0, 0.0, 0.0);
     //Create Location object for currentLocation variable to hold current position read by odometry
     public Location currentLocation = new Location(0.0,0.0,0.0);

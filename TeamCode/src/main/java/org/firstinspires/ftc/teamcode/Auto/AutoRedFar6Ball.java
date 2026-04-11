@@ -47,7 +47,7 @@ public class AutoRedFar6Ball extends OpMode {
     private static final Location destMoveOffWall = new Location(-260,105,0);
     private static final Location destAimLongRed = new Location(-220,105,-108);
     private static final Location destMoveOffWhite = new Location(100,735,0);
-    private static final Location destPickupFarRow = new Location(850,735,0.0);
+    private static final Location destPickupFarRow = new Location(850,700,0.0);
     private static final Location destSafePark = new Location(360,735,0);
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec

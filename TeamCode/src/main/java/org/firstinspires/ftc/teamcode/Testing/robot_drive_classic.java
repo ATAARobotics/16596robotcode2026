@@ -99,8 +99,8 @@ robot_drive_classic extends OpMode {
                 driveTrain.manual_FC_turning = true;
             }
         }
-        if (driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.8) {
-            driverSpeedRatio = 1.0;
+        if (driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 1.0) {
+            driverSpeedRatio = 0.8;
         } else {
             driverSpeedRatio = C2.DRIVER_SPEED_RATIO;
         }

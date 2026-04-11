@@ -123,7 +123,7 @@ public class AutoRedNear9ball extends OpMode {
                     currentDriveMode = dmPrecise;
                     if (waypointActiveForLessThan(1.0) || goto_xy(currentDestination, currentDriveMode)) {
                         driveTrain.drive(0.0, 0.0);
-                        if (waypointActiveForLessThan(4.0)) {
+                        if (waypointActiveForLessThan(4.7)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
                                 currentWayPoint = WayPoints.MoveToNearRow;

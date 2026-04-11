@@ -53,7 +53,7 @@ public class AutoRedFarPartnerPark extends OpMode {
  // private static final Location destSafePark = new Location(360,-735,0);
  //  private static final Location destMoveOffWhiteMiddle = new Location(19,-1263.6,0);
 //   private static final Location destPickupMiddleRow = new Location(920.5,-1263.6,0);
-   private static final Location destPartnerPark = new Location(147.9,144.6,0);
+   private static final Location destPartnerPark = new Location(140,125,0);// x was 147.9  y was 145
 
 
 
@@ -108,7 +108,7 @@ public class AutoRedFarPartnerPark extends OpMode {
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destMoveOffWall;
                     currentDriveMode = dmRough;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(4)) { //was 2 second wait
                         driveTrain.drive(0.0, 0.0);
                         currentWayPoint = WayPoints.AimLongRedShoot;
                     }
@@ -119,10 +119,10 @@ public class AutoRedFarPartnerPark extends OpMode {
                     driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destAimLongRed;
                     currentDriveMode = dmPrecise;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(1)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(4)) { // was 1 second wait
                         driveTrain.drive(0.0, 0.0);
                         driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarRedWithCorrection;
-                        if (wayPointActiveFor(6)) {
+                        if (wayPointActiveFor(9)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 10) {
                                 currentWayPoint = WayPoints.MoveOffWhite;

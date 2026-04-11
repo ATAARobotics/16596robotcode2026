@@ -49,7 +49,7 @@ public class AutoBlueNear9ball extends OpMode {
     private static final Location destMoveToNearRow = new Location(1032,-349,-140.6);
     private static final Location destPickupNearRow = new Location(429.9,-856.7,-140.6);
     private static final Location destMoveToMiddleRow = new Location(1484,-805, -140.6);
-    private static final Location destPickupMiddleRow = new Location(707, -1465.5,-140.6);
+    private static final Location destPickupMiddleRow = new Location(707, -1393.5,-140.6);
     private static final Location destSafePark = new Location(430,-735,0);
 
 
@@ -123,7 +123,7 @@ public class AutoBlueNear9ball extends OpMode {
                     currentDriveMode = dmPrecise;
                     if (waypointActiveForLessThan(1.0) || goto_xy(currentDestination, currentDriveMode)) {
                         driveTrain.drive(0.0, 0.0);
-                        if (waypointActiveForLessThan(4.0)) {
+                        if (waypointActiveForLessThan(4.7)) {
                             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
                             if (shotCount == 0) {
                                 currentWayPoint = WayPoints.MoveToNearRow;

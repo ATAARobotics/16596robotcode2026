@@ -9,7 +9,7 @@ import com.bylazar.configurables.annotations.Configurable;
 
 public class C2 {
     // Speed Ratio Settings
-    public static final double DRIVER_SPEED_RATIO = 0.8;  // Use this to slow down robot
+    public static final double DRIVER_SPEED_RATIO = 1.0;  // Use this to slow down robot
     public static final double OPER_SPEED_RATIO = DRIVER_SPEED_RATIO * 0.567;
     public static final double TURN_RATIO = 1.0; // use this to slow turn rate1q
     //
