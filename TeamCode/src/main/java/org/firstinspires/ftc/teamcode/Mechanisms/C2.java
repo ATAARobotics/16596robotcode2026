@@ -16,13 +16,13 @@ public class C2 {
     // ========== Intake, Shooter and Feeder Speeds
     public static double INTAKE_SPD_PICKUP = 4.0;//was 1.0
     public static double INTAKE_SPD_SHOOTING = 0.83;
-    public static double INTAKE_SPD_CORRECTING = 0.2;
+    public static double INTAKE_SPD_CORRECTING = 0.5; //was 0.2
     public static double INTAKE_SPD_HOLDING = 0.1;
     //FEEDER
     public static double FEEDER_SPD_CORRECTING = -0.8;//was -0.6
     public static double FEEDER_SPD_HOLDING = -0.1;
     public static double FEEDER_SPD_PICKUP = -0.2;
-    public static double FEEDER_SPD_NEAR = 0.75;
+    public static double FEEDER_SPD_NEAR = 1.0;//was .75
     public static double FEEDER_SPD_FAR = 0.58;
     //FLYWHEEL
     public static double FLYWHEEL_SPD_NEAR = 0.58;
