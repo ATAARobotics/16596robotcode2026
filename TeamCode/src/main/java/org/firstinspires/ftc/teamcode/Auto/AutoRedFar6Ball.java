@@ -51,7 +51,7 @@ public class AutoRedFar6Ball extends OpMode {
     private static final Location destSafePark = new Location(360,735,0);
 
     // Drive modes control speed and precision - if precision is required, lower speed higher precision.  else, higher speed lower prec
-    private driveMode dmPrecise = new driveMode(0.5567,4.670,4.670,1.50);
+    private driveMode dmPrecise = new driveMode(0.5,4.670,4.670,1.50);
     private driveMode dmRough = new driveMode(0.7,17.670,17.670,4.50);
 
     //Create Location object for currentLocation variable to hold current position read by odometry

@@ -108,10 +108,11 @@ public class AutoBlueFar6Ball extends OpMode {
                     break;
                     
                 case AimLongRedShoot:
-                    driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
+                   //commented for test for waiting time and shooter recovery
+                    // driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterHOLDING;// Set Shooter Mode
                     currentDestination = destAimLongRed;
                     currentDriveMode = dmPrecise;
-                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(2)) {
+                    if (goto_xy(currentDestination, currentDriveMode) || wayPointActiveFor(3)) {
                         driveTrain.drive(0.0, 0.0);
                         driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterSHOOTINGfarBlue;
                         if (wayPointActiveFor(9)) {
@@ -189,6 +190,7 @@ public class AutoBlueFar6Ball extends OpMode {
             joinedTelemetry.addData("Destination Y",currentDestination.y);
             joinedTelemetry.addData("Run Time",getRuntime());
             joinedTelemetry.addData("Time Diff",getRuntime() - startTime);
+            joinedTelemetry.addData("Speed",speed);
             joinedTelemetry.update();
         }else {
             driveTrain.CurrentShooterMode = DriveTrainBasic2.ShooterMode.shooterOFF;
