@@ -25,7 +25,7 @@ public class C2 {
     public static double FEEDER_SPD_NEAR = 1.0;//was .75
     public static double FEEDER_SPD_FAR = 0.85;//was.58
     //FLYWHEEL
-    public static double FLYWHEEL_SPD_NEAR = 0.58;
+    public static double FLYWHEEL_SPD_NEAR = 0.51;
     public static double FLYWHEEL_SPD_FAR_BLUE = 0.8;//was .74
     public static double FLYWHEEL_SPD_FAR_BLUE_EXTRA = 5.0; // Adds to the feedback requirement
     public static double FLYWHEEL_SPD_FAR_RED = 0.8; //was 0.0.75
