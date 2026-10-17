@@ -99,19 +99,16 @@ public class Constants2027 {
 
 
     //-------------------2026-27 OPERATOR CONTROLS MAP------------------
-    public static double POLLEN_SHOOTER_FORWARD = 1.0; // A or X
-    public static double NECTAR_SHOOTER_FORWARD = 1.0;// Dpad down
+    public static double SHOOTER_FORWARD = 1.0; // A or X
+    public static double SHOOTER_REVERSE = -1.0;// Dpad down
     public static double POLLEN_FEEDER_FORWARD = 1.0; //right bumper
     public static double POLLEN_FEEDER_REVERSE = -1.0; // right trigger
     public static double NECTAR_FEEDER_FORWARD = 1.0; //left bumper
     public static double NECTAR_FEEDER_REVERSE = -1.0; // left trigger
     public static double INTAKE_FORWARD = 1.0; // B or O
     public static double INTAKE_REVERSE = -1.0; // Dpad left
-    public static double  POLLEN_SORTER; // Y ,but its a servo so idk
 
     //-----------------------------------------------------------------
-
-
 
 
     // ========== RGB

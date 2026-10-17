@@ -184,7 +184,6 @@ robot_drive_2027 extends OpMode {
 //            driveTrain.setDirection(Constants2.SOUTH_EAST); // south east
 //        }
 
-
     }
     private void OperatorControls() {
 
@@ -205,8 +204,6 @@ robot_drive_2027 extends OpMode {
         }else if (operator.isDown(GamepadKeys.Button.B)) {
 
         }else if (operator.isDown(GamepadKeys.Button.DPAD_LEFT)) {
-
-        }else if (operator.isDown(GamepadKeys.Button.Y)) {
 
         }else {
 
