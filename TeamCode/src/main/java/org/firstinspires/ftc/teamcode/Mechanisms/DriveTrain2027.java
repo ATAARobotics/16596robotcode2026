@@ -69,7 +69,8 @@ public class DriveTrain2027 {
     public boolean manual_FC_turning = false;
 
     // Shooter Configuration
-    public final MotorEx Flywheel; //port 1 -expansion hub
+    public final MotorEx PollenShooter; //port 1 -expansion hub
+    public final MotorEx NectarShooter;
     public final MotorEx feeder; //port 0-expansion hub
     public final Motor intake; //port 1-expansion hub
     public CRServo feed1;   //port 1
@@ -79,6 +80,10 @@ public class DriveTrain2027 {
     public ShooterMode CurrentShooterMode = ShooterMode.shooterOFF;
     private double xOut = 0.0;
     private double yOut = 0.0;
+
+    //SHOOTER 2027
+
+
 
 
 
@@ -91,8 +96,9 @@ public class DriveTrain2027 {
         leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-        // Flywheel assignment
-        Flywheel = new MotorEx(hwMap, "shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        // Pollen Shooter assignment
+        PollenShooter = new MotorEx(hwMap, "PollenShooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        NectarShooter = new MotorEx(hwMap, "NectarShooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
         feeder = new MotorEx(hwMap, "feeder");
         // Intake assignment
         intake = new Motor(hwMap, "intake");
@@ -128,10 +134,15 @@ public class DriveTrain2027 {
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
         //set up for flywheel shooter
-        Flywheel.setRunMode(Motor.RunMode.VelocityControl);
-        Flywheel.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        Flywheel.setInverted(true);
-        Flywheel.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
+       PollenShooter.setRunMode(Motor.RunMode.VelocityControl);
+        PollenShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        PollenShooter.setInverted(true);
+        PollenShooter.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
+
+        NectarShooter.setRunMode(Motor.RunMode.VelocityControl);
+        NectarShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        NectarShooter.setInverted(true);
+        NectarShooter.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);
         // Feeder configuration
         feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         feeder.setInverted(false);
@@ -258,13 +269,13 @@ public class DriveTrain2027 {
     }
 
     public boolean canLaunch(double launchSpeed,  double FudgeFactor){
-        return Flywheel.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX) + FudgeFactor;
+        return PollenShooter.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX) + FudgeFactor;
     }
     public boolean canLaunch(double launchSpeed){
-        return Flywheel.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX);
+        return PollenShooter.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX);
     }
 
-    public void setDrivemodefieldcentric(){
+        public void setDrivemodefieldcentric(){
         this.drivemodefieldcentric = true;
     }
     public void setDrivemoderobotcentric(){
@@ -366,7 +377,8 @@ public class DriveTrain2027 {
         feed1.setPower(feed1Speed);
         feed2.setPower(feed1Speed);
         intake.set(intakeSpeed);
-        Flywheel.set(flywheelSpeed);
+        PollenShooter.set(flywheelSpeed);
+        NectarShooter.set(flywheelSpeed);
     }
     public void setNow(double nowSeconds) {
         now = nowSeconds;

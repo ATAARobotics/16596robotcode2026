@@ -16,7 +16,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants2027;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrain2027;
+import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
+import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrain2027.ShooterMode;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrain2027.ShooterMode;
 
 
@@ -90,7 +92,8 @@ robot_drive_2027 extends OpMode {
         driveTrain.setNow(currentTime);
         driver.readButtons();
         operator.readButtons();
-        speed = driveTrain.Flywheel.getCorrectedVelocity();
+        speed = driveTrain.PollenShooter.getCorrectedVelocity();
+        speed = driveTrain.NectarShooter.getCorrectedVelocity();
     }
     private void DriverControls() {
         // ===== Driver Controls =====
@@ -189,23 +192,12 @@ robot_drive_2027 extends OpMode {
 
         // =========  Operator controls ===========
         // Set shooting mode
-        if (operator.isDown(GamepadKeys.Button.A)) {
 
-        } else if (operator.isDown(GamepadKeys.Button.DPAD_DOWN)) {
+        if (gamepad2.a){
+            driveTrain.CurrentShooterMode = DriveTrain2027.ShooterMode.shooterSHOOTINGnearNOcorrection;
+        } else if (gamepad2.b) {
 
-        } else if (operator.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
-
-        } else if (operator.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>= Constants2027.TRIGGER_TOLERANCE) {
-
-        } else if (operator.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
-
-        } else if (operator.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>= Constants2027.TRIGGER_TOLERANCE) {
-
-        }else if (operator.isDown(GamepadKeys.Button.B)) {
-
-        }else if (operator.isDown(GamepadKeys.Button.DPAD_LEFT)) {
-
-        }else {
+        } else if (gamepad2.x){
 
         }
 

@@ -99,14 +99,22 @@ public class Constants2027 {
 
 
     //-------------------2026-27 OPERATOR CONTROLS MAP------------------
-    public static double SHOOTER_FORWARD = 1.0; // A or X
-    public static double SHOOTER_REVERSE = -1.0;// Dpad down
-    public static double POLLEN_FEEDER_FORWARD = 1.0; //right bumper
+
+    public static double POLLEN_SHOOTER = 1.0; //right bumper, activate feeder when up to speed
     public static double POLLEN_FEEDER_REVERSE = -1.0; // right trigger
-    public static double NECTAR_FEEDER_FORWARD = 1.0; //left bumper
+    public static double NECTAR_SHOOTER = 1.0; //left bumper, activate feeder when up to speed
     public static double NECTAR_FEEDER_REVERSE = -1.0; // left trigger
     public static double INTAKE_FORWARD = 1.0; // B or O
     public static double INTAKE_REVERSE = -1.0; // Dpad left
+
+
+   //-------------------------DEPENDANT ON SHOOTER SPEED--------------------------
+   public static double POLLEN_GATE_OPEN = 1.0;// open when shooter up to speed
+    public static double NECTAR_GATE_OPEN = 1.0;//  open when shooter up to speed
+    public static double POLLEN_GATE_CLOSE = 0.0;// no button
+    public static double NECTAR_GATE_CLOSE = 0.0;// no button
+
+
 
     //-----------------------------------------------------------------
 
