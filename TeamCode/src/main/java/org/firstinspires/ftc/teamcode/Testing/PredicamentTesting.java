@@ -59,7 +59,7 @@ public class PredicamentTesting extends OpMode {
 // ----------------------------- Sensors ----------------------------------------------
 
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "Color Sensor");
-        colorSensor.setGain(1);
+        colorSensor.setGain(0.5);
     }
 
         @Override
