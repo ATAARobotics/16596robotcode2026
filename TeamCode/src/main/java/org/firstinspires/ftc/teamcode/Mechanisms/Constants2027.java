@@ -107,12 +107,17 @@ public class Constants2027 {
     public static double INTAKE_FORWARD = 1.0; // B or O
     public static double INTAKE_REVERSE = -1.0; // Dpad left
 
+    public static double MOTOR_ADJUSTER_POLLEN = 1.0;
 
-   //-------------------------DEPENDANT ON SHOOTER SPEED--------------------------
+    public static double MOTOR_ADJUSTER_NECTAR = -1.0;
+
+
+
+    //-------------------------DEPENDANT ON SHOOTER SPEED--------------------------
    public static double POLLEN_GATE_OPEN = 1.0;// open when shooter up to speed
     public static double NECTAR_GATE_OPEN = 1.0;//  open when shooter up to speed
-    public static double POLLEN_GATE_CLOSE = 0.0;// no button
-    public static double NECTAR_GATE_CLOSE = 0.0;// no button
+    public static double POLLEN_GATE_CLOSE = -1.0;// no button
+    public static double NECTAR_GATE_CLOSE = -1.0;// no button
 
 
 
