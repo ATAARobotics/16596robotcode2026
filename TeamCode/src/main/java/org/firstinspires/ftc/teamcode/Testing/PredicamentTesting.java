@@ -51,15 +51,15 @@ public class PredicamentTesting extends OpMode {
         MotorAdjuster = hardwareMap.get(Servo.class, "Motor Adjuster");
 
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "Color Sensor");
-        colorSensor.setGain(4);
+        colorSensor.setGain(1);
     }
 
         @Override
         public void loop () {
             PollenShooter.setPower(PollenShooterSpeed);
             if (gamepad2.a) {
-                PollenShooter.setPower(1.0);
-                NectarShooter.setPower(-1.0);
+                PollenShooter.setPower(-1.0);
+                NectarShooter.setPower(1.0);
             } else {
                 PollenShooter.setPower(0.0);
                 NectarShooter.setPower(0.0);
@@ -82,28 +82,50 @@ public class PredicamentTesting extends OpMode {
                 normBlue = colors.blue / colors.alpha;
                 normGreen = colors.green / colors.alpha;
 
-                telemetry.addData("red", normRed);
-                telemetry.addData("green", normGreen);
-                telemetry.addData("blue", normBlue);
+                telemetry.addData("normred", normRed);
+                telemetry.addData("normgreen", normGreen);
+                telemetry.addData("normblue", normBlue);
+
+            telemetry.addData("red", colors.red);
+            telemetry.addData("green", colors.green);
+            telemetry.addData("blue", colors.blue);
 
 
-            if(timer.milliseconds() <= 1000 && nectarDetected){
-                MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
 
-            }else if(timer.milliseconds() >= 1000 && nectarDetected) {
 
-                MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
+            if ( colors.red < 0.0495 && colors.red > 0.015 &&
+                    colors.green < 0.076 && colors.green > 0.295 &&
+                    colors.blue < 0.026 && colors.blue > 0.01 ) {
+                MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN); // nothing valued
+            }
+            else if (colors.green <= 0.005 && colors.blue  <= 0.0035 && colors.red <= 0.0026){ //pollen values
+                MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);// WAS POLLEN
+            }
+
+            else if(timer.milliseconds() <= 100 && nectarDetected){
+                MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);//
+
+            }else if(timer.milliseconds() >= 100 && nectarDetected) {
+                MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);//WAS POLLEN
                 nectarDetected = false;
 
-            } else if (normRed > 0.04 && normGreen < 0.07 || normBlue > 0.05 && normGreen < 0.07) {
+            }
 
-                MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
-                timer.reset();
-                nectarDetected = true;
+            else {
+            nectarDetected = true;
+            timer.reset();
 
-            }else {
-
-                 MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
             }
         }
     }
+ /*else if (colors.red > 0.04 ) {
+
+        MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
+                timer.reset();
+nectarDetected = true;
+        } else if (colors.blue > 0.03 ) {
+
+        MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
+                timer.reset();
+nectarDetected = true;
+        } */

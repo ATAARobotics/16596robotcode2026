@@ -107,9 +107,9 @@ public class Constants2027 {
     public static double INTAKE_FORWARD = 1.0; // B or O
     public static double INTAKE_REVERSE = -1.0; // Dpad left
 
-    public static double MOTOR_ADJUSTER_POLLEN = 1.0;
+    public static double MOTOR_ADJUSTER_POLLEN = -1.0;
 
-    public static double MOTOR_ADJUSTER_NECTAR = -1.0;
+    public static double MOTOR_ADJUSTER_NECTAR = 1.0;
 
 
 

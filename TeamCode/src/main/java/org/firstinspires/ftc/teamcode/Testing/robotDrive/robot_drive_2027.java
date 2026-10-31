@@ -121,7 +121,7 @@ robot_drive_2027 extends OpMode {
         }else if(timer.milliseconds() >= 1000 && nectarDetected) {
             MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
             nectarDetected = false;
-        } else if (normRed > 0.04 && normGreen < 0.07 || normBlue > 0.05 && normGreen < 0.07) {
+        } else if (normRed > 0.11 || normBlue > 0.1 ) {
             MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
             timer.reset();
             nectarDetected = true;
@@ -231,8 +231,8 @@ robot_drive_2027 extends OpMode {
        // could also be in loop, but idk
         PollenShooter.setPower(PollenShooterSpeed);
         if (gamepad2.a) {
-            PollenShooter.setPower(1.0);
-            NectarShooter.setPower(-1.0);
+            PollenShooter.setPower(-1.0);
+            NectarShooter.setPower(1.0);
         } else {
             PollenShooter.setPower(0.0);
             NectarShooter.setPower(0.0);
@@ -316,6 +316,4 @@ robot_drive_2027 extends OpMode {
                 indicator.setColor(Constants2027.RGB_Light.WHITE);
         }
     }
-
-
 }
