@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 
@@ -21,6 +22,7 @@ public class ColorCalibrate extends OpMode {
     double blue_min = 1000.0;
     int counter = 0;
     int gain = 0;
+    boolean filefound = false;
     NormalizedColorSensor colorSensor;//control hub I2C Bus 1
     NormalizedRGBA colors;
     public String filename="rgb_calibrate.csv";
@@ -29,7 +31,13 @@ public class ColorCalibrate extends OpMode {
     public void init() {
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "Color Sensor");
         filename = String.format("%s/FIRST/data/%s",Environment.getExternalStorageDirectory().getPath(), filename);
-        DataOutput = new PrintStream(filename);
+        try{
+            DataOutput = new PrintStream(filename);
+            filefound = true;
+        }
+        catch (FileNotFoundException e) {
+            filefound = false;
+        }
     }
 
 
@@ -39,7 +47,7 @@ public class ColorCalibrate extends OpMode {
             while (counter <= 1000) {
                 colors = colorSensor.getNormalizedColors();
                 if (colors.red > red_max) {
-                    red_max = colors.red
+                    red_max = colors.red;
                 }
                 if (colors.red < red_min) {
                     red_min = colors.red;
@@ -51,7 +59,7 @@ public class ColorCalibrate extends OpMode {
                     blue_min = colors.blue;
                 }
                 if (colors.red > red_max) {
-                    red_max = colors.red
+                    red_max = colors.red;
                 }
                 if (colors.red < red_min) {
                     red_min = colors.red;
@@ -68,9 +76,9 @@ public class ColorCalibrate extends OpMode {
 
     }
     public void stopLog() {
-        if (this.logging) {
-            this.logWriter.flush();
-            this.logWriter.close();
+        if (filefound) {
+            DataOutput.flush();
+            DataOutput.close();
         }
     }
 
