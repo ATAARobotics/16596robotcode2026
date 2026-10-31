@@ -24,6 +24,10 @@ public class PredicamentTesting extends OpMode {
     ElapsedTime timer = new ElapsedTime();
     boolean nectarDetected = false;
 
+    private Servo FlyWheelGate;
+
+    double MotorSpeedThreshold = 0.05;
+
     public enum DetectedColor {
         PINK,
         BLUE,
@@ -35,6 +39,7 @@ public class PredicamentTesting extends OpMode {
 
     @Override
     public void init() {
+// ----------------------------- Motors ----------------------------------------------
 
         PollenShooter = hardwareMap.get(DcMotor.class, "Pollen Shooter");
         PollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -47,8 +52,11 @@ public class PredicamentTesting extends OpMode {
         NectarShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         NectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         NectarShooter.setPower(1.0);
-
+// ----------------------------- Servos ----------------------------------------------
         MotorAdjuster = hardwareMap.get(Servo.class, "Motor Adjuster");
+        FlyWheelGate = hardwareMap.get(Servo.class, "Fly Wheel Door");
+
+// ----------------------------- Sensors ----------------------------------------------
 
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "Color Sensor");
         colorSensor.setGain(4);
@@ -104,6 +112,12 @@ public class PredicamentTesting extends OpMode {
             }else {
 
                  MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
+            }
+
+            if (PollenShooterSpeed >= PollenShooterSpeed - MotorSpeedThreshold || PollenShooterSpeed >= PollenShooterSpeed + MotorSpeedThreshold){
+                FlyWheelGate.setPosition(Constants2027.POLLEN_GATE_OPEN);
+            } else {
+                FlyWheelGate.setPosition(Constants2027.POLLEN_GATE_CLOSE);
             }
         }
     }
