@@ -9,6 +9,10 @@ import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants2027;
@@ -37,6 +41,26 @@ robot_drive_2027 extends OpMode {
     public String spMode = "FlyWheel Reverse";
     private double driverSpeedRatio = Constants2027.DRIVER_SPEED_RATIO;
 
+    private DcMotor PollenShooter; // expansion hub motoe port 0
+    double PollenShooterSpeed;
+    double PollenShooterReverseSpeed;
+    private DcMotor NectarShooter;// expansion hub motor port 1
+    double NectarShooterSpeed;
+    double NectarShooterReverseSpeed;
+    private Servo MotorAdjuster; //expansion hub servo port 0
+    NormalizedColorSensor colorSensor;//control hub I2C Bus 1
+    ElapsedTime timer = new ElapsedTime();
+    boolean nectarDetected = false;
+
+    public enum DetectedColor {
+        PINK,
+        BLUE,
+        GREEN,
+        PURPLE,
+        YELLOW,
+        UNKNOWN,
+    }
+
     @Override
     public void init() {
         driveTrain = new DriveTrain2027(hardwareMap);
@@ -54,6 +78,24 @@ robot_drive_2027 extends OpMode {
         // Initializing indicator
         indicator = new LightIndicatorSubsystem(hardwareMap);
         driveTrain.setDrivemoderobotcentric();
+
+        PollenShooter = hardwareMap.get(DcMotor.class, "Pollen Shooter");
+        PollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        PollenShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        PollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        PollenShooter.setPower(1.0);
+
+        NectarShooter = hardwareMap.get(DcMotor.class, "Nectar Shooter");
+        NectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        NectarShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        NectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        NectarShooter.setPower(1.0);
+
+        MotorAdjuster = hardwareMap.get(Servo.class, "Motor Adjuster");
+
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "Color Sensor");
+        colorSensor.setGain(4);
+
     }
 
     @Override
@@ -66,6 +108,31 @@ robot_drive_2027 extends OpMode {
 
     @Override
     public void loop() {
+
+        NormalizedRGBA colors = colorSensor.getNormalizedColors(); //return 4 values
+
+        float normRed, normBlue, normGreen;
+        normRed = colors.red / colors.alpha;
+        normBlue = colors.blue / colors.alpha;
+        normGreen = colors.green / colors.alpha;
+
+        if(timer.milliseconds() <= 1000 && nectarDetected){
+            MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
+        }else if(timer.milliseconds() >= 1000 && nectarDetected) {
+            MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
+            nectarDetected = false;
+        } else if (normRed > 0.04 && normGreen < 0.07 || normBlue > 0.05 && normGreen < 0.07) {
+            MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
+            timer.reset();
+            nectarDetected = true;
+        }else {
+            MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
+        }
+
+        telemetry.addData("red", normRed);
+        telemetry.addData("green", normGreen);
+        telemetry.addData("blue", normBlue);
+
         readInputs();
         DriverControls();
         if (driveTrain.drivemodefieldcentric) {
@@ -79,6 +146,7 @@ robot_drive_2027 extends OpMode {
         driveTrain.ShooterControlLoop();
         updateIndicator();
         updateTelemetry();
+
 
     }
     private void readInputs() {
@@ -144,13 +212,11 @@ robot_drive_2027 extends OpMode {
         if(driver.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
             driveTrain.setFacing(Constants2027.REDSMALL_SHOOT);
         }
-
         //small blue shooting position
 //      dont have a constant angle yet
         if(driver.isDown(GamepadKeys.Button.LEFT_BUMPER)){
             driveTrain.setFacing(Constants2027.BLUESMALL_SHOOT);
         }
-
 //        //big red shooting position
         if(driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>= Constants2027.TRIGGER_TOLERANCE)  {
             driveTrain.setFacing(Constants2027.REDBIG_SHOOT);
@@ -159,31 +225,18 @@ robot_drive_2027 extends OpMode {
         if(driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>= Constants2027.TRIGGER_TOLERANCE) {
             driveTrain.setFacing(Constants2027.BLUEBIG_SHOOT);
         }
-        //Select N, S, E, W
-//        if (driver.getRightX() <= -Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.WEST); // west
-//        } else if (driver.getRightX() >= Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.EAST); // east
-//        } else if (driver.getRightY() >= Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.SOUTH); // south
-//        } else if (driver.getRightY() <= -Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.NORTH); // north
-//        }
-//
-//// Select Diagonal Directions (NE,SE,SW,NW)
-//        if (driver.getRightX() > Constants2.JOYSTICK_TOLERANCE & driver.getRightY() < -Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.NORTH_EAST); // north east
-//        } else if (driver.getRightX() < -Constants2.JOYSTICK_TOLERANCE & driver.getRightY() < -Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.NORTH_WEST); // north west
-//        } else if (driver.getRightX() < -Constants2.JOYSTICK_TOLERANCE & driver.getRightY() > Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.SOUTH_WEST); // south west
-//        } else if (driver.getRightX() > Constants2.JOYSTICK_TOLERANCE & driver.getRightY() > Constants2.JOYSTICK_TOLERANCE) {
-//            driveTrain.setDirection(Constants2.SOUTH_EAST); // south east
-//        }
-
     }
     private void OperatorControls() {
 
+       // could also be in loop, but idk
+        PollenShooter.setPower(PollenShooterSpeed);
+        if (gamepad2.a) {
+            PollenShooter.setPower(1.0);
+            NectarShooter.setPower(-1.0);
+        } else {
+            PollenShooter.setPower(0.0);
+            NectarShooter.setPower(0.0);
+        }
         // =========  Operator controls ===========
         // Set shooting mode
 
@@ -233,6 +286,9 @@ robot_drive_2027 extends OpMode {
         joinedTelemetry.addData("Intake Forward", Constants2027.INTAKE_SPD_PICKUP);
         joinedTelemetry.addData("Feeder Reverse", Constants2027.FEEDER_SPD_CORRECTING);
         joinedTelemetry.addData("FlyWheel Reverse", Constants2027.FLYWHEEL_SPD_REVERSE);
+        telemetry.addData("Pollen Shooter Speed", PollenShooterSpeed);
+        telemetry.addData("Nectar Shooter Speed", NectarShooterSpeed);
+
         joinedTelemetry.update();
     }
     private void updateIndicator() {
