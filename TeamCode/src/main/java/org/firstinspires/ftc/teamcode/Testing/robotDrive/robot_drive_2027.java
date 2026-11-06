@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants2027;
 import org.firstinspires.ftc.teamcode.Mechanisms.DriveTrain2027;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
+import org.firstinspires.ftc.teamcode.Testing.PredicamentTesting;
 
 
 @Configurable
@@ -51,6 +52,8 @@ robot_drive_2027 extends OpMode {
     NormalizedColorSensor colorSensor;//control hub I2C Bus 1
     ElapsedTime timer = new ElapsedTime();
     boolean nectarDetected = false;
+    boolean BallDetected;
+    double ColorThreshold = 0.05;
 
     public enum DetectedColor {
         PINK,
@@ -79,16 +82,14 @@ robot_drive_2027 extends OpMode {
         indicator = new LightIndicatorSubsystem(hardwareMap);
         driveTrain.setDrivemoderobotcentric();
 
-        PollenShooter = hardwareMap.get(DcMotor.class, "Pollen Shooter");
+        PollenShooter = hardwareMap.get(DcMotor.class, "pollen_shooter");
         PollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         PollenShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        PollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         PollenShooter.setPower(1.0);
 
-        NectarShooter = hardwareMap.get(DcMotor.class, "Nectar Shooter");
+        NectarShooter = hardwareMap.get(DcMotor.class, "nectar_shooter");
         NectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         NectarShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        NectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         NectarShooter.setPower(1.0);
 
         MotorAdjuster = hardwareMap.get(Servo.class, "Motor Adjuster");
@@ -108,30 +109,19 @@ robot_drive_2027 extends OpMode {
 
     @Override
     public void loop() {
+        //--------------------- FlyWheel Color Sensor ----------------------------------------------------------
 
         NormalizedRGBA colors = colorSensor.getNormalizedColors(); //return 4 values
-
-        float normRed, normBlue, normGreen;
-        normRed = colors.red / colors.alpha;
-        normBlue = colors.blue / colors.alpha;
-        normGreen = colors.green / colors.alpha;
-
-        if(timer.milliseconds() <= 1000 && nectarDetected){
+        if (colors.red > ColorThreshold || colors.blue > ColorThreshold || colors.green > ColorThreshold){
+            BallDetected = true;
+        }
+        if ((colors.red > colors.green && colors.red > colors.blue && BallDetected) ||( colors.blue > colors.green && colors.blue > colors.red  && BallDetected)) {
             MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
-        }else if(timer.milliseconds() >= 1000 && nectarDetected) {
-            MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
-            nectarDetected = false;
-        } else if (normRed > 0.11 || normBlue > 0.1 ) {
-            MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
-            timer.reset();
-            nectarDetected = true;
-        }else {
+        } else {
             MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
         }
 
-        telemetry.addData("red", normRed);
-        telemetry.addData("green", normGreen);
-        telemetry.addData("blue", normBlue);
+
 
         readInputs();
         DriverControls();
@@ -157,6 +147,8 @@ robot_drive_2027 extends OpMode {
         speed = driveTrain.PollenShooter.getCorrectedVelocity();
         speed = driveTrain.NectarShooter.getCorrectedVelocity();
     }
+    //--------------------- Driver Controls ----------------------------------------------------------
+
     private void DriverControls() {
         // ===== Driver Controls =====
         if (driveTrain.manual_FC_turning) {
@@ -205,6 +197,8 @@ robot_drive_2027 extends OpMode {
             }
         }
     }
+    //--------------------- Driving Presents ----------------------------------------------------------
+
     private void DriverFieldCentricPresets() {
         //===============driving presets======================
 
@@ -226,10 +220,10 @@ robot_drive_2027 extends OpMode {
             driveTrain.setFacing(Constants2027.BLUEBIG_SHOOT);
         }
     }
+    //--------------------- Operator controls ----------------------------------------------------------
     private void OperatorControls() {
 
        // could also be in loop, but idk
-        PollenShooter.setPower(PollenShooterSpeed);
         if (gamepad2.a) {
             PollenShooter.setPower(-1.0);
             NectarShooter.setPower(1.0);
@@ -237,7 +231,6 @@ robot_drive_2027 extends OpMode {
             PollenShooter.setPower(0.0);
             NectarShooter.setPower(0.0);
         }
-        // =========  Operator controls ===========
         // Set shooting mode
 
         if (gamepad2.a){

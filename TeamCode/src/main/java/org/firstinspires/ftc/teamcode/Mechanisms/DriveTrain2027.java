@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
@@ -73,8 +74,6 @@ public class DriveTrain2027 {
     public final MotorEx NectarShooter;
     public final MotorEx feeder; //port 0-expansion hub
     public final Motor intake; //port 1-expansion hub
-    public CRServo feed1;   //port 1
-    public CRServo feed2;   //port 0
     private double shooterModeStartTime = 0.0;
     private ShooterMode lastShooterMode = ShooterMode.shooterOFF;
     public ShooterMode CurrentShooterMode = ShooterMode.shooterOFF;
@@ -97,14 +96,14 @@ public class DriveTrain2027 {
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         // Pollen Shooter assignment
-        PollenShooter = new MotorEx(hwMap, "PollenShooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        NectarShooter = new MotorEx(hwMap, "NectarShooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        PollenShooter = new MotorEx(hwMap, "pollen_shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        NectarShooter = new MotorEx(hwMap, "nectar_shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+
         feeder = new MotorEx(hwMap, "feeder");
         // Intake assignment
         intake = new Motor(hwMap, "intake");
         // Servo assignment
-        feed1 = hwMap.get(CRServo.class,"feed1");
-        feed2 = hwMap.get(CRServo.class,"feed2");
+
 
     }
 
@@ -374,8 +373,6 @@ public class DriveTrain2027 {
     // Shooter Helper Methods/Functions
     public void shooterMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed, double feed1Speed){
         feeder.set(feederSpeed);
-        feed1.setPower(feed1Speed);
-        feed2.setPower(feed1Speed);
         intake.set(intakeSpeed);
         PollenShooter.set(flywheelSpeed);
         NectarShooter.set(flywheelSpeed);

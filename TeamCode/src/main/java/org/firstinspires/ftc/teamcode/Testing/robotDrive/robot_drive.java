@@ -36,6 +36,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -48,6 +49,7 @@ import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 // need to use dashboard to change PID gains; comment out for competition
 @Configurable
+@Disabled
 @TeleOp(name = "RobotDrive",group = "_0A")
 public class
 robot_drive extends OpMode {
