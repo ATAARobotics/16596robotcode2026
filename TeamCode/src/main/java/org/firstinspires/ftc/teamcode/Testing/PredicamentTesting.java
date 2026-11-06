@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.Testing;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants2027;
 
 @TeleOp
@@ -23,19 +25,14 @@ public class PredicamentTesting extends OpMode {
     NormalizedColorSensor colorSensor;//control hub I2C Bus 1
     ElapsedTime timer = new ElapsedTime();
     boolean nectarDetected = false;
-
     private Servo FlyWheelGate;
-
     double MotorSpeedThreshold = 0.05;
+    double ColorThreshold = 0.05;
+    boolean BallDetected;
+    DistanceSensor distanceSensor;
 
-    public enum DetectedColor {
-        PINK,
-        BLUE,
-        GREEN,
-        PURPLE,
-        YELLOW,
-        UNKNOWN,
-    }
+    boolean BallOutDistance;
+
 
     @Override
     public void init() {
@@ -59,7 +56,12 @@ public class PredicamentTesting extends OpMode {
 // ----------------------------- Sensors ----------------------------------------------
 
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "Color Sensor");
-        colorSensor.setGain(0.5);
+        colorSensor.setGain(1);
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "Distance Sensor");
+
+    }
+    public double getDistance (){
+        return distanceSensor.getDistance(DistanceUnit.CM);
     }
 
         @Override
@@ -79,6 +81,7 @@ public class PredicamentTesting extends OpMode {
 //            } else {
 //                NectarShooter.setPower(0.0);
 //            }
+// ----------------------------- Color Sensor Reader ----------------------------------------------
 
             telemetry.addData("Pollen Shooter Speed", PollenShooterSpeed);
             telemetry.addData("Nectar Shooter Speed", NectarShooterSpeed);
@@ -99,9 +102,44 @@ public class PredicamentTesting extends OpMode {
             telemetry.addData("blue", colors.blue);
 
 
+// ----------------------------- Motor Adjuster ----------------------------------------------
+
+             if (colors.red > ColorThreshold || colors.blue > ColorThreshold || colors.green > ColorThreshold){
+                 BallDetected = true;
+             }
+             if ((colors.red > colors.green && colors.red > colors.blue && BallDetected) ||( colors.blue > colors.green && colors.blue > colors.red  && BallDetected)) {
+                 MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
+            } else {
+                 MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN);
+             }
+            if (getDistance() < 0.0) {
+                nectarDetected = false;
+            }
 
 
-            if ( colors.red < 0.0495 && colors.red > 0.015 &&
+// ----------------------------- Servo Gate ----------------------------------------------
+
+            if (PollenShooterSpeed >= PollenShooterSpeed - MotorSpeedThreshold || PollenShooterSpeed >= PollenShooterSpeed + MotorSpeedThreshold){
+                FlyWheelGate.setPosition(Constants2027.POLLEN_GATE_OPEN);
+            } else {
+                FlyWheelGate.setPosition(Constants2027.POLLEN_GATE_CLOSE);
+            }
+
+        }
+    }
+ /*else if (colors.red > 0.04 ) {
+
+        MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
+                timer.reset();
+nectarDetected = true;
+        } else if (colors.blue > 0.03 ) {
+
+        MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
+                timer.reset();
+nectarDetected = true;
+        } */
+
+          /*  if ( colors.red < 0.0495 && colors.red > 0.015 &&
                     colors.green < 0.076 && colors.green > 0.295 &&
                     colors.blue < 0.026 && colors.blue > 0.01 ) {
                 MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_POLLEN); // nothing valued
@@ -123,23 +161,4 @@ public class PredicamentTesting extends OpMode {
             nectarDetected = true;
             timer.reset();
 
-            }
-
-            if (PollenShooterSpeed >= PollenShooterSpeed - MotorSpeedThreshold || PollenShooterSpeed >= PollenShooterSpeed + MotorSpeedThreshold){
-                FlyWheelGate.setPosition(Constants2027.POLLEN_GATE_OPEN);
-            } else {
-                FlyWheelGate.setPosition(Constants2027.POLLEN_GATE_CLOSE);
-            }
-        }
-    }
- /*else if (colors.red > 0.04 ) {
-
-        MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
-                timer.reset();
-nectarDetected = true;
-        } else if (colors.blue > 0.03 ) {
-
-        MotorAdjuster.setPosition(Constants2027.MOTOR_ADJUSTER_NECTAR);
-                timer.reset();
-nectarDetected = true;
-        } */
+            } */
