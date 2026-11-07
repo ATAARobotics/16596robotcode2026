@@ -134,12 +134,12 @@ public class DriveTrain2027 {
 
         //set up for flywheel shooter
        PollenShooter.setRunMode(Motor.RunMode.VelocityControl);
-        PollenShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        //PollenShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         PollenShooter.setInverted(true);
         PollenShooter.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
 
         NectarShooter.setRunMode(Motor.RunMode.VelocityControl);
-        NectarShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        //NectarShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         NectarShooter.setInverted(true);
         NectarShooter.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);
         // Feeder configuration
@@ -374,8 +374,8 @@ public class DriveTrain2027 {
     public void shooterMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed, double feed1Speed){
         feeder.set(feederSpeed);
         intake.set(intakeSpeed);
-        PollenShooter.set(flywheelSpeed);
-        NectarShooter.set(flywheelSpeed);
+        //PollenShooter.set(flywheelSpeed);
+        //NectarShooter.set(flywheelSpeed);
     }
     public void setNow(double nowSeconds) {
         now = nowSeconds;

@@ -42,7 +42,9 @@ robot_drive_2027 extends OpMode {
     public String spMode = "FlyWheel Reverse";
     private double driverSpeedRatio = Constants2027.DRIVER_SPEED_RATIO;
 
-    private DcMotor PollenShooter; // expansion hub motoe port 0
+    private DcMotor PollenShooter;// expansion hub motoe port 0
+
+
     double PollenShooterSpeed;
     double PollenShooterReverseSpeed;
     private DcMotor NectarShooter;// expansion hub motor port 1
@@ -83,14 +85,14 @@ robot_drive_2027 extends OpMode {
         driveTrain.setDrivemoderobotcentric();
 
         PollenShooter = hardwareMap.get(DcMotor.class, "pollen_shooter");
-        PollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        PollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         PollenShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        PollenShooter.setPower(1.0);
+        PollenShooter.setPower(0.0);
 
         NectarShooter = hardwareMap.get(DcMotor.class, "nectar_shooter");
-        NectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        NectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         NectarShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        NectarShooter.setPower(1.0);
+        NectarShooter.setPower(0.0);
 
         MotorAdjuster = hardwareMap.get(Servo.class, "Motor Adjuster");
 
@@ -224,9 +226,9 @@ robot_drive_2027 extends OpMode {
     private void OperatorControls() {
 
        // could also be in loop, but idk
-        if (gamepad2.a) {
-            PollenShooter.setPower(-1.0);
-            NectarShooter.setPower(1.0);
+        if (gamepad2.b) {
+            PollenShooter.setPower(PollenShooterSpeed);
+            NectarShooter.setPower(NectarShooterSpeed);
         } else {
             PollenShooter.setPower(0.0);
             NectarShooter.setPower(0.0);
