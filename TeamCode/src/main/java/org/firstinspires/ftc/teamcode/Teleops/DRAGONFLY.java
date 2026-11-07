@@ -65,7 +65,7 @@ public class DRAGONFLY extends OpMode {
         mechanisms.loop();
         //driveTrain.loop();
         joinedTelemetry.update();
-
+        telemetry.addData("Mode:", Mechanisms2027.ShooterMode);
     }//loop
 
     private void OperatorControls() {
