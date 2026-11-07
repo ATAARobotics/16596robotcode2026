@@ -8,9 +8,6 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Mechanisms.Old.DriveTrainBasic2;
-import org.firstinspires.ftc.teamcode.Utils.Constant;
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants2027;
 import org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027;
 import org.firstinspires.ftc.teamcode.Utils.Controller;
 
@@ -64,12 +61,13 @@ public class DRAGONFLY extends OpMode {
         // End Section
         mechanisms.loop();
         //driveTrain.loop();
+        AddTelemetryData();
         joinedTelemetry.update();
-        telemetry.addData("Mode:", Mechanisms2027.ShooterMode);
+
     }//loop
 
     private void OperatorControls() {
-        // could also be in loop, but idk
+        // Configure Operator Controller Buttons
         if (gamepad2.b) {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_1;
             telemetry.addData("b","is pressed");
@@ -79,9 +77,15 @@ public class DRAGONFLY extends OpMode {
 
         }
 
-        }
-        // Set shooting mode
+    }//Operator Controls End Bracket
 
-        }
+    public void AddTelemetryData() {
+        telemetry.addData("Mode:", Mechanisms2027.ShooterMode);
+
+    }// Print Telemetry
+
+
+}// OpMode End Bracket
+
 
 // DRAGONFLY
