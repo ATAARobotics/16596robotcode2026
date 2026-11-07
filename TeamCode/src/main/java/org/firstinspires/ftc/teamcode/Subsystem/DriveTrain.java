@@ -76,6 +76,7 @@ public class DriveTrain {
     {
         this.hwMap = hwMap;
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
+        //drive motors only
         leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
         rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
         leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
@@ -141,8 +142,7 @@ public class DriveTrain {
                     headingCorrection,// turn
                     heading,// heading
                     false);
-        }
-        else {
+        } else {
             driveBase.driveRobotCentric(-xSpeed,-ySpeed,turnSpeed);
         }
     }// end of main drivetrain loop()
@@ -210,8 +210,6 @@ public class DriveTrain {
         telemetry.addData("X Distance inches:", "%5.2f", getXPosition());
         telemetry.addData("Y Distance inches:", "%5.2f", getYPosition());
         telemetry.addData("Auto DriveTo Enabled", autoEnabled);
-
-        // telemetry.addData("elevator","%5.2f",elevator.getCurrentPosition());
 
         if(autoEnabled) {
             telemetry.addData("Auto target X:", "%5.2f", currentXTarget);
