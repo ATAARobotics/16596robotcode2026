@@ -69,10 +69,12 @@ public class DRAGONFLY extends OpMode {
     private void OperatorControls() {
         // Configure Operator Controller Buttons
         if (gamepad2.b) {
-            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_1;
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.PICKUP;
             telemetry.addData("b","is pressed");
-        } else {
-            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_3;
+        } else if (gamepad2.a) {
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.SHOOTING;
+        }else {
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.IDLEROBOT;
             telemetry.addData("b","is not pressed");
 
         }

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystem;
 
-import static org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027.Mode.MODE_2;
+import static org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027.Mode.SHOOTING;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Utils.Constant;
 @Config
 public class Mechanisms2027 {
     public HardwareMap hwMap;
-    public static Mode ShooterMode = Mode.MODE_3;
+    public static Mode ShooterMode = Mode.IDLEROBOT;
     //================================ Motors ============================================
     public final MotorEx ShooterRight; //port 1 -expansion hub
     public final MotorEx ShooterLeft;
@@ -76,7 +76,7 @@ public class Mechanisms2027 {
 
         ShooterLeft.setRunMode(Motor.RunMode.VelocityControl);
         ShooterLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        ShooterLeft.setInverted(true);
+        ShooterLeft.setInverted(false);
         ShooterLeft.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
 
         Feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -94,12 +94,11 @@ public class Mechanisms2027 {
 
     public void loop() {
         switch (ShooterMode){
-            case MODE_1: //Intaking
+            case PICKUP: //Intaking
                 operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_PICKUP, Constant.FEEDER_SPEED_PICKUP);
                 break;
 
-
-            case MODE_2: //Shooting
+            case SHOOTING: //Shooting
                 if (!ShooterModeActiveForMoreThan(Constant.CORRECTION_DELAY)) { // input delay seconds
                     operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_HOLDING, Constant.FEEDER_SPEED_CORRECTING);
                 } else {
@@ -110,7 +109,7 @@ public class Mechanisms2027 {
                 }
                 break;
 
-            case MODE_3://Off
+            case IDLEROBOT://Off
             default:
                 operatorMotors(0,0,0);
                 break;
@@ -147,9 +146,9 @@ public class Mechanisms2027 {
 
     // Class Types
     public enum Mode {
-        MODE_1,
-        MODE_2,
-        MODE_3
+        PICKUP,
+        SHOOTING,
+        IDLEROBOT
     }
     public void setNow(double nowSeconds) {
         now = nowSeconds;
