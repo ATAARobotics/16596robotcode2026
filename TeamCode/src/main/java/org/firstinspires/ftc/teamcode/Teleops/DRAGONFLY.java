@@ -45,14 +45,14 @@ public class DRAGONFLY extends OpMode {
     }//start
 
     public void loop(){
+        // Update Section
 
+        // Body Section
+
+        // End Section
+        mechanisms.loop();
+        driveTrain.loop();
+        joinedTelemetry.update();
     }//loop
 
-
-    private void updateTelemetry() {
-        // Send data to telemetry
-
-        joinedTelemetry.update();
-
-    }// updateTelemetry
 }// DRAGONFLY
