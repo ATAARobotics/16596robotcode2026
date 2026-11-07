@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Utils.Constant;
 @Config
 public class Mechanisms2027 {
     public HardwareMap hwMap;
-
+    private Mode mode;
     //================================ Motors ============================================
     public final MotorEx ShooterRight; //port 1 -expansion hub
     public final MotorEx ShooterLeft;
@@ -90,7 +90,12 @@ public class Mechanisms2027 {
     }
 
     public void loop() {
-
+        switch (mode){
+            case MODE_1:
+                break;
+            case MODE_2:
+                break;
+        }
     }
 
     public boolean canLaunch(double launchSpeed, double FudgeFactor) {
@@ -112,6 +117,12 @@ public class Mechanisms2027 {
         return ShooterProximity.getDistance(DistanceUnit.CM);
     }
 
+    public Mode getMode(){return this.mode;}
+    public void setMode(Mode mode){this.mode = mode;}
 
-
+    // Class Types
+    public enum Mode {
+        MODE_1,
+        MODE_2
+    }
 }
