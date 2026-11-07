@@ -7,9 +7,11 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Utils.Constant;
 
 @Config
@@ -32,6 +34,8 @@ public class Mechanisms2027 {
     public NormalizedColorSensor ShooterColorSensor;
     public DistanceSensor ShooterProximity;
 
+    boolean BallDetected;
+    Double ColorThreshold = 0.05;
 
 
 
@@ -97,19 +101,15 @@ public class Mechanisms2027 {
         return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX);
     }
 
+    //================================ Sensor Functions ============================================
 
-    public enum ShooterMode {
-        shooterSHOOTINGfarBlue, shooterSHOOTINGfarRedWithCorrection, shooterSHOOTINGfarRedNOcorrection, shooterSHOOTINGnear, shooterSHOOTINGnearNOcorrection, shooterPICKUP, shooterCORRECTING, shooterHOLDING, shooterOFF
+    public boolean detectNectar () {
+        NormalizedRGBA colors = ShooterColorSensor.getNormalizedColors();
+        return (((colors.red > colors.green && colors.red > colors.blue) || (colors.blue > colors.green && colors.blue > colors.red)) && (colors.red > ColorThreshold || colors.blue > ColorThreshold || colors.green > ColorThreshold));
     }
 
-    public void shooterMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed, double feed1Speed) {
-        Feeder.set(feederSpeed);
-        Intake.set(intakeSpeed);
-        ShooterRight.set(flywheelSpeed);
-        ShooterLeft.set(flywheelSpeed);
+    public double getDistance (){
+        return ShooterProximity.getDistance(DistanceUnit.CM);
     }
-
-
-
 
 }
