@@ -163,10 +163,10 @@ public class Mechanisms2027 {
     }
 
 
-    public void operatorMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed){
+    public void operatorMotors(double shooterSpeed, double intakeSpeed, double feederSpeed){
         Feeder.set(feederSpeed);
         Intake.set(intakeSpeed);
-        ShooterRight.set(flywheelSpeed);
-        ShooterLeft.set(flywheelSpeed);
+        ShooterRight.set(shooterSpeed);
+        ShooterLeft.set(shooterSpeed);
     }
 }
