@@ -5,7 +5,7 @@ import com.bylazar.configurables.annotations.Configurable;
 
 //@Configurable// need this to access constants from Panels-Bruce
 @Config// for FTC dashboard
-@Configurable // Needed for Panels
+//@Configurable // Needed for Panels
 
 public class Constants {
     //

@@ -27,12 +27,15 @@ public class DRAGONFLY extends OpMode {
     private JoinedTelemetry joinedTelemetry;
 
 
-    public GamepadEx driver = new GamepadEx(gamepad1);
-    public GamepadEx operator = new GamepadEx(gamepad2);
+    public GamepadEx driver = null;
+    public GamepadEx operator = null;
 
 
     public void init(){
-       // driveTrain = new DriveTrain2027(hardwareMap);
+        driver = new GamepadEx(gamepad1);
+        operator = new GamepadEx(gamepad1);
+
+        // driveTrain = new DriveTrain2027(hardwareMap);
        // driveTrain.init();
         controller = new Controller();
         mechanisms = new Mechanisms2027(hardwareMap);
@@ -57,6 +60,7 @@ public class DRAGONFLY extends OpMode {
 
         // Body Section
         controller.updateController(operator);
+        OperatorControls();
         // End Section
         mechanisms.loop();
         //driveTrain.loop();
@@ -65,13 +69,11 @@ public class DRAGONFLY extends OpMode {
     }//loop
 
     private void OperatorControls() {
-
         // could also be in loop, but idk
         if (gamepad2.b) {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_1;
         } else {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_3;
-
         }
 
         }
