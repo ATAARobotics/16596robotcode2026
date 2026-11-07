@@ -4,7 +4,8 @@ public class Constant {
     // Speed Ratio Settings
     public static final double DRIVER_SPEED_RATIO = 1.0;  // Use this to slow down robot
     public static final double OPER_SPEED_RATIO = DRIVER_SPEED_RATIO * 0.567;
-    public static final double TURN_RATIO = 1.0; // use this to slow turn rate1q
+    public static final double TURN_RATIO = 1.0;
+    public static final double MAX_TURN_SPEED = 1.0;
     //
     // INTAKE
     public static double INTAKE_SPEED_PICKUP = 4.0;//was 1.0
@@ -15,11 +16,10 @@ public class Constant {
     public static double SHOOTER_KD = 0.0;
     public static double SHOOTER_MAX = 2100;
     // FEEDER
-    public static double FEEDER_SPD_CORRECTING = -0.8;//was -0.6
-    public static double FEEDER_SPD_HOLDING = -0.1;
-    public static double FEEDER_SPD_PICKUP = -0.2;
-    public static double FEEDER_SPD_NEAR = 1.0;//was .75
-    public static double FEEDER_SPD_FAR = 0.85;//was.58
+    public static double FEEDER_SPEED_CORRECTING = -0.8;//was -0.6
+    public static double FEEDER_SPEED_HOLDING = -0.1;
+    public static double FEEDER_SPEED_PICKUP = -0.2;
+
 
     public static final double FEEDER_SPEED_FWD = -1.0;
     public static final double FEEDER_SPEED_REVERSE = 1.0;
@@ -56,7 +56,7 @@ public class Constant {
     public static double AUTO_X_DISTANCE_ERROR = 5.67;
     public static final double AUTO_XPID_Kp = 0.00167;
     public static final double AUTO_YPID_Kp = 0.00267;
-    public static double AUTO_HEADING_ERROR_Tolerance = 1.5; // Degrees
+    public static double AUTO_HEADING_ERROR_TOLERANCE = 1.5; // Degrees
     public static final double AUTO_HEADING_Kp = 0.001;
 
     // LIMELIGHT
