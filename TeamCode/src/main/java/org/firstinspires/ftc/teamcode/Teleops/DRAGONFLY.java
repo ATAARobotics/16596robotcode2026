@@ -16,14 +16,10 @@ import org.firstinspires.ftc.teamcode.Utils.Controller;
 @Config
 @TeleOp(name = "DRAGONFLY")
 public class DRAGONFLY extends OpMode {
-
   //  public DriveTrain2027 driveTrain;
     public Mechanisms2027 mechanisms;
     public Controller controller;
-
     private JoinedTelemetry joinedTelemetry;
-
-
     public GamepadEx driver = null;
     public GamepadEx operator = null;
 
@@ -53,14 +49,18 @@ public class DRAGONFLY extends OpMode {
     }//start
 
     public void loop(){
-        // Update Section
-
-        // Body Section
+        // Read Gamepad inputs
         controller.updateController(operator);
+        controller.updateController(driver);
+
+        // Process Controls
         OperatorControls();
-        // End Section
+
+        // Execute Outputs
         mechanisms.loop();
         //driveTrain.loop();
+
+        //Publish Telemetry
         AddTelemetryData();
         joinedTelemetry.update();
 
@@ -70,10 +70,10 @@ public class DRAGONFLY extends OpMode {
         // Configure Operator Controller Buttons
         if (gamepad2.b) {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_1;
-            telemetry.addData("b","is pressed");
+
         } else {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_3;
-            telemetry.addData("b","is not pressed");
+
 
         }
 
