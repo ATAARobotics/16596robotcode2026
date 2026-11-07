@@ -98,7 +98,7 @@ public class Mechanisms2027 {
     }
 
     public boolean canLaunch(double launchSpeed) {
-        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX);
+        return this.canLaunch(launchSpeed,0.0);
     }
 
     //================================ Sensor Functions ============================================
