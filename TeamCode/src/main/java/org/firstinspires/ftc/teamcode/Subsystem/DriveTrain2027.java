@@ -12,8 +12,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.Mechanisms.C2;
+
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.Utils.Constant;
 
 @Config
 public class DriveTrain2027 {
@@ -55,7 +56,7 @@ public class DriveTrain2027 {
     public PIDController xControl = null;
     public PIDController yControl = null;
     public double headingCorrection = 0;
-    public double headingSetPoint = C2.FORWARD;
+    public double headingSetPoint = Constant.DRIVE_FORWARD;
     public double heading;
     public boolean onHeading = false;
     private double currentSpeed = 0.0;
@@ -65,25 +66,19 @@ public class DriveTrain2027 {
     double ySpeed = 0.0;
     public double headingError;
     public double turnSpeed = 0.0;
-    private double maxTurnSpeed = 1.0;
     public boolean manual_FC_turning = false;
 
     // Shooter Configuration
-    public final MotorEx PollenShooter; //port 1 -expansion hub
-    public final MotorEx NectarShooter;
-    public final MotorEx feeder; //port 0-expansion hub
-    public final Motor intake; //port 1-expansion hub
+    public final MotorEx ShooterRight; //port 1 -expansion hub
+    public final MotorEx ShooterLeft;
+    public final MotorEx Feeder; //port 0-expansion hub
+    public final Motor Intake; //port 1-expansion hub
+
     private double shooterModeStartTime = 0.0;
     private ShooterMode lastShooterMode = ShooterMode.shooterOFF;
     public ShooterMode CurrentShooterMode = ShooterMode.shooterOFF;
     private double xOut = 0.0;
     private double yOut = 0.0;
-
-    //SHOOTER 2027
-
-
-
-
 
     public DriveTrain2027(HardwareMap hwMap)
     {
@@ -95,12 +90,12 @@ public class DriveTrain2027 {
         rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         // Pollen Shooter assignment
-        PollenShooter = new MotorEx(hwMap, "pollen_shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        NectarShooter = new MotorEx(hwMap, "nectar_shooter");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        ShooterRight = new MotorEx(hwMap, "shooter_right");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        ShooterLeft = new MotorEx(hwMap, "shooter_left");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
 
-        feeder = new MotorEx(hwMap, "feeder");
+        Feeder = new MotorEx(hwMap, "feeder");
         // Intake assignment
-        intake = new Motor(hwMap, "intake");
+        Intake = new Motor(hwMap, "intake");
         // Servo assignment
 
 
@@ -112,7 +107,7 @@ public class DriveTrain2027 {
         //}
         //Drive Motor Configuration
         headingControl = new PIDController(headingpid.p, headingpid.i, headingpid.d);
-        headingControl.setTolerance(C2.HEADING_ERROR_Tolerance);// was 3 increased to see if affects spinnning ..cbw
+        headingControl.setTolerance(Constant.AUTO_HEADING_ERROR_TOLERANCE);// was 3 increased to see if affects spinnning ..cbw
         xControl = new PIDController(xpid.p, xpid.i, xpid.d);//FOR AUTO
         yControl = new PIDController(ypid.p, ypid.i, ypid.d);//For AUTO
         // redundant as default is brake mode
@@ -127,25 +122,25 @@ public class DriveTrain2027 {
         leftBackDrive.setInverted(true);
         // odometer initializing
         odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
-        odometer.setOffsets(C2.ODOMETER_X_OFFSET, C2.ODOMETER_Y_OFFSET);
+        odometer.setOffsets(Constant.ODOMETER_X_OFFSET, Constant.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
         //set up for flywheel shooter
-       PollenShooter.setRunMode(Motor.RunMode.VelocityControl);
+        ShooterRight.setRunMode(Motor.RunMode.VelocityControl);
         //PollenShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        PollenShooter.setInverted(true);
-        PollenShooter.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
+        ShooterRight.setInverted(true);
+        ShooterRight.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);     //coefficients are. kp, ki, and kd
 
-        NectarShooter.setRunMode(Motor.RunMode.VelocityControl);
+        ShooterLeft.setRunMode(Motor.RunMode.VelocityControl);
         //NectarShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        NectarShooter.setInverted(true);
-        NectarShooter.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);
+        ShooterLeft.setInverted(true);
+        ShooterLeft.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
         // Feeder configuration
-        feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        feeder.setInverted(false);
+        Feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        Feeder.setInverted(false);
         // Intake configuration
-        intake.setInverted(true);
+        Intake.setInverted(true);
 
 
     }// end of init()
@@ -168,7 +163,7 @@ public class DriveTrain2027 {
         if (!manual_FC_turning) {
             headingError = headingErrorDeg(heading, headingSetPoint);
             headingControl.setSetPoint(0);
-            onHeading = headingWithinTolerance(heading, headingSetPoint, C2.HEADING_ERROR_Tolerance);
+            onHeading = headingWithinTolerance(heading, headingSetPoint, Constant.AUTO_HEADING_ERROR_TOLERANCE);
             if (!onHeading){
                 headingCorrection = -headingControl.calculate(headingError);
                 double kS_turn = 0.2;   // tune separately
@@ -203,10 +198,10 @@ public class DriveTrain2027 {
     }
 
     // Wrap any angle to (-180, 180]
-    public static double wrapDeg180(double a) {
-        while (a > 180) a -= 360;
-        while (a <= -180) a += 360;
-        return a;
+    public static double wrapDeg180(double angle) {
+        while (angle > 180) angle -= 360;
+        while (angle <= -180) angle += 360;
+        return angle;
     }
     public boolean headingWithinTolerance(double currentDeg,
                                           double targetDeg,
@@ -267,27 +262,28 @@ public class DriveTrain2027 {
     }
 
     public boolean canLaunch(double launchSpeed,  double FudgeFactor){
-        return PollenShooter.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX) + FudgeFactor;
+        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX) + FudgeFactor;
     }
     public boolean canLaunch(double launchSpeed){
-        return PollenShooter.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX);
+        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX);
     }
 
-        public void setDrivemodefieldcentric(){
+    public void setDrivemodefieldcentric(){
         this.drivemodefieldcentric = true;
     }
+
     public void setDrivemoderobotcentric(){
         this.drivemodefieldcentric = false;
         manual_FC_turning = false;
     }
     public void turn(double turnDirection){
         // Check turnDirection speed for max
-        if ((Math.abs(turnDirection) <= this.maxTurnSpeed)) {
+        if ((Math.abs(turnDirection) <= Constant.MAX_TURN_SPEED)) {
             this.turnSpeed = turnDirection;
         } else if (turnDirection >= 0.0) {
-            this.turnSpeed = this.maxTurnSpeed;
+            this.turnSpeed = Constant.MAX_TURN_SPEED;
         } else {
-            this.turnSpeed = -this.maxTurnSpeed;
+            this.turnSpeed = -Constant.MAX_TURN_SPEED;
         }
     }
     public enum ShooterMode {
