@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-import org.firstinspires.ftc.teamcode.Mechanisms.C2;
+import org.firstinspires.ftc.teamcode.Utils.Constant;
 
 @Config
 public class Mechanisms2027 {
@@ -65,12 +65,12 @@ public class Mechanisms2027 {
         ShooterRight.setRunMode(Motor.RunMode.VelocityControl);
         ShooterRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         ShooterRight.setInverted(true);
-        ShooterRight.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
+        ShooterRight.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);     //coefficients are. kp, ki, and kd
 
         ShooterLeft.setRunMode(Motor.RunMode.VelocityControl);
         ShooterLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         ShooterLeft.setInverted(true);
-        ShooterLeft.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);
+        ShooterLeft.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
 
         Feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         Feeder.setInverted(false);
@@ -90,11 +90,11 @@ public class Mechanisms2027 {
     }
 
     public boolean canLaunch(double launchSpeed, double FudgeFactor) {
-        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX) + FudgeFactor;
+        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX) + FudgeFactor;
     }
 
     public boolean canLaunch(double launchSpeed) {
-        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * C2.FLYWHEEL_MAX);
+        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX);
     }
 
 
