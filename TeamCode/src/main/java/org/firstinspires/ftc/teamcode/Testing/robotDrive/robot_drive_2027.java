@@ -145,8 +145,8 @@ robot_drive_2027 extends OpMode {
         driveTrain.setNow(currentTime);
         driver.readButtons();
         operator.readButtons();
-        speed = driveTrain.PollenShooter.getCorrectedVelocity();
-        speed = driveTrain.NectarShooter.getCorrectedVelocity();
+        //speed = driveTrain.PollenShooter.getCorrectedVelocity();
+        //speed = driveTrain.NectarShooter.getCorrectedVelocity();
     }
     //--------------------- Driver Controls ----------------------------------------------------------
 

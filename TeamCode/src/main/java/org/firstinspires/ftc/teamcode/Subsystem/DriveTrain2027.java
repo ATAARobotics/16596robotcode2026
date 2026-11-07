@@ -367,8 +367,8 @@ public class DriveTrain2027 {
 
     // Shooter Helper Methods/Functions
     public void shooterMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed, double feed1Speed){
-        feeder.set(feederSpeed);
-        intake.set(intakeSpeed);
+        Feeder.set(feederSpeed);
+        Intake.set(intakeSpeed);
         //PollenShooter.set(flywheelSpeed);
         //NectarShooter.set(flywheelSpeed);
     }

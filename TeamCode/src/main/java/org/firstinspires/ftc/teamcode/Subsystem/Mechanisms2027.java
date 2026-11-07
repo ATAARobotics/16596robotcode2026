@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Subsystem;
 
+import static org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027.Mode.MODE_2;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -36,7 +38,13 @@ public class Mechanisms2027 {
 
     boolean BallDetected;
     Double ColorThreshold = 0.05;
+    private double now = 0.0;
+    private double shooterModeStartTime = 0.0;
 
+
+
+    private DriveTrain2027.ShooterMode lastShooterMode = DriveTrain2027.ShooterMode.shooterOFF;
+    public DriveTrain2027.ShooterMode CurrentShooterMode = DriveTrain2027.ShooterMode.shooterOFF;
 
 
 
@@ -91,9 +99,25 @@ public class Mechanisms2027 {
 
     public void loop() {
         switch (mode){
-            case MODE_1:
+            case MODE_1: //Intaking
+                operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_PICKUP, Constant.FEEDER_SPEED_PICKUP);
                 break;
-            case MODE_2:
+
+
+            case MODE_2: //Shooting
+                if (!ShooterModeActiveForMoreThan(Constant.CORRECTION_DELAY)) { // input delay seconds
+                    operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_HOLDING, Constant.FEEDER_SPEED_CORRECTING);
+                } else {
+                    operatorMotors(Constant.SHOOTER_SPEED_SHOOTING, Constant.INTAKE_SPEED_HOLDING, Constant.FEEDER_SPEED_CORRECTING);
+                    if (canLaunch(Constant.SHOOTER_SPEED_SHOOTING)) {
+                        operatorMotors(Constant.SHOOTER_SPEED_SHOOTING, Constant.INTAKE_SPEED_PICKUP, Constant.FEEDER_SPEED_PICKUP);
+                    }
+                }
+                break;
+
+            case MODE_3://Off
+            default:
+                operatorMotors(0,0,0);
                 break;
         }
     }
@@ -123,6 +147,25 @@ public class Mechanisms2027 {
     // Class Types
     public enum Mode {
         MODE_1,
-        MODE_2
+        MODE_2,
+        MODE_3
+    }
+    public void setNow(double nowSeconds) {
+        now = nowSeconds;
+    }
+    private void onShooterModeChange() {
+        shooterModeStartTime = now;
+
+    }
+    public boolean ShooterModeActiveForMoreThan(double seconds) {
+        return (now - shooterModeStartTime) >= seconds;
+    }
+
+
+    public void operatorMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed){
+        Feeder.set(feederSpeed);
+        Intake.set(intakeSpeed);
+        ShooterRight.set(flywheelSpeed);
+        ShooterLeft.set(flywheelSpeed);
     }
 }
