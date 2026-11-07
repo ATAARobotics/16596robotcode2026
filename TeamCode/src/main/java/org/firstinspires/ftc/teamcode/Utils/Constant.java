@@ -16,7 +16,7 @@ public class Constant {
 
     //================================ INTAKE ================================================
     public static double INTAKE_SPEED_PICKUP = 4.0;//was 1.0
-    public static double INTAKE_SPEED_HOLDING = 0.1;
+    public static double INTAKE_SPEED_HOLDING = 1.0;
 
 
     //================================ SHOOTER ================================================
@@ -24,14 +24,14 @@ public class Constant {
     public static double SHOOTER_KI = 0.00;
     public static double SHOOTER_KD = 0.0;
     public static double SHOOTER_MAX = 2100;
-    public static double SHOOTER_SPEED_HOLDING = 0.0;
-    public static double SHOOTER_SPEED_SHOOTING = 0.0;
+    public static double SHOOTER_SPEED_HOLDING = 1.0;
+    public static double SHOOTER_SPEED_SHOOTING = 1.0;
 
 
     //================================ FEEDER ================================================
     public static double FEEDER_SPEED_CORRECTING = -0.8;//was -0.6
     public static double FEEDER_SPEED_HOLDING = -0.1;
-    public static double FEEDER_SPEED_PICKUP = -0.2;
+    public static double FEEDER_SPEED_PICKUP = -0.5;
 
 
 
