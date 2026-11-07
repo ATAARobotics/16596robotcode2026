@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Utils.Constant;
 @Config
 public class Mechanisms2027 {
     public HardwareMap hwMap;
-    private Mode mode;
+    public static Mode ShooterMode;
     //================================ Motors ============================================
     public final MotorEx ShooterRight; //port 1 -expansion hub
     public final MotorEx ShooterLeft;
@@ -40,11 +40,6 @@ public class Mechanisms2027 {
     Double ColorThreshold = 0.05;
     private double now = 0.0;
     private double shooterModeStartTime = 0.0;
-
-
-
-    private DriveTrain2027.ShooterMode lastShooterMode = DriveTrain2027.ShooterMode.shooterOFF;
-    public DriveTrain2027.ShooterMode CurrentShooterMode = DriveTrain2027.ShooterMode.shooterOFF;
 
 
 
@@ -98,7 +93,7 @@ public class Mechanisms2027 {
     }
 
     public void loop() {
-        switch (mode){
+        switch (ShooterMode){
             case MODE_1: //Intaking
                 operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_PICKUP, Constant.FEEDER_SPEED_PICKUP);
                 break;
@@ -141,8 +136,8 @@ public class Mechanisms2027 {
         return ShooterProximity.getDistance(DistanceUnit.CM);
     }
 
-    public Mode getMode(){return this.mode;}
-    public void setMode(Mode mode){this.mode = mode;}
+    public Mode getMode(){return this.ShooterMode;}
+    public void setMode(Mode mode){this.ShooterMode = mode;}
 
     // Class Types
     public enum Mode {

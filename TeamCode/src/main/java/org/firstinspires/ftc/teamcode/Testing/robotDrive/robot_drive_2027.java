@@ -20,11 +20,12 @@ import org.firstinspires.ftc.teamcode.Subsystem.DriveTrain2027;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 
-@Configurable
-@Config
+//@Configurable
+//@Config
 @TeleOp(name = "robot_drive_2027",group = "_0A")
 public class
-robot_drive_2027 extends OpMode {
+robot_drive_2027  {
+    /*
     private boolean testMode = true;  // Set to false during comp to disable dashboard and setpoints/config buttons
     private final ElapsedTime runtime = new ElapsedTime();
     private DriveTrain2027 driveTrain;
@@ -310,4 +311,6 @@ robot_drive_2027 extends OpMode {
                 indicator.setColor(Constants2027.RGB_Light.WHITE);
         }
     }
+
+     */
 }
