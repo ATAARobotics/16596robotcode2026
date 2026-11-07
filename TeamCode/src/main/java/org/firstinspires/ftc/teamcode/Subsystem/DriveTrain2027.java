@@ -1,12 +1,10 @@
-package org.firstinspires.ftc.teamcode.Mechanisms;
+package org.firstinspires.ftc.teamcode.Subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
@@ -14,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.Mechanisms.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.GoBildaPinpointDriver;
 
 @Config
@@ -134,12 +133,12 @@ public class DriveTrain2027 {
 
         //set up for flywheel shooter
        PollenShooter.setRunMode(Motor.RunMode.VelocityControl);
-        PollenShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        //PollenShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         PollenShooter.setInverted(true);
         PollenShooter.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);     //coefficients are. kp, ki, and kd
 
         NectarShooter.setRunMode(Motor.RunMode.VelocityControl);
-        NectarShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        //NectarShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         NectarShooter.setInverted(true);
         NectarShooter.setVeloCoefficients(C2.FLYWHEEL_KP, C2.FLYWHEEL_KI, C2.FLYWHEEL_KD);
         // Feeder configuration
@@ -374,8 +373,8 @@ public class DriveTrain2027 {
     public void shooterMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed, double feed1Speed){
         feeder.set(feederSpeed);
         intake.set(intakeSpeed);
-        PollenShooter.set(flywheelSpeed);
-        NectarShooter.set(flywheelSpeed);
+        //PollenShooter.set(flywheelSpeed);
+        //NectarShooter.set(flywheelSpeed);
     }
     public void setNow(double nowSeconds) {
         now = nowSeconds;
