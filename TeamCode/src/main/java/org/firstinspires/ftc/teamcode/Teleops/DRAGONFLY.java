@@ -72,7 +72,7 @@ public class DRAGONFLY extends OpMode {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.PICKUP;
         } else if (gamepad2.a) {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.SHOOTING;
-        }else {
+        } else {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.IDLEROBOT;
         }
 
@@ -84,7 +84,4 @@ public class DRAGONFLY extends OpMode {
     }// Print Telemetry
 
 
-}// OpMode End Bracket
-
-
-// DRAGONFLY
+}// DRAGONFLY OpMode
