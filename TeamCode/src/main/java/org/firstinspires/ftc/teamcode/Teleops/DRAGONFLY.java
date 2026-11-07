@@ -7,9 +7,9 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Mechanisms.Old.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Utils.Constant;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants2027;
-import org.firstinspires.ftc.teamcode.Subsystem.DriveTrain2027;
 import org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027;
 import org.firstinspires.ftc.teamcode.Utils.Controller;
 
@@ -19,14 +19,15 @@ import org.firstinspires.ftc.teamcode.Utils.Controller;
 @TeleOp(name = "DRAGONFLY")
 public class DRAGONFLY extends OpMode {
 
-    public DriveTrain2027 driveTrain;
+  //  public DriveTrain2027 driveTrain;
     public Mechanisms2027 mechanisms;
+
     private JoinedTelemetry joinedTelemetry;
 
 
     public void init(){
-        driveTrain = new DriveTrain2027(hardwareMap);
-        driveTrain.init();
+       // driveTrain = new DriveTrain2027(hardwareMap);
+       // driveTrain.init();
 
         mechanisms = new Mechanisms2027(hardwareMap);
         mechanisms.init();
@@ -51,8 +52,24 @@ public class DRAGONFLY extends OpMode {
 
         // End Section
         mechanisms.loop();
-        driveTrain.loop();
+        //driveTrain.loop();
         joinedTelemetry.update();
+
     }//loop
 
-}// DRAGONFLY
+    private void OperatorControls() {
+
+        // could also be in loop, but idk
+        if (gamepad2.b) {
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_1;
+        } else {
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_3;
+
+        }
+
+        }
+        // Set shooting mode
+
+        }
+
+// DRAGONFLY

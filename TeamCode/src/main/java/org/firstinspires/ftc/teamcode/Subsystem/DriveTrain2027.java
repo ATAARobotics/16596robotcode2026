@@ -16,11 +16,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Utils.Constant;
 
-@Config
+//@Config /*
 public class DriveTrain2027 {
-    // Basic config
+   /* // Basic config
     public HardwareMap hwMap;
     public GoBildaPinpointDriver odometer;
+
     public boolean autoEnabled = false;
     private double now = 0.0;
     public boolean modeRED = false;
@@ -464,4 +465,6 @@ public class DriveTrain2027 {
         currentLocation.y = -pos.getY(DistanceUnit.MM);
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
+
+    */
 }

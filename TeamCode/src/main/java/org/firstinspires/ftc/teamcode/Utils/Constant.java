@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Utils;
 
+import com.bylazar.configurables.annotations.Configurable;
+
+@Configurable // Needed for Panels
+
 public class Constant {
 
 
