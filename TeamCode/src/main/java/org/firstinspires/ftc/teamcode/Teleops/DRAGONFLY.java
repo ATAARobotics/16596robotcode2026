@@ -8,9 +8,6 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Mechanisms.Old.DriveTrainBasic2;
-import org.firstinspires.ftc.teamcode.Utils.Constant;
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants2027;
 import org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027;
 import org.firstinspires.ftc.teamcode.Utils.Controller;
 
@@ -19,14 +16,10 @@ import org.firstinspires.ftc.teamcode.Utils.Controller;
 @Config
 @TeleOp(name = "DRAGONFLY")
 public class DRAGONFLY extends OpMode {
-
   //  public DriveTrain2027 driveTrain;
     public Mechanisms2027 mechanisms;
     public Controller controller;
-
     private JoinedTelemetry joinedTelemetry;
-
-
     public GamepadEx driver = null;
     public GamepadEx operator = null;
 
@@ -56,32 +49,39 @@ public class DRAGONFLY extends OpMode {
     }//start
 
     public void loop(){
-        // Update Section
-
-        // Body Section
+        // Read Gamepad inputs
         controller.updateController(operator);
+        controller.updateController(driver);
+
+        // Process Controls
         OperatorControls();
-        // End Section
+
+        // Execute Outputs
         mechanisms.loop();
         //driveTrain.loop();
+
+        //Publish Telemetry
+        AddTelemetryData();
         joinedTelemetry.update();
-        telemetry.addData("Mode:", Mechanisms2027.ShooterMode);
+
     }//loop
 
     private void OperatorControls() {
-        // could also be in loop, but idk
+        // Configure Operator Controller Buttons
         if (gamepad2.b) {
-            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_1;
-            telemetry.addData("b","is pressed");
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.PICKUP;
+        } else if (gamepad2.a) {
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.SHOOTING;
         } else {
-            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_3;
-            telemetry.addData("b","is not pressed");
-
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.IDLEROBOT;
         }
 
-        }
-        // Set shooting mode
+    }//Operator Controls End Bracket
 
-        }
+    public void AddTelemetryData() {
+        telemetry.addData("Mode:", Mechanisms2027.ShooterMode);
 
-// DRAGONFLY
+    }// Print Telemetry
+
+
+}// DRAGONFLY OpMode

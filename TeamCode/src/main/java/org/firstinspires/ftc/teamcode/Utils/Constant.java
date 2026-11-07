@@ -25,7 +25,7 @@ public class Constant {
     public static double SHOOTER_KD = 0.0;
     public static double SHOOTER_MAX = 2100;
     public static double SHOOTER_SPEED_HOLDING = 1.0;
-    public static double SHOOTER_SPEED_SHOOTING = 1.0;
+    public static double SHOOTER_SPEED_SHOOTING = -1.0;
 
 
     //======================= FEEDER ================================
