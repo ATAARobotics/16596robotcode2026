@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Utils.Constant;
 @Config
 public class Mechanisms2027 {
     public HardwareMap hwMap;
-    public static Mode ShooterMode;
+    public static Mode ShooterMode = Mode.MODE_3;
     //================================ Motors ============================================
     public final MotorEx ShooterRight; //port 1 -expansion hub
     public final MotorEx ShooterLeft;

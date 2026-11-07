@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Teleops;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -21,14 +22,19 @@ public class DRAGONFLY extends OpMode {
 
   //  public DriveTrain2027 driveTrain;
     public Mechanisms2027 mechanisms;
+    public Controller controller;
 
     private JoinedTelemetry joinedTelemetry;
+
+
+    public GamepadEx driver = new GamepadEx(gamepad1);
+    public GamepadEx operator = new GamepadEx(gamepad2);
 
 
     public void init(){
        // driveTrain = new DriveTrain2027(hardwareMap);
        // driveTrain.init();
-
+        controller = new Controller();
         mechanisms = new Mechanisms2027(hardwareMap);
         mechanisms.init();
 
@@ -43,13 +49,14 @@ public class DRAGONFLY extends OpMode {
     }// init
 
     public void start(){
+
     }//start
 
     public void loop(){
         // Update Section
 
         // Body Section
-
+        controller.updateController(operator);
         // End Section
         mechanisms.loop();
         //driveTrain.loop();
