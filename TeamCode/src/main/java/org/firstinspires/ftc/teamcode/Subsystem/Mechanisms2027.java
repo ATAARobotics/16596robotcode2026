@@ -136,8 +136,14 @@ public class Mechanisms2027 {
         return ShooterProximity.getDistance(DistanceUnit.CM);
     }
 
-    public Mode getMode(){return this.ShooterMode;}
-    public void setMode(Mode mode){this.ShooterMode = mode;}
+    public Mode getMode(){return ShooterMode;}
+
+    public void setMode(Mode mode){
+        if (mode != ShooterMode) {
+            ShooterMode = mode;
+            onShooterModeChange();
+            }
+        }
 
     // Class Types
     public enum Mode {
