@@ -72,8 +72,11 @@ public class DRAGONFLY extends OpMode {
         // could also be in loop, but idk
         if (gamepad2.b) {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_1;
+            telemetry.addData("b","is pressed");
         } else {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.MODE_3;
+            telemetry.addData("b","is not pressed");
+
         }
 
         }
