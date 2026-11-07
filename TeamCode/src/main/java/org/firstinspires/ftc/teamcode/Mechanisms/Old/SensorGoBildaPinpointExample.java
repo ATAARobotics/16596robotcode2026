@@ -28,7 +28,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.CAITelemetry;
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
 
 import java.util.Locale;
 

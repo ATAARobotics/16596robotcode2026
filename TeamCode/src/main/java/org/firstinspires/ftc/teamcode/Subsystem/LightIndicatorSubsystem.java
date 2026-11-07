@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Subsystem;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
+import org.firstinspires.ftc.teamcode.Mechanisms.Old.Constants;
 
 public class LightIndicatorSubsystem extends SubsystemBase {
     private final SimpleServo indicator;

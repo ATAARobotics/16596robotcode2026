@@ -42,7 +42,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.CAITelemetry;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.DriveTrainBasic;
 
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
+import org.firstinspires.ftc.teamcode.Mechanisms.Old.Constants;
 
 import java.util.Locale;
 

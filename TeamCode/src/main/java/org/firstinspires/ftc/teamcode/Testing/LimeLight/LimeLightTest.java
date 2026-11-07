@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
+import org.firstinspires.ftc.teamcode.Mechanisms.Old.Constants;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 // The following libraries are special for LimeLight
 import com.qualcomm.hardware.limelightvision.LLResult;

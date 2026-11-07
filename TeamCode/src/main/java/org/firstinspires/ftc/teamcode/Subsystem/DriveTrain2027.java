@@ -301,7 +301,7 @@ public class DriveTrain2027 {
             // shooterMotors: flywheelSpeed intakeSpeed feederSpeed feed1/2Speed
             case shooterSHOOTINGfarBlue:
                 // shooter delayed for feeder reverse to correct ball position
-                if (!shooterModeActiveForMoreThan(C2.CORRECTION_DELAY)) { // input delay seconds
+                if (!shooterModeActiveForMoreThan(C.CORRECTION_DELAY)) { // input delay seconds
                     shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
                 } else {
                     shooterMotors(C2.FLYWHEEL_SPD_FAR_BLUE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);

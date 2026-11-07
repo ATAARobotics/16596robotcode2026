@@ -11,12 +11,10 @@ import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.Mechanisms.Constants;
-import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
+import org.firstinspires.ftc.teamcode.Mechanisms.Old.Constants;
 import org.firstinspires.ftc.teamcode.Utils.Logger;
 
 import java.util.Locale;

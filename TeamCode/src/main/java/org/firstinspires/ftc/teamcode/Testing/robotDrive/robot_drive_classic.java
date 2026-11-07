@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Mechanisms.C2;
+import org.firstinspires.ftc.teamcode.Mechanisms.Old.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
