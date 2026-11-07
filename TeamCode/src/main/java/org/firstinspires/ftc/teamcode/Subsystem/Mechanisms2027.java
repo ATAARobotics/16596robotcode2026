@@ -136,8 +136,14 @@ public class Mechanisms2027 {
         return ShooterProximity.getDistance(DistanceUnit.CM);
     }
 
-    public Mode getMode(){return this.ShooterMode;}
-    public void setMode(Mode mode){this.ShooterMode = mode;}
+    public Mode getMode(){return ShooterMode;}
+
+    public void setMode(Mode mode){
+        if (mode != ShooterMode) {
+            ShooterMode = mode;
+            onShooterModeChange();
+            }
+        }
 
     // Class Types
     public enum Mode {
@@ -157,10 +163,10 @@ public class Mechanisms2027 {
     }
 
 
-    public void operatorMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed){
+    public void operatorMotors(double shooterSpeed, double intakeSpeed, double feederSpeed){
         Feeder.set(feederSpeed);
         Intake.set(intakeSpeed);
-        ShooterRight.set(flywheelSpeed);
-        ShooterLeft.set(flywheelSpeed);
+        ShooterRight.set(shooterSpeed);
+        ShooterLeft.set(shooterSpeed);
     }
 }
