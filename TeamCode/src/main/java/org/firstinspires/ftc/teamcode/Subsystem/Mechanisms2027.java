@@ -18,74 +18,38 @@ import org.firstinspires.ftc.teamcode.Utils.Constant;
 
 @Config
 public class Mechanisms2027 {
-    public HardwareMap hwMap;
-    public static Mode ShooterMode = Mode.IDLEROBOT;
-    //================================ Motors ============================================
-    public final MotorEx ShooterRight; //port 1 -expansion hub
-    public final MotorEx ShooterLeft;
-    public final MotorEx Feeder; //port 0-expansion hub
-    public final Motor Intake; //port 1-expansion hub
+    private HardwareMap hwMap;
+    private static Mode ShooterMode = Mode.IDLEROBOT;
+    //========== Motors =============================================
+    private MotorEx ShooterRight; //port 1 -expansion hub
+    private MotorEx ShooterLeft;
+    private MotorEx Feeder; //port 0-expansion hub
+    private Motor Intake; //port 1-expansion hub
 
-    //================================ Servos ============================================
-    public Servo ShooterNectarLift;
-    public Servo ShooterRamp;
-    public Servo ShooterStopper;
-
-
-    //================================ Sensors ============================================
-    public NormalizedColorSensor ShooterColorSensor;
-    public DistanceSensor ShooterProximity;
-
-    boolean BallDetected;
-    Double ColorThreshold = 0.05;
+    //========== Servos =============================================
+    private Servo ShooterNectarLift;
+    private Servo ShooterRamp;
+    private Servo ShooterStopper;
+    //========== Sensors ============================================
+    private NormalizedColorSensor ShooterColorSensor;
+    private DistanceSensor ShooterProximity;
+    //========== Time ===============================================
     private double now = 0.0;
     private double shooterModeStartTime = 0.0;
 
 
 
     public Mechanisms2027(HardwareMap hwMap) {
+        this.hwMap = hwMap;
         //================================ Motors ============================================
-
-        ShooterRight = new MotorEx(hwMap, "ShooterRight");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        ShooterLeft = new MotorEx(hwMap, "ShooterLeft");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        Feeder = new MotorEx(hwMap, "Feeder");
-        Intake = new MotorEx(hwMap, "Intake");
-
+        assignMotors();
         //================================ Servos ============================================
-
-
-        ShooterNectarLift = hwMap.get(Servo.class, "ShooterNectarLift");
-        ShooterRamp = hwMap.get(Servo.class, "ShooterRamp");
-        ShooterStopper = hwMap.get(Servo.class, "ShooterStopper");
-
+        assignServos();
         //================================ Sensors ============================================
-
-        ShooterColorSensor = hwMap.get(NormalizedColorSensor.class, "ShooterColorSensor");
-        ShooterProximity = hwMap.get(DistanceSensor.class, "ShooterProximity");
-
-
-
+        assignSensors();
     }
-
     public void init() {
-
-        ShooterRight.setRunMode(Motor.RunMode.VelocityControl);
-        ShooterRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        ShooterRight.setInverted(true);
-        ShooterRight.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);     //coefficients are. kp, ki, and kd
-
-        ShooterLeft.setRunMode(Motor.RunMode.VelocityControl);
-        ShooterLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        ShooterLeft.setInverted(false);
-        ShooterLeft.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
-
-        Feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        Feeder.setInverted(false);
-
-        Intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        Intake.setInverted(true);
-
-
+        initializeMotors();
     }// end of init()
 
     public void start() {
@@ -94,11 +58,10 @@ public class Mechanisms2027 {
 
     public void loop() {
         switch (ShooterMode){
-            case PICKUP: //Intaking
+            case PICKUP: // Intaking
                 operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_PICKUP, Constant.FEEDER_SPEED_PICKUP);
                 break;
-
-            case SHOOTING: //Shooting
+            case SHOOTING: // Shooting
                 if (!ShooterModeActiveForMoreThan(Constant.CORRECTION_DELAY)) { // input delay seconds
                     operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_HOLDING, Constant.FEEDER_SPEED_CORRECTING);
                 } else {
@@ -108,64 +71,104 @@ public class Mechanisms2027 {
                     }
                 }
                 break;
-
-            case IDLEROBOT://Off
+            case IDLEROBOT:// Off
             default:
                 operatorMotors(0,0,0);
                 break;
         }
     }
-
-    public boolean canLaunch(double launchSpeed, double FudgeFactor) {
-        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX) + FudgeFactor;
-    }
-
+    // canLaunch Overloading
     public boolean canLaunch(double launchSpeed) {
         return this.canLaunch(launchSpeed,0.0);
     }
+    public boolean canLaunch(double launchSpeed, double FudgeFactor) {
+        return this.ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX) + FudgeFactor;
+    }
 
-    //================================ Sensor Functions ============================================
+    //========== Sensor Functions ===================================
 
     public boolean detectNectar () {
-        NormalizedRGBA colors = ShooterColorSensor.getNormalizedColors();
-        return (((colors.red > colors.green && colors.red > colors.blue) || (colors.blue > colors.green && colors.blue > colors.red)) && (colors.red > ColorThreshold || colors.blue > ColorThreshold || colors.green > ColorThreshold));
+        NormalizedRGBA colors = this.ShooterColorSensor.getNormalizedColors();
+        return (((colors.red > colors.green
+                && colors.red > colors.blue)
+                || (colors.blue > colors.green
+                && colors.blue > colors.red))
+                && (colors.red > Constant.COLOR_THRESHOLD
+                || colors.blue > Constant.COLOR_THRESHOLD
+                || colors.green > Constant.COLOR_THRESHOLD));
     }
 
+    //========== Class Get Sections =================================
     public double getDistance (){
-        return ShooterProximity.getDistance(DistanceUnit.CM);
+        return this.ShooterProximity.getDistance(DistanceUnit.CM);
     }
-
-    public Mode getMode(){return ShooterMode;}
-
+    public Mode getMode(){return this.ShooterMode;}
+    //========== Class Set Section ==================================
     public void setMode(Mode mode){
         if (mode != ShooterMode) {
             ShooterMode = mode;
             onShooterModeChange();
             }
         }
-
-    // Class Types
+    public void setNow(double nowSeconds) {
+        this.now = nowSeconds;
+    }
+    //========== Class Types ========================================
     public enum Mode {
         PICKUP,
         SHOOTING,
         IDLEROBOT
     }
-    public void setNow(double nowSeconds) {
-        now = nowSeconds;
-    }
+    //========== Class Functions ====================================
     private void onShooterModeChange() {
-        shooterModeStartTime = now;
-
+        this.shooterModeStartTime = this.now;
     }
-    public boolean ShooterModeActiveForMoreThan(double seconds) {
-        return (now - shooterModeStartTime) >= seconds;
+    private boolean ShooterModeActiveForMoreThan(double seconds) {
+        return (this.now - this.shooterModeStartTime) >= seconds;
     }
+    private void operatorMotors(double shooterSpeed, double intakeSpeed, double feederSpeed){
+        this.Feeder.set(feederSpeed);
+        this.Intake.set(intakeSpeed);
+        this.ShooterRight.set(shooterSpeed);
+        this.ShooterLeft.set(shooterSpeed);
+    }
+    //========== Assign functions ===================================
+    private void assignMotors(){
+        // see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        this.ShooterRight = new MotorEx(this.hwMap, "ShooterRight");
+        // see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
+        this.ShooterLeft = new MotorEx(this.hwMap, "ShooterLeft");
+        this.Feeder = new MotorEx(this.hwMap, "Feeder");
+        this.Intake = new MotorEx(this.hwMap, "Intake");
+    }
+    private void assignServos() {
+        this.ShooterNectarLift = this.hwMap.get(Servo.class, "ShooterNectarLift");
+        this.ShooterRamp = this.hwMap.get(Servo.class, "ShooterRamp");
+        this.ShooterStopper = this.hwMap.get(Servo.class, "ShooterStopper");
+    }
+    private void assignSensors(){
+        ShooterColorSensor = hwMap.get(NormalizedColorSensor.class, "ShooterColorSensor");
+        ShooterProximity = hwMap.get(DistanceSensor.class, "ShooterProximity");
+    }
+    // Initialize functions
+    private void  initializeMotors(){
+        // Shooters
+        this.ShooterRight.setRunMode(Motor.RunMode.VelocityControl);
+        this.ShooterRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        this.ShooterRight.setInverted(true);
+        //coefficients are: kp, ki, and kd
+        this.ShooterRight.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
 
-
-    public void operatorMotors(double shooterSpeed, double intakeSpeed, double feederSpeed){
-        Feeder.set(feederSpeed);
-        Intake.set(intakeSpeed);
-        ShooterRight.set(shooterSpeed);
-        ShooterLeft.set(shooterSpeed);
+        this.ShooterLeft.setRunMode(Motor.RunMode.VelocityControl);
+        this.ShooterLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        this.ShooterLeft.setInverted(false);
+        //coefficients are: kp, ki, and kd
+        this.ShooterLeft.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
+        // Feeder
+        this.Feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.Feeder.setInverted(false);
+        // Intake
+        this.Intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.Intake.setInverted(true);
     }
 }
