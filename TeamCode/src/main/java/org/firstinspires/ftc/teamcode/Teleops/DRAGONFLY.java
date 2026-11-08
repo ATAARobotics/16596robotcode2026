@@ -14,23 +14,26 @@ import org.firstinspires.ftc.teamcode.Utils.Controller;
 
 @Configurable
 @Config
-@TeleOp(name = "DRAGONFLY")
+@TeleOp(name = "DRAGONFLY",group="a_comp")
 public class DRAGONFLY extends OpMode {
   //  public DriveTrain2027 driveTrain;
     public Mechanisms2027 mechanisms;
-    public Controller controller;
+    public Controller driverControls;
+    public Controller operatorControls;
     private JoinedTelemetry joinedTelemetry;
-    public GamepadEx driver = null;
-    public GamepadEx operator = null;
+    public GamepadEx driver;
+    public GamepadEx operator;
 
 
     public void init(){
         driver = new GamepadEx(gamepad1);
-        operator = new GamepadEx(gamepad1);
+        operator = new GamepadEx(gamepad2);
+        driverControls = new Controller();
+        operatorControls = new Controller();
 
         // driveTrain = new DriveTrain2027(hardwareMap);
        // driveTrain.init();
-        controller = new Controller();
+
         mechanisms = new Mechanisms2027(hardwareMap);
         mechanisms.init();
 
@@ -73,7 +76,7 @@ public class DRAGONFLY extends OpMode {
         } else if (gamepad2.a) {
             Mechanisms2027.ShooterMode = Mechanisms2027.Mode.SHOOTING;
         } else {
-            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.IDLEROBOT;
+            Mechanisms2027.ShooterMode = Mechanisms2027.Mode.IDLE;
         }
 
     }//Operator Controls End Bracket

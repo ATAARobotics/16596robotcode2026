@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Mechanisms.Constants2027;
+@TeleOp(name="PredicamentTesting", group = "test")
 
-@TeleOp
 public class PredicamentTesting extends OpMode {
     private DcMotor PollenShooter; // expansion hub motoe port 0
     double PollenShooterSpeed;

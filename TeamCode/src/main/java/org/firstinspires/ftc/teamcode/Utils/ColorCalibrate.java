@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 
-@TeleOp
+@TeleOp(name="ColorCalibrate",group="b_config")
 public class ColorCalibrate extends OpMode {
 
     private PrintStream DataOutput;

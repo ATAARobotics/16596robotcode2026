@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Testing.SensorTesting;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+@TeleOp(name="ColorSensor",group="test")
 public class ColorSensor {
 
     NormalizedColorSensor colorSensor;

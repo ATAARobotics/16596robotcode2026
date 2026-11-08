@@ -14,9 +14,8 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 // The following libraries are for FTControl
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.JoinedTelemetry;
+@TeleOp(name="LimeLightTest", group = "test")
 
-@Config // need to use dashboard to change PID gains; comment out for competition
-@TeleOp(name = "LimeLightTest")
 public class LimeLightTest extends OpMode {
     //test comment
     private Limelight3A limelight;

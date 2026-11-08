@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp
+@TeleOp(name="BallIntakeCountingRed",group="test")
 public class BallIntakeCountingRed extends OpMode {
     private DistanceSensor distance;
     double ballcount;

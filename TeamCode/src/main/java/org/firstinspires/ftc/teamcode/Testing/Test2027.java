@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@Config
-@TeleOp(name = "Test2027", group = "Testing")
+//@Config
+//@TeleOp(name = "Test2027", group = "Testing")
 
 public class Test2027 extends OpMode {
     // Inside your OpMode initialization:

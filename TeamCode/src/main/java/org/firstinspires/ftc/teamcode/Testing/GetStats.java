@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Old.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.GoBildaPinpointDriver;
 
 @Config
-@TeleOp(name = "GetStats")
+@TeleOp(name = "GetStats", group="b_Config")
 
 public class GetStats extends OpMode {
     public GoBildaPinpointDriver odometer;

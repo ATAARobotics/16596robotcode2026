@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Utils.Constant;
 @Config
 public class Mechanisms2027 {
     public HardwareMap hwMap;
-    public static Mode ShooterMode = Mode.IDLEROBOT;
+    public static Mode ShooterMode = Mode.IDLE;
     //================================ Motors ============================================
     public final MotorEx ShooterRight; //port 1 -expansion hub
     public final MotorEx ShooterLeft;
@@ -68,7 +68,7 @@ public class Mechanisms2027 {
     }
 
     public void init() {
-
+        //================================ Motors ============================================
         ShooterRight.setRunMode(Motor.RunMode.VelocityControl);
         ShooterRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         ShooterRight.setInverted(true);
@@ -93,9 +93,15 @@ public class Mechanisms2027 {
     }
 
     public void loop() {
+
+        // Shooter Modes
         switch (ShooterMode){
-            case PICKUP: //Intaking
+            case PICKUP:
+                //Intake/pickup mode:
+                // stop (or reverse?) shooter while running intake and feeder
+                //intake servo down, ramp servo mid, shooter door closed
                 operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_PICKUP, Constant.FEEDER_SPEED_PICKUP);
+                // ** ADD SERVO CONTROL HERE
                 break;
 
             case SHOOTING: //Shooting
@@ -109,7 +115,7 @@ public class Mechanisms2027 {
                 }
                 break;
 
-            case IDLEROBOT://Off
+            case IDLE://Off
             default:
                 operatorMotors(0,0,0);
                 break;
@@ -148,7 +154,7 @@ public class Mechanisms2027 {
     public enum Mode {
         PICKUP,
         SHOOTING,
-        IDLEROBOT
+        IDLE
     }
     public void setNow(double nowSeconds) {
         now = nowSeconds;

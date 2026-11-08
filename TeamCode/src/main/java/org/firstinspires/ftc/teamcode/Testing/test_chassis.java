@@ -49,8 +49,8 @@ import com.bylazar.telemetry.JoinedTelemetry;
 //import com.bylazar.graph.GraphManager;
 
 // need to use dashboard to change PID gains; comment out for competition
-@Configurable
-@TeleOp(name = "RealTestBot")
+//@Configurable
+//@TeleOp(name = "RealTestBot")
 public class
 test_chassis extends OpMode {
     private final ElapsedTime runtime = new ElapsedTime();

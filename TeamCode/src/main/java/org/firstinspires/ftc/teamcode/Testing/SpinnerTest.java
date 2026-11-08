@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.Utils.Logger;
 
 import java.util.Locale;
 
-@Configurable
-@TeleOp(name = "SpinnerTest", group ="Testing")
+//@Configurable
+//@TeleOp(name = "SpinnerTest", group ="Testing")
 public class SpinnerTest extends OpMode{
 
     public HardwareMap hwMap;
