@@ -84,11 +84,9 @@ public class DriveTrain2027 {
     public DriveTrain2027(HardwareMap hwMap)
     {
         this.hwMap = hwMap;
-        // Define and Initialize Motors (note: need to use reference to actual OpMode).
-        leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
-        rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
-        leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
-        rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
+        this.assignMotors();
+        this.initializeMotors();
+
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         // Pollen Shooter assignment
         ShooterRight = new MotorEx(hwMap, "shooter_right");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
@@ -103,6 +101,7 @@ public class DriveTrain2027 {
     }
 
     public void init() {
+
         //if (!modeRED && modeNEAR) {
         Location_Close_Shot = Blue_Near_Close_Shot;
         //}
@@ -442,6 +441,26 @@ public class DriveTrain2027 {
             this.yTolerance = yTolerance;
             this.hTolerance = hTolerance;
         }
+    private void assignMotors(){
+        // Assign the motors
+        this.leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
+        this.rightFrontDrive = new Motor(hwMap, "right_front_drive"); // 1
+        this.leftBackDrive = new Motor(hwMap, "left_back_drive"); // 2
+        this.rightBackDrive = new Motor(hwMap, "right_back_drive"); // 3
+    }
+
+    private void initializeMotors(){
+        // Initialize Motors
+        this.leftFrontDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.leftBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.rightFrontDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.rightBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        // Inverting, since it isn't direct drive
+        this.leftFrontDrive.setInverted(true);
+        this.leftBackDrive.setInverted(true);
+        this.rightFrontDrive.setInverted(true);
+        this.rightBackDrive.setInverted(true);
+    }
     }
 
 
