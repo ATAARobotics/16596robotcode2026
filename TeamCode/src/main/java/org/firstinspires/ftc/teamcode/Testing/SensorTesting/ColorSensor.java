@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@TeleOp(name="ColorSensor",group="test")
+
 public class ColorSensor {
 
     NormalizedColorSensor colorSensor;

@@ -8,10 +8,10 @@ public class Controller {
     public double triggerLeft = 0.0;
     public double triggerRight = 0.0;
     // Buttons
-    public boolean buttonA = false;
-    public boolean buttonB = false;
     public boolean buttonX = false;
-    public boolean buttonY = false;
+    public boolean buttonCircle = false;
+    public boolean buttonSquare = false;
+    public boolean buttonTriangle = false;
     // D-Pad
     public boolean dpadUp = false;
     public boolean dpadDown = false;
@@ -45,10 +45,10 @@ public class Controller {
         this.dpadLeft = gamepad.isDown(GamepadKeys.Button.DPAD_LEFT);
         this.dpadRight = gamepad.isDown(GamepadKeys.Button.DPAD_RIGHT);
         // Update Buttons
-        this.buttonA = gamepad.isDown(GamepadKeys.Button.A);
-        this.buttonB = gamepad.isDown(GamepadKeys.Button.B);
-        this.buttonX = gamepad.isDown(GamepadKeys.Button.X);
-        this.buttonY = gamepad.isDown(GamepadKeys.Button.Y);
+        this.buttonX = gamepad.isDown(GamepadKeys.Button.A);
+        this.buttonCircle = gamepad.isDown(GamepadKeys.Button.B);
+        this.buttonSquare = gamepad.isDown(GamepadKeys.Button.X);
+        this.buttonTriangle = gamepad.isDown(GamepadKeys.Button.Y);
         // Update Triggers
         if (Math.abs(gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)) >= this.toleranceTriggerLeft) {
             this.triggerLeft = gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);

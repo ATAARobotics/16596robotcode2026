@@ -1,36 +1,66 @@
 package org.firstinspires.ftc.teamcode.Utils;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 
 @Configurable // Needed for Panels
-
+@Config
 public class Constant {
     //========== SPEED RATIO SETTINGS ===============================
-    public static final double DRIVER_SPEED_RATIO = 1.0;  // Use this to slow down robot
+    public static final double DRIVER_SPEED_RATIO = 0.6;  // Use this to slow down robot
     public static final double OPER_SPEED_RATIO = DRIVER_SPEED_RATIO * 0.567;
     public static final double TURN_RATIO = 1.0;
     public static final double MAX_TURN_SPEED = 1.0;
 
     //========== INTAKE =============================================
-    public static final double INTAKE_SPEED_PICKUP = 4.0;//was 1.0
+    public static final double INTAKE_SPEED_STOP = 0.0;
+    public static final double INTAKE_SPEED_PICKUP = 1.0;
     public static final double INTAKE_SPEED_HOLDING = 1.0;
 
+    //========== SHOOTER =============================================
+    public static final double SHOOTER_RPM_STOP = 0.0;
+    public static final double SHOOTER_RPM_HOLDING = -1500.0;
+    public static double SHOOTER_RPM_SHOOTING = 4000.0;
+
+
+    public static final double SHOOTER_READY_TOLERANCE_RPM = 150.0;
     //========== SHOOTER ============================================
+
+    public static final double SHOOTER_SPEED_STOP = 0.0;
+    public static final double SHOOTER_SPEED_HOLDING = -1.0;
+    public static final double SHOOTER_SPEED_SHOOTING = 1.0;
+    public static final double SHOOTER_TICKS_PER_REV = 28.0;
     public static final double SHOOTER_KP = 5.0;
     public static final double SHOOTER_KI = 0.00;
     public static final double SHOOTER_KD = 0.0;
     public static final double SHOOTER_MAX = 2100;
-    public static final double SHOOTER_SPEED_HOLDING = 1.0;
-    public static final double SHOOTER_SPEED_SHOOTING = -1.0;
+
+    //========== SERVOS =============================================
+
+    public static final double NECTAR_LIFT_DOWN = 0.0;
+    public static final double NECTAR_LIFT_UP = 1.0;
+    public static final double SHOOTER_RAMP_UP = 0.0;
+    public static final double SHOOTER_STOPPER_CLOSED = 0.0;
+    public static final double SHOOTER_STOPPER_OPEN = 1.0;
+
+    public static final double SHOOTER_RAMP_DOWN = 1.0;
+    public static final double SHOOTER_RAMP_IDLE = 0.5;
+    //========== Shooter Ramp RPM Compensation =======================
+    public static double SHOOTER_RAMP_NOMINAL = 0.50;
+    public static double SHOOTER_RAMP_MIN = 0.25;
+    public static double SHOOTER_RAMP_MAX = 0.50;
+    public static double SHOOTER_RAMP_RPM_KP = 0.00025;
+
 
     //========== FEEDER =============================================
-    public static double FEEDER_SPEED_CORRECTING = -0.8;//was -0.6
-    public static double FEEDER_SPEED_HOLDING = -0.1;
-    public static double FEEDER_SPEED_PICKUP = -0.5;
+    public static final double FEEDER_SPEED_STOP = 0.0;
+    public static final double FEEDER_SPEED_CORRECTING = -0.8;
+    public static final double FEEDER_SPEED_HOLDING = -0.1;
+    public static final double FEEDER_SPEED_PICKUP = -0.5;
     public static final double FEEDER_SPEED_FWD = -1.0;
     public static final double FEEDER_SPEED_REVERSE = 1.0;
     public static final double FEEDER_SPEED_AUTO = -0.5;
-    public static final double CORRECTION_DELAY = 1.7;
+    public static final double CORRECTION_DELAY = 1.7;  //  Should this move to a timers section?
 
     //========== DRIVE ==============================================
     public static final double DRIVE_FORWARD = 0; // north
@@ -48,8 +78,8 @@ public class Constant {
 
 
     //========== TOLERANCE ==========================================
-    public static final double TOLERANCE_JOYSTICK = 0.5;
-    public static final double TOLERANCE_TRIGGER = 0.5;
+    public static final float TOLERANCE_JOYSTICK = 0.05F;
+    public static final float TOLERANCE_TRIGGER = 0.05F;
 
 
     //========== ODOMETER ===========================================
@@ -58,7 +88,7 @@ public class Constant {
 
 
     //========== AUTO ================================================
-    public static double AUTO_DRIVE_SPEED = 0.5567;
+    public static final double AUTO_DRIVE_SPEED = 0.5567;
     public static final double AUTO_DRIVE_SPEED_MIN = 0.1067;
     public static final double AUTO_DRIVE_SPEED_MIN_STRAFEFACTOR = 1.35;
     public static final double AUTO_Y_DISTANCE_ERROR = 5.67;
@@ -89,7 +119,7 @@ public class Constant {
     public static final double NECTAR_GATE_CLOSE = -1.0;// no button
 
     //========== RGB ================================================
-    public static final class RGB_Light {
+        public static final class RGB_Light {
         public static final double OFF = 0.0;
         public static final double BLACK = 0.0;
         public static final double RED = 0.279;

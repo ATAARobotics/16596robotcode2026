@@ -1,41 +1,48 @@
 package org.firstinspires.ftc.teamcode.Subsystem;
 
-import static org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027.Mode.SHOOTING;
-
+import static com.qualcomm.robotcore.hardware.Servo.Direction.FORWARD;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
+//import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
-
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Utils.Constant;
 
+@Configurable
 @Config
 public class Mechanisms2027 {
     private HardwareMap hwMap;
-    private static Mode ShooterMode = Mode.IDLEROBOT;
+    private Mode shooterMode = Mode.STOP;
+    private ballDetecting ballDetected = ballDetecting.NONE;
     //========== Motors =============================================
-    private MotorEx ShooterRight; //port 1 -expansion hub
-    private MotorEx ShooterLeft;
-    private MotorEx Feeder; //port 0-expansion hub
-    private Motor Intake; //port 1-expansion hub
+    private DcMotorEx shooterRight;
+    private DcMotorEx shooterLeft;
+    private MotorEx feeder;
+    private Motor intake;
 
     //========== Servos =============================================
-    private Servo ShooterNectarLift;
-    private Servo ShooterRamp;
-    private Servo ShooterStopper;
+    private Servo shooterNectarLift;
+    private Servo shooterRamp;
+    private Servo shooterStopper;
     //========== Sensors ============================================
-    private NormalizedColorSensor ShooterColorSensor;
-    private DistanceSensor ShooterProximity;
+    private RevColorSensorV3 shooterColorSensor;
+    //private NormalizedColorSensor shooterColorSensor;
+    private DistanceSensor shooterProximity;
+    //private DistanceSensor shooterColorDistance;
     //========== Time ===============================================
     private double now = 0.0;
     private double shooterModeStartTime = 0.0;
+    private double shooterSpinUpTime = -1.0;
+    private boolean shooterReachedSpeed = false;
 
 
 
@@ -60,43 +67,113 @@ public class Mechanisms2027 {
     public void loop() {
 
         // Shooter Modes
-        switch (ShooterMode){
+        // shooterSpeed, double intakeSpeed, double feederSpeed, double shooterNectarLiftPosition, double shooterRampPosition
+        // shooterStopperPosition
+        switch (shooterMode){
+            //========== PICKUP/INTAKE ===================================
             case PICKUP:
                 // Intake/pickup mode:
                 // stop (or reverse?) shooter while running intake and feeder
                 // intake servo down, ramp servo mid, shooter door closed
-                operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_PICKUP, Constant.FEEDER_SPEED_PICKUP);
-                // ** ADD SERVO CONTROL HERE
+
+                setOperatorMotors(
+                        Constant.SHOOTER_RPM_HOLDING, // Speed - Shooter Flywheels
+                        Constant.INTAKE_SPEED_PICKUP,   // Speed - Intake Motor
+                        Constant.FEEDER_SPEED_PICKUP,   // Speed - Feeder Motor
+                        Constant.NECTAR_LIFT_DOWN,      // Position - Nectar Lift
+                        Constant.SHOOTER_RAMP_DOWN,     // Position - Shooter Ramp
+                        Constant.SHOOTER_STOPPER_CLOSED // Position - Shooter Stopper
+                );
+
                 break;
+            //========== SHOOTING ===================================
             case SHOOTING: // Shooting
                 if (!ShooterModeActiveForMoreThan(Constant.CORRECTION_DELAY)) { // input delay seconds
-                    operatorMotors(Constant.SHOOTER_SPEED_HOLDING, Constant.INTAKE_SPEED_HOLDING, Constant.FEEDER_SPEED_CORRECTING);
+                    setOperatorMotors(
+                            Constant.SHOOTER_RPM_HOLDING,   // Speed - Shooter Flywheels
+                            Constant.INTAKE_SPEED_HOLDING,    // Speed - Intake Motor
+                            Constant.FEEDER_SPEED_CORRECTING, // Speed - Feeder Motor
+                            Constant.NECTAR_LIFT_DOWN,        // Position - Nectar Lift
+                            Constant.SHOOTER_RAMP_DOWN,       // Position - Shooter Ramp
+                            Constant.SHOOTER_STOPPER_CLOSED   // Position - Shooter Stopper
+                    );
                 } else {
-                    operatorMotors(Constant.SHOOTER_SPEED_SHOOTING, Constant.INTAKE_SPEED_HOLDING, Constant.FEEDER_SPEED_CORRECTING);
-                    if (canLaunch(Constant.SHOOTER_SPEED_SHOOTING)) {
-                        operatorMotors(Constant.SHOOTER_SPEED_SHOOTING, Constant.INTAKE_SPEED_PICKUP, Constant.FEEDER_SPEED_PICKUP);
+                    setOperatorMotors(
+                            Constant.SHOOTER_RPM_SHOOTING,   // Speed - Shooter Flywheels
+                            Constant.INTAKE_SPEED_HOLDING,    // Speed - Intake Motor
+                            Constant.FEEDER_SPEED_CORRECTING, // Speed - Feeder Motor
+                            Constant.NECTAR_LIFT_DOWN,        // Position - Nectar Lift
+                            Constant.SHOOTER_RAMP_DOWN,       // Position - Shooter Ramp
+                            Constant.SHOOTER_STOPPER_CLOSED   // Position - Shooter Stopper
+                    );
+                    if (canLaunch(Constant.SHOOTER_RPM_SHOOTING)) {
+                        setOperatorMotors(
+                                Constant.SHOOTER_RPM_SHOOTING,  // Speed - Shooter Flywheels
+                                Constant.INTAKE_SPEED_PICKUP,     // Speed - Intake Motor
+                                Constant.FEEDER_SPEED_PICKUP,     // Speed - Feeder Motor
+                                Constant.NECTAR_LIFT_DOWN,        // Position - Nectar Lift
+                                Constant.SHOOTER_RAMP_UP,         // Position - Shooter Ramp
+                                Constant.SHOOTER_STOPPER_OPEN     // Position - Shooter Stopper
+                        );
                     }
                 }
                 break;
-
-            case IDLE://Off
-            default:
-                operatorMotors(0,0,0);
+            //========== STOP ===================================
+            case SHOOT_TEST: // Off
+                setOperatorMotors(
+                        Constant.SHOOTER_RPM_SHOOTING,    // Speed - Shooter Flywheels
+                        Constant.INTAKE_SPEED_STOP,     // Speed - Intake Motor
+                        Constant.FEEDER_SPEED_STOP,     // Speed - Feeder Motor
+                        Constant.NECTAR_LIFT_DOWN,      // Position - Nectar Lift
+                        //Constant.SHOOTER_RAMP_DOWN,     // Position - Shooter Ramp
+                        getShooterRampTargetPosition(),
+                        Constant.SHOOTER_STOPPER_CLOSED // Position - Shooter Stopper
+                );
                 break;
-        }
-    }
-    // canLaunch Overloading
-    public boolean canLaunch(double launchSpeed) {
-        return this.canLaunch(launchSpeed,0.0);
-    }
-    public boolean canLaunch(double launchSpeed, double FudgeFactor) {
-        return this.ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX) + FudgeFactor;
-    }
+
+            //========== STOP ===================================
+            case STOP: // Off
+            default:
+                setOperatorMotors(
+                        Constant.SHOOTER_SPEED_STOP,    // Speed - Shooter Flywheels
+                        Constant.INTAKE_SPEED_STOP,     // Speed - Intake Motor
+                        Constant.FEEDER_SPEED_STOP,     // Speed - Feeder Motor
+                        Constant.NECTAR_LIFT_DOWN,      // Position - Nectar Lift
+                        Constant.SHOOTER_RAMP_IDLE,     // Position - Shooter Ramp
+                        Constant.SHOOTER_STOPPER_CLOSED // Position - Shooter Stopper
+                );
+                break;
+        } // Switch shooterMode
+
+        //========== Shooter Spin-Up Timing ==============================
+        if ((shooterMode == Mode.SHOOTING
+                || shooterMode == Mode.SHOOT_TEST)
+                && !shooterReachedSpeed) {
+
+            if (canLaunch(Constant.SHOOTER_RPM_SHOOTING)) {
+                shooterSpinUpTime = now - shooterModeStartTime;
+                shooterReachedSpeed = true;
+            }
+        } // Shooter Spin-Up Timing
+
+    } // Loop
+
 
     //========== Sensor Functions ===================================
+    public ballDetecting detectBall() {
+        double colorDist = getColorDistance();
+        boolean nectarDetected = detectNectar();
 
-    public boolean detectNectar () {
-        NormalizedRGBA colors = this.ShooterColorSensor.getNormalizedColors();
+        if (colorDist > 75.0) {
+            return ballDetecting.NONE;
+        } else if (nectarDetected) {
+            return ballDetecting.NECTAR;
+        } else {
+            return ballDetecting.POLLEN;
+        }
+    }
+    public boolean detectNectar() {
+        NormalizedRGBA colors = this.shooterColorSensor.getNormalizedColors();
         return (((colors.red > colors.green
                 && colors.red > colors.blue)
                 || (colors.blue > colors.green
@@ -107,14 +184,34 @@ public class Mechanisms2027 {
     }
 
     //========== Class Get Sections =================================
-    public double getDistance (){
-        return this.ShooterProximity.getDistance(DistanceUnit.CM);
+    public double getProxDistance(){
+        return this.shooterProximity.getDistance(DistanceUnit.MM);
     }
-    public Mode getMode(){return this.ShooterMode;}
+    public double getColorDistance() {
+        return this.shooterColorSensor.getDistance(DistanceUnit.MM);
+    }
+
+    public Mode getMode(){return this.shooterMode;}
+    public double getShooterRightCurrent() {
+        return shooterRight.getCurrent(CurrentUnit.AMPS);
+    }
+
+    public double getShooterLeftCurrent() {
+        return shooterLeft.getCurrent(CurrentUnit.AMPS);
+    }
+
+    public double getShooterSpinUpTime() {
+        return shooterSpinUpTime;
+    }
+
+    public boolean isShooterReady() {
+        return shooterReachedSpeed;
+    }
+
     //========== Class Set Section ==================================
     public void setMode(Mode mode){
-        if (mode != ShooterMode) {
-            ShooterMode = mode;
+        if (mode != shooterMode) {
+            shooterMode = mode;
             onShooterModeChange();
             }
         }
@@ -125,58 +222,149 @@ public class Mechanisms2027 {
     public enum Mode {
         PICKUP,
         SHOOTING,
-        IDLE
+        SHOOT_TEST,
+        STOP
+    }
+    public enum ballDetecting {
+        NECTAR,
+        POLLEN,
+        NONE
+    }
+    // Added Shooter State Class for future implementation
+    private enum shooterState {
+        IDLE,
+        PICKUP,
+        CORRECTING,
+        SPINNING_UP,
+        READY,
+        FEEDING
     }
     //========== Class Functions ====================================
     private void onShooterModeChange() {
+
         this.shooterModeStartTime = this.now;
+        shooterSpinUpTime = -1.0;
+        shooterReachedSpeed = false;
     }
     private boolean ShooterModeActiveForMoreThan(double seconds) {
         return (this.now - this.shooterModeStartTime) >= seconds;
     }
-    private void operatorMotors(double shooterSpeed, double intakeSpeed, double feederSpeed){
-        this.Feeder.set(feederSpeed);
-        this.Intake.set(intakeSpeed);
-        this.ShooterRight.set(shooterSpeed);
-        this.ShooterLeft.set(shooterSpeed);
+    private void setOperatorMotors(double shooterRPM, double intakeSpeed, double feederSpeed, double shooterNectarLiftPosition, double shooterRampPosition, double shooterStopperPosition){
+        this.feeder.set(feederSpeed);
+        this.intake.set(intakeSpeed);
+        setShooterRPM(shooterRPM);
+        this.shooterNectarLift.setPosition(shooterNectarLiftPosition);
+        this.shooterRamp.setPosition(shooterRampPosition);
+        this.shooterStopper.setPosition(shooterStopperPosition);
+
     }
     //========== Assign functions ===================================
     private void assignMotors(){
-        // see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        this.ShooterRight = new MotorEx(this.hwMap, "ShooterRight");
-        // see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        this.ShooterLeft = new MotorEx(this.hwMap, "ShooterLeft");
-        this.Feeder = new MotorEx(this.hwMap, "Feeder");
-        this.Intake = new MotorEx(this.hwMap, "Intake");
+        shooterRight = this.hwMap.get(DcMotorEx.class, "ShooterRight");
+        shooterLeft = this.hwMap.get(DcMotorEx.class, "ShooterLeft");
+        this.feeder = new MotorEx(this.hwMap, "Feeder");
+        this.intake = new MotorEx(this.hwMap, "Intake");
     }
     private void assignServos() {
-        this.ShooterNectarLift = this.hwMap.get(Servo.class, "ShooterNectarLift");
-        this.ShooterRamp = this.hwMap.get(Servo.class, "ShooterRamp");
-        this.ShooterStopper = this.hwMap.get(Servo.class, "ShooterStopper");
+        this.shooterNectarLift = this.hwMap.get(Servo.class, "ShooterNectarLift");
+        this.shooterRamp = this.hwMap.get(Servo.class, "ShooterRamp");
+        this.shooterStopper = this.hwMap.get(Servo.class, "ShooterStopper");
     }
     private void assignSensors(){
-        ShooterColorSensor = hwMap.get(NormalizedColorSensor.class, "ShooterColorSensor");
-        ShooterProximity = hwMap.get(DistanceSensor.class, "ShooterProximity");
+        shooterColorSensor = hwMap.get(RevColorSensorV3.class, "ShooterColorSensor");
+        shooterProximity = hwMap.get(DistanceSensor.class, "ShooterProximity");
+        //shooterColorDistance = hwMap.get(DistanceSensor.class, "ShooterColorSensor");
     }
     // Initialize functions
     private void  initializeMotors(){
-        // Shooters
-        this.ShooterRight.setRunMode(Motor.RunMode.VelocityControl);
-        this.ShooterRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        this.ShooterRight.setInverted(true);
-        //coefficients are: kp, ki, and kd
-        this.ShooterRight.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
+        //========== Shooter Motors ======================================
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        shooterRight.setDirection(DcMotor.Direction.FORWARD);
 
-        this.ShooterLeft.setRunMode(Motor.RunMode.VelocityControl);
-        this.ShooterLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        this.ShooterLeft.setInverted(false);
-        //coefficients are: kp, ki, and kd
-        this.ShooterLeft.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        shooterLeft.setDirection(DcMotor.Direction.REVERSE);
+
         // Feeder
-        this.Feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        this.Feeder.setInverted(false);
+        this.feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.feeder.setInverted(false);
         // Intake
-        this.Intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        this.Intake.setInverted(true);
+        this.intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.intake.setInverted(true);
+        // Servos
+        this.shooterNectarLift.setDirection(FORWARD);
+        this.shooterRamp.setDirection(FORWARD);
+        this.shooterStopper.setDirection(FORWARD);
+
     }
-}
+    //========== RPM Control functions ===================================
+
+    private void setShooterRPM(double targetRPM) {
+
+        if (targetRPM == 0.0) {
+            // Stop commanding velocity and allow flywheel to coast
+            shooterRight.setPower(0.0);
+            shooterLeft.setPower(0.0);
+
+        } else {
+            // Convert RPM to encoder ticks per second
+            double targetTPS =
+                    targetRPM * Constant.SHOOTER_TICKS_PER_REV / 60.0;
+
+            shooterRight.setVelocity(targetTPS);
+            shooterLeft.setVelocity(targetTPS);
+        }
+    }
+
+    public double getShooterRightRPM() {
+        return shooterRight.getVelocity() * 60.0 / Constant.SHOOTER_TICKS_PER_REV;
+    }
+
+    public double getShooterLeftRPM() {
+        return shooterLeft.getVelocity() * 60.0 / Constant.SHOOTER_TICKS_PER_REV;
+    }
+    //// canLaunch Overloading
+    //public boolean canLaunch(double launchSpeed) {
+    //    return this.canLaunch(launchSpeed,0.0);
+    //}
+    //public boolean canLaunch(double launchSpeed, double FudgeFactor) {
+    //    return this.shooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX) + FudgeFactor;
+    //}
+    public boolean canLaunch(double targetRPM) {
+
+        double rightRPM = getShooterRightRPM();
+        double leftRPM = getShooterLeftRPM();
+
+        double minimumRPM = targetRPM
+                - Constant.SHOOTER_READY_TOLERANCE_RPM;
+
+        return targetRPM > 0
+                && rightRPM >= minimumRPM
+                && leftRPM >= minimumRPM;
+    }
+
+
+    //private double calculateShooterRampPosition() {
+    public double getShooterRampTargetPosition() {
+        // Average measured RPM from both shooter motors
+        double actualRPM = (getShooterRightRPM()
+                + getShooterLeftRPM()) / 2.0;
+
+        double targetRPM = Constant.SHOOTER_RPM_SHOOTING;
+
+        // Calculate RPM error (ignore overspeed)
+        double rpmError = Math.max(0.0, targetRPM - actualRPM);
+
+        // Proportional compensation
+        double rampPosition = Constant.SHOOTER_RAMP_NOMINAL
+                - rpmError * Constant.SHOOTER_RAMP_RPM_KP;
+
+        // Limit servo travel
+        return Math.max(Constant.SHOOTER_RAMP_MIN,
+                Math.min(Constant.SHOOTER_RAMP_MAX, rampPosition));
+    } // Calculate shooter ramp position
+
+} // Mechanisms Opmode
