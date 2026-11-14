@@ -7,7 +7,9 @@ import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Subsystem.DriveTrain2027;
 import org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027;
 import org.firstinspires.ftc.teamcode.Utils.Controller;
 import org.firstinspires.ftc.teamcode.Utils.Constant;
@@ -23,7 +25,8 @@ public class dragonFly_01 extends OpMode {
     private JoinedTelemetry joinedTelemetry;
     public GamepadEx driver;
     public GamepadEx operator;
-
+    private DriveTrain2027 driveTrain;
+    public HardwareMap hwMap;
     public void init(){
         driver = new GamepadEx(gamepad1);
         operator = new GamepadEx(gamepad2);
@@ -33,8 +36,8 @@ public class dragonFly_01 extends OpMode {
         controllerJoystickTolerance(driverControls, Constant.TOLERANCE_JOYSTICK);
         controllerJoystickTolerance(operatorControls, Constant.TOLERANCE_JOYSTICK);
 
-        // driveTrain = new DriveTrain2027(hardwareMap);
-        // driveTrain.init();
+        driveTrain = new DriveTrain2027(hwMap);
+        driveTrain.init();
 
         mechanisms = new Mechanisms2027(hardwareMap);
         mechanisms.init();
@@ -57,79 +60,90 @@ public class dragonFly_01 extends OpMode {
     public void loop(){
         //========== Update Time =========================================
         mechanisms.setNow(getRuntime());
-
         //========== Read Inputs =========================================
         driverControls.updateController(driver);
         operatorControls.updateController(operator);
         //double batteryVoltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
-
+        addTelemetryData(); // this should be the last part of read
         //========== Process Controls ====================================
         operatorControls();
-
+        driverControls();
         //========== Execute Outputs =====================================
         mechanisms.loop();
-
+        driveTrain.drive(driverControls.stickLeftY, driverControls.stickLeftX);
         //========== Publish Telemetry ===================================
-        addTelemetryData();
         joinedTelemetry.update();
     }//loop
 
 
     private void operatorControls() {
 
-        if (operatorControls.buttonCircle) {
-            mechanisms.setMode(Mechanisms2027.Mode.PICKUP);
+        if(this.operatorControls.buttonX){}//intake forward
+        if(this.operatorControls.buttonCircle){}//shooter forward
+        if(this.operatorControls.bummerRight){}//feeder forward
 
-        } else if (operatorControls.buttonX) {
-            mechanisms.setMode(Mechanisms2027.Mode.SHOOTING);
+        if(this.operatorControls.dpadDown){}//intake reverse
+        if(this.operatorControls.dpadLeft){}//shooter reverse
+        if(this.operatorControls.bummerLeft){}//feeder reverse
 
-        } else if (operatorControls.buttonTriangle) {
-            mechanisms.setMode(Mechanisms2027.Mode.SHOOT_TEST);
+        if (this.operatorControls.buttonCircle) {
+            this.mechanisms.setMode(Mechanisms2027.Mode.PICKUP);
+
+        } else if (this.operatorControls.buttonX) {
+            this.mechanisms.setMode(Mechanisms2027.Mode.SHOOTING);
+
+        } else if (this.operatorControls.buttonTriangle) {
+            this.mechanisms.setMode(Mechanisms2027.Mode.SHOOT_TEST);
 
         } else {
-            mechanisms.setMode(Mechanisms2027.Mode.STOP);
+            this.mechanisms.setMode(Mechanisms2027.Mode.STOP);
         }
 
     }//Operator Controls End Bracket
 
+    private void driverControls(){
+    }
+
     private void addTelemetryData() {
 
-        telemetry.addData("Shooter Mode", mechanisms.getMode());
+        this.telemetry.addData("Shooter Mode", this.mechanisms.getMode());
 
-        telemetry.addData("Shooter Target RPM", "%.0f",
+        this.telemetry.addData("Shooter Target RPM", "%.0f",
                 Constant.SHOOTER_RPM_SHOOTING);
 
-        telemetry.addData("Shooter Right RPM", "%.0f",
-                mechanisms.getShooterRightRPM());
+        this.telemetry.addData("Shooter Right RPM", "%.0f",
+                this.mechanisms.getShooterRightRPM());
 
-        telemetry.addData("Shooter Left RPM", "%.0f",
-                mechanisms.getShooterLeftRPM());
+        this.telemetry.addData("Shooter Left RPM", "%.0f",
+                this.mechanisms.getShooterLeftRPM());
 
-        telemetry.addData("Shooter Ready",
-                mechanisms.canLaunch(Constant.SHOOTER_RPM_SHOOTING));
-        telemetry.addData("Shooter Right Amps", "%.2f",
-                mechanisms.getShooterRightCurrent());
+        this.telemetry.addData("Shooter Ready",
+                this.mechanisms.canLaunch(Constant.SHOOTER_RPM_SHOOTING));
+        this.telemetry.addData("Shooter Right Amps", "%.2f",
+                this.mechanisms.getShooterRightCurrent());
 
-        telemetry.addData("Shooter Left Amps", "%.2f",
-                mechanisms.getShooterLeftCurrent());
+        this.telemetry.addData("Shooter Left Amps", "%.2f",
+                this.mechanisms.getShooterLeftCurrent());
 
-        telemetry.addData("Battery Voltage", "%.2f",
+        this.telemetry.addData("Battery Voltage", "%.2f",
                 hardwareMap.voltageSensor.iterator().next().getVoltage());
-        telemetry.addData("Shooter Ready", mechanisms.isShooterReady());
+        this.telemetry.addData("Shooter Ready",
+                this.mechanisms.isShooterReady());
 
-        if (mechanisms.getShooterSpinUpTime() >= 0) {
-            telemetry.addData("Shooter Spin-Up Time", "%.2f sec",
-                    mechanisms.getShooterSpinUpTime());
+        if (this.mechanisms.getShooterSpinUpTime() >= 0) {
+            this.telemetry.addData("Shooter Spin-Up Time", "%.2f sec",
+                    this.mechanisms.getShooterSpinUpTime());
         } else {
-            telemetry.addData("Shooter Spin-Up Time", "Waiting...");
+            this.telemetry.addData("Shooter Spin-Up Time", "Waiting...");
         }
-        telemetry.addData("Prox Sensor Distance", "%.2f mm",
-                mechanisms.getProxDistance());
-        telemetry.addData("Color Sensor Distance", "%.2f mm",
-                mechanisms.getColorDistance());
-        telemetry.addData("Ball Detected", mechanisms.detectBall());
-        telemetry.addData("Shooter Ramp Target", "%.3f",
-                mechanisms.getShooterRampTargetPosition());
+        this.telemetry.addData("Prox Sensor Distance", "%.2f mm",
+                this.mechanisms.getProxDistance());
+        this.telemetry.addData("Color Sensor Distance", "%.2f mm",
+                this.mechanisms.getColorDistance());
+        this.telemetry.addData("Ball Detected",
+                this.mechanisms.detectBall());
+        this.telemetry.addData("Shooter Ramp Target", "%.3f",
+                this.mechanisms.getShooterRampTargetPosition());
     }// Print Telemetry
 
 
