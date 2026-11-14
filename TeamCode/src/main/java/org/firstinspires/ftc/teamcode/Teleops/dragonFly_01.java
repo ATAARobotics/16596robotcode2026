@@ -26,8 +26,11 @@ public class dragonFly_01 extends OpMode {
     public GamepadEx driver;
     public GamepadEx operator;
     private DriveTrain2027 driveTrain;
+
     public HardwareMap hwMap;
     public void init(){
+
+        hwMap = hardwareMap;
         driver = new GamepadEx(gamepad1);
         operator = new GamepadEx(gamepad2);
         // Configure Controllers
@@ -38,8 +41,9 @@ public class dragonFly_01 extends OpMode {
 
         driveTrain = new DriveTrain2027(hwMap);
         driveTrain.init();
+        driveTrain.setDrivemoderobotcentric();
 
-        mechanisms = new Mechanisms2027(hardwareMap);
+        mechanisms = new Mechanisms2027(hwMap);
         mechanisms.init();
         mechanisms.setMode(Mechanisms2027.Mode.STOP);
 
@@ -64,12 +68,13 @@ public class dragonFly_01 extends OpMode {
         driverControls.updateController(driver);
         operatorControls.updateController(operator);
         //double batteryVoltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
-        addTelemetryData(); // this should be the last part of read
+        addTelemetryData(); // last part of read
         //========== Process Controls ====================================
         operatorControls();
         driverControls();
         //========== Execute Outputs =====================================
         mechanisms.loop();
+        driveTrain.loop();
         driveTrain.drive(driverControls.stickLeftY, driverControls.stickLeftX);
         //========== Publish Telemetry ===================================
         joinedTelemetry.update();
@@ -102,6 +107,7 @@ public class dragonFly_01 extends OpMode {
     }//Operator Controls End Bracket
 
     private void driverControls(){
+    driveTrain.turn(driverControls.stickRightX);
     }
 
     private void addTelemetryData() {

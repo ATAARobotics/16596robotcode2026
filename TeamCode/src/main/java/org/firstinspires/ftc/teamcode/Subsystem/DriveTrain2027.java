@@ -31,7 +31,7 @@ public class DriveTrain2027 {
     private Motor rightBackDrive;
     // Drive Train Control
     public MecanumDrive driveBase;
-    public boolean drivemodefieldcentric = true; // True for fieldcentric False for robotcentric
+    public boolean drivemodefieldcentric = false; // True for fieldcentric False for robotcentric
 
     public PIDController headingControl = null;
     public static PIDCoefficients headingpid = new PIDCoefficients(0.019, 0.0, 0.0);
@@ -154,7 +154,7 @@ public class DriveTrain2027 {
         // tell ftclib its inputs  strafeSpeed,forwardSpeed,turn,heading
         // turn and heading are managed in loop with the heading control PID
         // inverting strafe speed to correct directions, inverting no longer required for telemtry pdos have been turned to right position
-        xSpeed = -strafeSpeed;
+        xSpeed = strafeSpeed;
         ySpeed = forwardSpeed;
     }
     public double getXPosition() { // Convert xPod into actual direction based on current heading

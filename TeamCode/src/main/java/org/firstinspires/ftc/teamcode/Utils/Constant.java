@@ -135,7 +135,6 @@ public class Constant {
         public static final double ON = 1.000;
     }
     //========== Timer ================================================
-        public static final double TIME_ONE_SECOND = 1.0;
-
+        public static final double TIME_ONE_SECOND = 5.0;//change name later
 
 }
