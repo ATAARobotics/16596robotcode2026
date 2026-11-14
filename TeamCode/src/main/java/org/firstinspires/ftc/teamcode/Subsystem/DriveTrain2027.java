@@ -20,7 +20,6 @@ import org.firstinspires.ftc.teamcode.Utils.Constant;
 public class DriveTrain2027 {
     public HardwareMap hwMap;
     public GoBildaPinpointDriver odometer;
-
     public boolean autoEnabled = false;
     private double now = 0.0;
 
@@ -71,11 +70,11 @@ public class DriveTrain2027 {
         xControl = new PIDController(xpid.p, xpid.i, xpid.d);//FOR AUTO
         yControl = new PIDController(ypid.p, ypid.i, ypid.d);//For AUTO
         // odometer initializing
-   /*     odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
+        odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
         odometer.setOffsets(Constant.ODOMETER_X_OFFSET, Constant.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-*/
+
     }// end of init()
 
     public void start() {
@@ -84,11 +83,10 @@ public class DriveTrain2027 {
 
     public void loop() {
         // - Update Inputs at the beginning of every loop
-  /*      odometer.update();
+        odometer.update();
         Pose2D pos = odometer.getPosition();
-   */
-       // updateCurrentLocation(odometer.getPosition());
-   //     heading = pos.getHeading(AngleUnit.DEGREES);
+          updateCurrentLocation(odometer.getPosition());
+        heading = pos.getHeading(AngleUnit.DEGREES);
 
         // PID controller for heading
         if (autoEnabled) {
@@ -288,12 +286,12 @@ public class DriveTrain2027 {
         return at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && onHeading;
     }
     */
-/*
+
     public void updateCurrentLocation(Pose2D pos) {
         currentLocation.x = -pos.getX(DistanceUnit.MM);
         currentLocation.y = -pos.getY(DistanceUnit.MM);
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
-    */
+
 
 }

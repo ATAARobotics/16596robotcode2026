@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
 @Config// for FTC dashboard
 @Configurable // Needed for Panels
-@Autonomous(name = "AutoRedFar6BallWallPickup")
+//@Autonomous(name = "AutoRedFar6BallWallPickup")
 public class AutoRedFar6BallWallPickup extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Old.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous(name = "AutoRedFar6Ball")
+//@Autonomous(name = "AutoRedFar6Ball")
 public class AutoRedFar6Ball extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)

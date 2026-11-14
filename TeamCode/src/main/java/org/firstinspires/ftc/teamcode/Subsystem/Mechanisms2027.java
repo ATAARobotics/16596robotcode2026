@@ -90,6 +90,7 @@ public class Mechanisms2027 {
             case SHOOTING: // Shooting
                 if (!ShooterModeActiveForMoreThan(Constant.CORRECTION_DELAY)) { // input delay seconds
                     setOperatorMotors(
+                            //holding mode for current delay time
                             Constant.SHOOTER_RPM_HOLDING,   // Speed - Shooter Flywheels
                             Constant.INTAKE_SPEED_HOLDING,    // Speed - Intake Motor
                             Constant.FEEDER_SPEED_CORRECTING, // Speed - Feeder Motor
