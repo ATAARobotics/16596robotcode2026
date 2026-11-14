@@ -16,44 +16,28 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Utils.Constant;
 
-//@Config /*
+@Config
 public class DriveTrain2027 {
-   /* // Basic config
     public HardwareMap hwMap;
     public GoBildaPinpointDriver odometer;
 
     public boolean autoEnabled = false;
     private double now = 0.0;
-    public boolean modeRED = false;
-    public boolean modeNEAR = false;
-    private static final Location Blue_Near_Close_Shot = new Location(1000.0,0.0,0);
-    public Location loc_Far_Shot = new Location(0,0,0);
 
-    public Location Location_Close_Shot = new Location(0.0, 0.0, 0.0);
-    //Create Location object for currentLocation variable to hold current position read by odometry
-    public Location currentLocation = new Location(0.0,0.0,0.0);
-    private Location currentDestination = new Location(0.0,0.0,0.0);
-    private driveMode dmPrecise = new driveMode(0.6767,4.670,4.670,1.50);
-    private driveMode dmPickup = new driveMode(0.4567,4.670,4.670,1.50);
-    public driveMode dmRough = new driveMode(0.8,20.670,20.670,4.50);
-    // Holding object for current drive mode precision settings
-    private driveMode currentDriveMode = new driveMode(0,0,0,0);
     // Drive Train Motors
-    private final Motor leftFrontDrive;
-
-    private final Motor rightFrontDrive;
-    private final Motor leftBackDrive;
-    private final Motor rightBackDrive;
+    private Motor leftFrontDrive;
+    private Motor rightFrontDrive;
+    private Motor leftBackDrive;
+    private Motor rightBackDrive;
     // Drive Train Control
     public MecanumDrive driveBase;
     public boolean drivemodefieldcentric = true; // True for fieldcentric False for robotcentric
+
     public PIDController headingControl = null;
     public static PIDCoefficients headingpid = new PIDCoefficients(0.019, 0.0, 0.0);
     public static PIDCoefficients xpid = new PIDCoefficients(0.005, 0.0, 0.001);
     public static PIDCoefficients ypid = new PIDCoefficients(0.005, 0.0, 0.001);
-    //    public static PIDCoefficients headingpid = new PIDCoefficients(Constants2.HEADING_Kp, 0.0001, 0.003);
-//    public static PIDCoefficients xpid = new PIDCoefficients(Constants2.XPID_Kp, 0.09, 0.03);
-//    public static PIDCoefficients ypid = new PIDCoefficients(Constants2.YPID_Kp, 0.12, 0.04);
+
     public PIDController xControl = null;
     public PIDController yControl = null;
     public double headingCorrection = 0;
@@ -63,23 +47,11 @@ public class DriveTrain2027 {
     private double currentSpeed = 0.0;
     private double currentXTarget = 0.0;
     private double currentYTarget = 0.0;
-    double xSpeed = 0.0;
-    double ySpeed = 0.0;
+    private double xSpeed = 0.0;
+    private double ySpeed = 0.0;
     public double headingError;
     public double turnSpeed = 0.0;
     public boolean manual_FC_turning = false;
-
-    // Shooter Configuration
-    public final MotorEx ShooterRight; //port 1 -expansion hub
-    public final MotorEx ShooterLeft;
-    public final MotorEx Feeder; //port 0-expansion hub
-    public final Motor Intake; //port 1-expansion hub
-
-    private double shooterModeStartTime = 0.0;
-    private ShooterMode lastShooterMode = ShooterMode.shooterOFF;
-    public ShooterMode CurrentShooterMode = ShooterMode.shooterOFF;
-    private double xOut = 0.0;
-    private double yOut = 0.0;
 
     public DriveTrain2027(HardwareMap hwMap)
     {
@@ -88,60 +60,21 @@ public class DriveTrain2027 {
         this.initializeMotors();
 
         driveBase = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-        // Pollen Shooter assignment
-        ShooterRight = new MotorEx(hwMap, "shooter_right");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-        ShooterLeft = new MotorEx(hwMap, "shooter_left");// see https://docs.ftclib.org/ftclib/features/hardware/motors -- may have to add gobilda type
-
-        Feeder = new MotorEx(hwMap, "feeder");
-        // Intake assignment
-        Intake = new Motor(hwMap, "intake");
-        // Servo assignment
 
 
     }
 
     public void init() {
-
-        //if (!modeRED && modeNEAR) {
-        Location_Close_Shot = Blue_Near_Close_Shot;
-        //}
         //Drive Motor Configuration
         headingControl = new PIDController(headingpid.p, headingpid.i, headingpid.d);
         headingControl.setTolerance(Constant.AUTO_HEADING_ERROR_TOLERANCE);// was 3 increased to see if affects spinnning ..cbw
         xControl = new PIDController(xpid.p, xpid.i, xpid.d);//FOR AUTO
         yControl = new PIDController(ypid.p, ypid.i, ypid.d);//For AUTO
-        // redundant as default is brake mode
-        leftBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        leftFrontDrive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        // Inverting because of the extra gear and not direct drive
-        rightFrontDrive.setInverted(true);
-        rightBackDrive.setInverted(true);
-        leftFrontDrive.setInverted(true);
-        leftBackDrive.setInverted(true);
         // odometer initializing
         odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
         odometer.setOffsets(Constant.ODOMETER_X_OFFSET, Constant.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-
-        //set up for flywheel shooter
-        ShooterRight.setRunMode(Motor.RunMode.VelocityControl);
-        //PollenShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        ShooterRight.setInverted(true);
-        ShooterRight.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);     //coefficients are. kp, ki, and kd
-
-        ShooterLeft.setRunMode(Motor.RunMode.VelocityControl);
-        //NectarShooter.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-        ShooterLeft.setInverted(true);
-        ShooterLeft.setVeloCoefficients(Constant.SHOOTER_KP, Constant.SHOOTER_KI, Constant.SHOOTER_KD);
-        // Feeder configuration
-        Feeder.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        Feeder.setInverted(false);
-        // Intake configuration
-        Intake.setInverted(true);
-
 
     }// end of init()
 
@@ -153,7 +86,7 @@ public class DriveTrain2027 {
         // - Update Inputs at the beginning of every loop
         odometer.update();
         Pose2D pos = odometer.getPosition();
-        updateCurrentLocation(odometer.getPosition());
+       // updateCurrentLocation(odometer.getPosition());
         heading = pos.getHeading(AngleUnit.DEGREES);
 
         // PID controller for heading
@@ -241,41 +174,9 @@ public class DriveTrain2027 {
         autoEnabled = false;
     }
 
-    public void printTelemetry(Telemetry telemetry) {
-        //telemetry.addData("actual heading:", "%5.2f", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-        telemetry.addData("saved heading:", "%5.2f", heading);
-        telemetry.addData("heading Target:", headingSetPoint);
-        telemetry.addData("heading correction:", headingCorrection);
-        telemetry.addData("X Distance inches:", "%5.2f", getXPosition());
-        telemetry.addData("Y Distance inches:", "%5.2f", getYPosition());
-        telemetry.addData("Auto DriveTo Enabled", autoEnabled);
+    public void setDrivemodefieldcentric(){this.drivemodefieldcentric = true;}
+    public void setDrivemoderobotcentric(){this.drivemodefieldcentric = false;}
 
-        // telemetry.addData("elevator","%5.2f",elevator.getCurrentPosition());
-
-        if(autoEnabled) {
-            telemetry.addData("Auto target X:", "%5.2f", currentXTarget);
-            telemetry.addData("Auto target Y:", "%5.2f", currentYTarget);
-            telemetry.addData("heading OnTarget:", onHeading);
-            telemetry.addData("headingCorrection:", headingCorrection);
-        }
-        telemetry.update();
-    }
-
-    public boolean canLaunch(double launchSpeed,  double FudgeFactor){
-        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX) + FudgeFactor;
-    }
-    public boolean canLaunch(double launchSpeed){
-        return ShooterRight.getCorrectedVelocity() >= (launchSpeed * Constant.SHOOTER_MAX);
-    }
-
-    public void setDrivemodefieldcentric(){
-        this.drivemodefieldcentric = true;
-    }
-
-    public void setDrivemoderobotcentric(){
-        this.drivemodefieldcentric = false;
-        manual_FC_turning = false;
-    }
     public void turn(double turnDirection){
         // Check turnDirection speed for max
         if ((Math.abs(turnDirection) <= Constant.MAX_TURN_SPEED)) {
@@ -286,102 +187,10 @@ public class DriveTrain2027 {
             this.turnSpeed = -Constant.MAX_TURN_SPEED;
         }
     }
-    public enum ShooterMode {
-        shooterSHOOTINGfarBlue, shooterSHOOTINGfarRedWithCorrection, shooterSHOOTINGfarRedNOcorrection, shooterSHOOTINGnear, shooterSHOOTINGnearNOcorrection, shooterPICKUP, shooterCORRECTING, shooterHOLDING, shooterOFF
-    }
 
-    public void ShooterControlLoop() {
-        // Reset Shooter Mode Start Timer when mode changes
-        if (CurrentShooterMode != lastShooterMode) {
-            onShooterModeChange();
-            lastShooterMode = CurrentShooterMode;
-        }
 
-        switch (CurrentShooterMode) {
-            // shooterMotors: flywheelSpeed intakeSpeed feederSpeed feed1/2Speed
-            case shooterSHOOTINGfarBlue:
-                // shooter delayed for feeder reverse to correct ball position
-                if (!shooterModeActiveForMoreThan(C.CORRECTION_DELAY)) { // input delay seconds
-                    shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                } else {
-                    shooterMotors(C2.FLYWHEEL_SPD_FAR_BLUE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                    if (canLaunch(C2.FLYWHEEL_SPD_FAR_BLUE,C2.FLYWHEEL_SPD_FAR_BLUE_EXTRA)) {
-                        shooterMotors(C2.FLYWHEEL_SPD_FAR_BLUE, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_FAR, C2.FEED_SPD_FWD);
-                    }
-                } break;
-            case shooterSHOOTINGfarRedWithCorrection:
-                // shooter delayed for feeder reverse to correct ball position
-                if (!shooterModeActiveForMoreThan(C2.CORRECTION_DELAY)) { // input delay seconds
-                    shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                } else {
-                    if (canLaunch(C2.FLYWHEEL_SPD_FAR_RED)) {
-                        shooterMotors(C2.FLYWHEEL_SPD_FAR_RED, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_FAR, C2.FEED_SPD_FWD);
-                    } else {
-                        shooterMotors(C2.FLYWHEEL_SPD_FAR_RED, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                    }
-                } break;
-            case shooterSHOOTINGfarRedNOcorrection:
-                if (canLaunch(C2.FLYWHEEL_SPD_FAR_RED)) {
-                    shooterMotors(C2.FLYWHEEL_SPD_FAR_RED, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_FAR, C2.FEED_SPD_FWD);
-                } else {
-                    shooterMotors(C2.FLYWHEEL_SPD_FAR_RED, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                }
-                break;
-            case shooterSHOOTINGnear:
-                // shooter delayed for feeder reverse to correct ball position
-                if (!shooterModeActiveForMoreThan(C2.CORRECTION_DELAY)) { // input delay seconds
-                    shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                } else {
-                    shooterMotors(C2.FLYWHEEL_SPD_NEAR, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                    if (canLaunch(C2.FLYWHEEL_SPD_NEAR)) {
-                        shooterMotors(C2.FLYWHEEL_SPD_NEAR, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_NEAR, C2.FEED_SPD_FWD);
-                    }
-                } break;
-
-            case shooterSHOOTINGnearNOcorrection:
-                if (canLaunch(C2.FLYWHEEL_SPD_NEAR)) {
-                    shooterMotors(C2.FLYWHEEL_SPD_NEAR, C2.INTAKE_SPD_SHOOTING, C2.FEEDER_SPD_NEAR, C2.FEED_SPD_FWD);
-                } else {
-                    shooterMotors(C2.FLYWHEEL_SPD_NEAR, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                }
-                break;
-
-            case shooterPICKUP:
-                shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_PICKUP, C2.FEEDER_SPD_PICKUP, C2.FEED_SPD_REVERSE);
-                break;
-
-            case shooterCORRECTING:
-                shooterMotors(C2.FLYWHEEL_SPD_REVERSE, C2.INTAKE_SPD_CORRECTING, C2.FEEDER_SPD_CORRECTING, C2.FEED_SPD_REVERSE);
-                break;
-
-            case shooterHOLDING:
-                shooterMotors(C2.FLYWHEEL_SPD_HOLDING, C2.INTAKE_SPD_HOLDING, C2.FEEDER_SPD_HOLDING, C2.FEED_SPD_REVERSE);
-                break;
-
-            case shooterOFF:
-            default:
-                shooterMotors(0,0,0,0);
-                break;
-        }//END SHOOTER MODE CASE/SELECT
-    }// END SHOOTER CONTROL LOOP
-
-    // Shooter Helper Methods/Functions
-    public void shooterMotors(double flywheelSpeed, double intakeSpeed, double feederSpeed, double feed1Speed){
-        Feeder.set(feederSpeed);
-        Intake.set(intakeSpeed);
-        //PollenShooter.set(flywheelSpeed);
-        //NectarShooter.set(flywheelSpeed);
-    }
     public void setNow(double nowSeconds) {
         now = nowSeconds;
-    }
-    private void onShooterModeChange() {
-        shooterModeStartTime = now;
-
-    }
-
-    public boolean shooterModeActiveForMoreThan(double seconds) {
-        return (now - shooterModeStartTime) >= seconds;
     }
 
     public static class Location {
@@ -395,7 +204,7 @@ public class DriveTrain2027 {
             this.facing = facing;
         }
     }
-    public boolean goto_xy(Location targetLocation, driveMode driveMode) {
+/*    public boolean goto_xy(Location targetLocation, driveMode driveMode) {
         xControl.setSetPoint(targetLocation.x);
         yControl.setSetPoint(targetLocation.y);
         xOut = xControl.calculate(getXPosition());
@@ -428,8 +237,8 @@ public class DriveTrain2027 {
 
         drive(xOut, yOut);
         return at_xy(targetLocation, driveMode);
-    }
-    public static class driveMode {
+    }*/
+    /*public static class driveMode {
         public double spdFactor;
         public double xTolerance;
         public double yTolerance;
@@ -440,7 +249,8 @@ public class DriveTrain2027 {
             this.xTolerance = xTolerance;
             this.yTolerance = yTolerance;
             this.hTolerance = hTolerance;
-        }
+    }*/
+
     private void assignMotors(){
         // Assign the motors
         this.leftFrontDrive = new Motor(hwMap, "left_front_drive"); // 0
@@ -461,29 +271,30 @@ public class DriveTrain2027 {
         this.rightFrontDrive.setInverted(true);
         this.rightBackDrive.setInverted(true);
     }
-    }
 
-
+/*
 
     public boolean at_x(double destinationX, driveMode driveMode) {
         //return (Math.abs(destinationX - getXPosition())) <= C2.AUTO_X_DISTANCE_ERROR;
         return (Math.abs(destinationX - getXPosition())) <= driveMode.xTolerance;
     }
-
+*/
+    /*
     public boolean at_y(double destinationY, driveMode driveMode) {
         //return (Math.abs(destinationY - getYPosition())) <= C2.AUTO_Y_DISTANCE_ERROR;
         return (Math.abs(destinationY - getYPosition())) <= driveMode.yTolerance;
-    }
-
+    }*/
+/*
     public boolean at_xy(Location destinationLocation, driveMode driveMode) {
         return at_x(destinationLocation.x, driveMode) && at_y(destinationLocation.y, driveMode) && onHeading;
     }
-
+    */
+/*
     public void updateCurrentLocation(Pose2D pos) {
         currentLocation.x = -pos.getX(DistanceUnit.MM);
         currentLocation.y = -pos.getY(DistanceUnit.MM);
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
-
     */
+
 }
