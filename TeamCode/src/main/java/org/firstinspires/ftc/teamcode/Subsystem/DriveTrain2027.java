@@ -119,8 +119,6 @@ public class DriveTrain2027 {
             driveBase.driveRobotCentric(-xSpeed,-ySpeed,turnSpeed);
         }
     }// end of main drivetrain loop()
-
-
     // Angle Wrapping
     // Returns error in [-180, 180], where 0 means "on target"
     private double applyKS(double output, double kS) {
