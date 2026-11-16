@@ -4,15 +4,14 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+//import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+//import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Utils.Constant;
 
@@ -43,6 +42,9 @@ public class DriveTrain2027 {
     public double headingSetPoint = Constant.DRIVE_FORWARD;
     public double heading;
     public boolean onHeading = false;
+    //Create Location object for currentLocation variable to hold current position read by odometry
+    private Location currentLocation = new Location(0.0,0.0,0.0);
+    private Location currentDestination = new Location(0.0,0.0,0.0);
     private double currentSpeed = 0.0;
     private double currentXTarget = 0.0;
     private double currentYTarget = 0.0;
@@ -72,8 +74,8 @@ public class DriveTrain2027 {
         // odometer initializing
         odometer = hwMap.get(GoBildaPinpointDriver.class, "xy-cord");
         odometer.setOffsets(Constant.ODOMETER_X_OFFSET, Constant.ODOMETER_Y_OFFSET);
-        odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
     }// end of init()
 
@@ -83,10 +85,7 @@ public class DriveTrain2027 {
 
     public void loop() {
         // - Update Inputs at the beginning of every loop
-        odometer.update();
-        Pose2D pos = odometer.getPosition();
-          updateCurrentLocation(odometer.getPosition());
-        heading = pos.getHeading(AngleUnit.DEGREES);
+        updateOdometry();
 
         // PID controller for heading
         if (autoEnabled) {
@@ -114,7 +113,7 @@ public class DriveTrain2027 {
                     false);
         }
         else {
-            driveBase.driveRobotCentric(-xSpeed,-ySpeed,turnSpeed);
+            driveBase.driveRobotCentric(xSpeed,ySpeed,turnSpeed);
         }
     }// end of main drivetrain loop()
     // Angle Wrapping
@@ -167,8 +166,10 @@ public class DriveTrain2027 {
     public void stop() {
         xSpeed = 0.0;
         ySpeed = 0.0;
-        driveBase.stop();
+        turnSpeed = 0.0;
+        headingCorrection = 0.0;
         autoEnabled = false;
+        driveBase.stop();
     }
 
     public void setDrivemodefieldcentric(){this.drivemodefieldcentric = true;}
@@ -293,5 +294,34 @@ public class DriveTrain2027 {
         currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
     }
 
+    public void resetOdometry() {
+        odometer.resetPosAndIMU();
+    }
+    //========== Update Odometry =====================================
+    public void updateOdometry() {
+        odometer.update();
+
+        Pose2D pos = odometer.getPosition();
+
+        currentLocation.x = -pos.getX(DistanceUnit.MM);
+        currentLocation.y = -pos.getY(DistanceUnit.MM);
+        currentLocation.facing = pos.getHeading(AngleUnit.DEGREES);
+
+        heading = currentLocation.facing;
+    }
+
+    public static class driveMode {
+        public double spdFactor;
+        public double xTolerance;
+        public double yTolerance;
+        public double hTolerance;
+
+        public driveMode(double spdFactor, double xTolerance, double yTolerance, double hTolerance) {
+            this.spdFactor = spdFactor;
+            this.xTolerance = xTolerance;
+            this.yTolerance = yTolerance;
+            this.hTolerance = hTolerance;
+        }
+    }
 
 }

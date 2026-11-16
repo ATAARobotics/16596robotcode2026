@@ -6,23 +6,25 @@ import com.bylazar.configurables.annotations.Configurable;
 @Configurable // Needed for Panels
 @Config
 public class Constant {
-    //========== SPEED RATIO SETTINGS ===============================
-    public static final double DRIVER_SPEED_RATIO = 0.6;  // Use this to slow down robot
-    public static final double OPER_SPEED_RATIO = DRIVER_SPEED_RATIO * 0.567;
-    public static final double TURN_RATIO = 1.0;
-    public static final double MAX_TURN_SPEED = 1.0;
+
 
     //========== INTAKE =============================================
     public static final double INTAKE_SPEED_STOP = 0.0;
-    public static final double INTAKE_SPEED_PICKUP = 1.0;
-    public static final double INTAKE_SPEED_HOLDING = 1.0;
-
+    public static final double INTAKE_SPEED_PICKUP = 0.8;
+    public static final double INTAKE_SPEED_HOLDING = 0.1;
+    //========== FEEDER =============================================
+    public static final double FEEDER_SPEED_STOP = 0.0;
+    public static final double FEEDER_SPEED_CORRECTING = -0.2;
+    public static final double FEEDER_SPEED_HOLDING = -0.0;
+    public static final double FEEDER_SPEED_PICKUP = 0.8;
+    public static final double FEEDER_SPEED_FWD = 1.0;
+    public static final double FEEDER_SPEED_REVERSE = -1.0;
+    public static final double FEEDER_SPEED_AUTO = -0.5;
+    public static final double CORRECTION_DELAY = 1.0;  //  Should this move to a timers section?
     //========== SHOOTER =============================================
     public static final double SHOOTER_RPM_STOP = 0.0;
-    public static final double SHOOTER_RPM_HOLDING = -1500.0;
-    public static double SHOOTER_RPM_SHOOTING = 4000.0;
-
-
+    public static final double SHOOTER_RPM_HOLDING = -500.0;
+    public static double SHOOTER_RPM_SHOOTING = 3000.0;
     public static final double SHOOTER_READY_TOLERANCE_RPM = 150.0;
     //========== SHOOTER ============================================
 
@@ -52,17 +54,15 @@ public class Constant {
     public static double SHOOTER_RAMP_RPM_KP = 0.00025;
 
 
-    //========== FEEDER =============================================
-    public static final double FEEDER_SPEED_STOP = 0.0;
-    public static final double FEEDER_SPEED_CORRECTING = -0.8;
-    public static final double FEEDER_SPEED_HOLDING = -0.1;
-    public static final double FEEDER_SPEED_PICKUP = -0.5;
-    public static final double FEEDER_SPEED_FWD = -1.0;
-    public static final double FEEDER_SPEED_REVERSE = 1.0;
-    public static final double FEEDER_SPEED_AUTO = -0.5;
-    public static final double CORRECTION_DELAY = 1.7;  //  Should this move to a timers section?
+
 
     //========== DRIVE ==============================================
+    //========== SPEED RATIO SETTINGS ===============================
+    public static final double DRIVER_SPEED_RATIO = 0.6;  // Use this to slow down robot
+    public static final double OPER_SPEED_RATIO = DRIVER_SPEED_RATIO * 0.567;
+    public static final double TURN_RATIO = 1.0;
+    public static final double MAX_TURN_SPEED = 1.0;
+    //========== DRIVE SETTINGS ===
     public static final double DRIVE_FORWARD = 0; // north
     public static final double DRIVE_BACK = -180; // south
     public static final double DRIVE_RIGHT = -90; // east
@@ -83,9 +83,8 @@ public class Constant {
 
 
     //========== ODOMETER ===========================================
-    public static final double ODOMETER_X_OFFSET = 0.0;
-    public static final double ODOMETER_Y_OFFSET = 0.0;
-
+    public static final double ODOMETER_X_OFFSET = 119.063;
+    public static final double ODOMETER_Y_OFFSET = 171.1;
 
     //========== AUTO ================================================
     public static final double AUTO_DRIVE_SPEED = 0.5567;

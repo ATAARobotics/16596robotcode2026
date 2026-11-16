@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Subsystem.DriveTrain2027;
 import org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027;
 import org.firstinspires.ftc.teamcode.Utils.Controller;
@@ -72,10 +73,10 @@ public class dragonFly_01 extends OpMode {
         //========== Process Controls ====================================
         operatorControls();
         driverControls();
+        driveTrain.drive(driverControls.stickLeftY, driverControls.stickLeftX);
         //========== Execute Outputs =====================================
         mechanisms.loop();
         driveTrain.loop();
-        driveTrain.drive(driverControls.stickLeftY, driverControls.stickLeftX);
         //========== Publish Telemetry ===================================
         joinedTelemetry.update();
     }//loop
@@ -89,12 +90,13 @@ public class dragonFly_01 extends OpMode {
 
         if(this.operatorControls.dpadDown){}//intake reverse
         if(this.operatorControls.dpadLeft){}//shooter reverse
-        if(this.operatorControls.bummerLeft){}//feeder reverse
+        //if(this.operatorControls.bummerLeft){}//feeder reverse
+        mechanisms.setManualLiftUp(operatorControls.bummerLeft);
 
-        if (this.operatorControls.buttonCircle) {
+        if (this.operatorControls.buttonX) {
             this.mechanisms.setMode(Mechanisms2027.Mode.PICKUP);
 
-        } else if (this.operatorControls.buttonX) {
+        } else if (this.operatorControls.buttonCircle) {
             this.mechanisms.setMode(Mechanisms2027.Mode.SHOOTING);
 
         } else if (this.operatorControls.buttonTriangle) {
@@ -150,6 +152,18 @@ public class dragonFly_01 extends OpMode {
                 this.mechanisms.detectBall());
         this.telemetry.addData("Shooter Ramp Target", "%.3f",
                 this.mechanisms.getShooterRampTargetPosition());
+        // PINPOINT TESTING
+        telemetry.addData("Pinpoint X (mm)",
+                driveTrain.odometer.getPosition().getX(DistanceUnit.MM));
+        telemetry.addData("Pinpoint Y (mm)",
+                driveTrain.odometer.getPosition().getY(DistanceUnit.MM));
+        telemetry.addData("Pinpoint Heading (deg)",
+                driveTrain.heading);
+        telemetry.addData("Raw X Encoder",
+                driveTrain.odometer.getEncoderX());
+        telemetry.addData("Raw Y Encoder",
+                driveTrain.odometer.getEncoderY());
+        // END PINPOINT TESTING
     }// Print Telemetry
 
 

@@ -31,6 +31,7 @@ public class Mechanisms2027 {
 
     //========== Servos =============================================
     private Servo shooterNectarLift;
+    private boolean manualLiftUp = false;
     private Servo shooterRamp;
     private Servo shooterStopper;
     //========== Sensors ============================================
@@ -113,7 +114,8 @@ public class Mechanisms2027 {
                                 Constant.INTAKE_SPEED_PICKUP,     // Speed - Intake Motor
                                 Constant.FEEDER_SPEED_PICKUP,     // Speed - Feeder Motor
                                 Constant.NECTAR_LIFT_DOWN,        // Position - Nectar Lift
-                                Constant.SHOOTER_RAMP_UP,         // Position - Shooter Ramp
+                                //Constant.SHOOTER_RAMP_UP,         // Position - Shooter Ramp
+                                getShooterRampTargetPosition(),
                                 Constant.SHOOTER_STOPPER_OPEN     // Position - Shooter Stopper
                         );
                     }
@@ -219,6 +221,9 @@ public class Mechanisms2027 {
     public void setNow(double nowSeconds) {
         this.now = nowSeconds;
     }
+    public void setManualLiftUp(boolean enabled) {
+        manualLiftUp = enabled;
+    }
     //========== Class Types ========================================
     public enum Mode {
         PICKUP,
@@ -255,7 +260,8 @@ public class Mechanisms2027 {
         this.intake.set(intakeSpeed);
         setShooterRPM(shooterRPM);
         this.shooterNectarLift.setPosition(shooterNectarLiftPosition);
-        this.shooterRamp.setPosition(shooterRampPosition);
+        //this.shooterRamp.setPosition(shooterRampPosition);
+        this.shooterNectarLift.setPosition(manualLiftUp ? Constant.NECTAR_LIFT_UP : shooterNectarLiftPosition);
         this.shooterStopper.setPosition(shooterStopperPosition);
 
     }
@@ -294,7 +300,7 @@ public class Mechanisms2027 {
         this.feeder.setInverted(false);
         // Intake
         this.intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        this.intake.setInverted(true);
+        this.intake.setInverted(false);
         // Servos
         this.shooterNectarLift.setDirection(FORWARD);
         this.shooterRamp.setDirection(FORWARD);

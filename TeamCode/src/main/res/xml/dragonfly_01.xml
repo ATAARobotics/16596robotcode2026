@@ -18,6 +18,7 @@
             <goBILDA5202SeriesMotor name="left_back_drive" port="2" />
             <goBILDA5202SeriesMotor name="right_back_drive" port="3" />
             <ControlHubImuBHI260AP name="imu" port="0" bus="0" />
+            <goBILDAPinpoint name="xy-cord" port="0" bus="1" />
         </LynxModule>
     </LynxUsbDevice>
 </Robot>

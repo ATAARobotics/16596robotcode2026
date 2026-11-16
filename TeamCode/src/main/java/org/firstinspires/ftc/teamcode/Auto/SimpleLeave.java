@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Subsystem.DriveTrain2027;
 import org.firstinspires.ftc.teamcode.Subsystem.Mechanisms2027;
 import org.firstinspires.ftc.teamcode.Utils.Constant;
@@ -26,6 +28,7 @@ public class SimpleLeave extends OpMode {
         hwMap = hardwareMap;
         driveTrain = new DriveTrain2027(hwMap);
         driveTrain.init();
+        driveTrain.resetOdometry();
         driveTrain.setDrivemoderobotcentric();
 
         mechanisms = new Mechanisms2027(hwMap);
@@ -48,7 +51,25 @@ public class SimpleLeave extends OpMode {
 
     @Override
     public void loop() {
+//========== Update Time =========================================
+        mechanisms.setNow(getRuntime());
 
+        // TIME BASED STEPS
+        if (elapsedTime.seconds() < 1.0) {
+            // Drive forward
+            currentSteps = Steps.STOP;
+        } else if (elapsedTime.seconds() < 3.0){
+            // Stop
+            currentSteps = Steps.SHOOT;
+        } else if (elapsedTime.seconds() < 4.0){
+            currentSteps = Steps.MOVE_OFF_WALL;
+        }else if (elapsedTime.seconds() < 5.0){
+            currentSteps = Steps.PARK;
+        }else{
+            currentSteps = Steps.STOP;
+        } // END IF TIME BASED STEPS
+
+        // CONTROLS MOTOR OUTPUTS FOR EACH STEP CASE
         switch (currentSteps){
             case SHOOT:
                 mechanisms.setMode(Mechanisms2027.Mode.SHOOTING);
@@ -73,21 +94,11 @@ public class SimpleLeave extends OpMode {
         }//switch current steps
 
 
-        if (elapsedTime.seconds() < 1.0) {
-            // Drive forward
-            currentSteps = Steps.STOP;
-        } else if (elapsedTime.seconds() < 3.0){
-            // Stop
-            currentSteps = Steps.SHOOT;
-        } else if (elapsedTime.seconds() < 4.0){
-            currentSteps = Steps.MOVE_OFF_WALL;
-        }else if (elapsedTime.seconds() < 5.0){
-            currentSteps = Steps.PARK;
-        }else{
-            currentSteps = Steps.STOP;
-        }
+        //========== Execute Outputs =====================================
+        mechanisms.loop();
         driveTrain.loop();
 
+        //========== Publish Telemetry ===================================
         addTelemetryData();
         telemetry.update();
         joinedTelemetry.update();
@@ -104,5 +115,11 @@ public class SimpleLeave extends OpMode {
     private void addTelemetryData() {
         this.telemetry.addData("AUTO STEPS", currentSteps.toString());
         this.telemetry.addData("Shooter Mode", this.mechanisms.getMode());
+        telemetry.addData("Pinpoint X (mm)",
+                driveTrain.odometer.getPosition().getX(DistanceUnit.MM));
+        telemetry.addData("Pinpoint Y (mm)",
+                driveTrain.odometer.getPosition().getY(DistanceUnit.MM));
+        telemetry.addData("Pinpoint Heading (deg)",
+                driveTrain.heading);
     }
 }//simple leave
