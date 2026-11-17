@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Old.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.DriveTrainSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Autonomous
+//@Autonomous
 public class AutoTrackingYellowBall extends OpMode {
     private double atTargetStartTime = -1;
     private static final double AT_TARGET_HOLD_TIME = 0.5; // seconds (500ms)

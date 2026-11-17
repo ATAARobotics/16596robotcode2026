@@ -10,22 +10,28 @@ public class Constant {
 
     //========== INTAKE =============================================
     public static final double INTAKE_SPEED_STOP = 0.0;
-    public static final double INTAKE_SPEED_PICKUP = 0.8;
+    public static final double INTAKE_SPEED_PICKUP = 0.7;
+    public static final double INTAKE_SPEED_SHOOTING = 0.7;
     public static final double INTAKE_SPEED_HOLDING = 0.1;
+    public static final double INTAKE_SPEED_CORRECTING = 0.1;
     //========== FEEDER =============================================
     public static final double FEEDER_SPEED_STOP = 0.0;
     public static final double FEEDER_SPEED_CORRECTING = -0.2;
     public static final double FEEDER_SPEED_HOLDING = -0.0;
-    public static final double FEEDER_SPEED_PICKUP = 0.8;
+    public static final double FEEDER_SPEED_PICKUP = 0.1;
+    public static final double FEEDER_SPEED_SHOOTING = 0.6;
     public static final double FEEDER_SPEED_FWD = 1.0;
     public static final double FEEDER_SPEED_REVERSE = -1.0;
     public static final double FEEDER_SPEED_AUTO = -0.5;
     public static final double CORRECTION_DELAY = 1.0;  //  Should this move to a timers section?
     //========== SHOOTER =============================================
     public static final double SHOOTER_RPM_STOP = 0.0;
-    public static final double SHOOTER_RPM_HOLDING = -500.0;
-    public static double SHOOTER_RPM_SHOOTING = 3000.0;
+    public static final double SHOOTER_RPM_HOLDING = -1.0;
+    public static final double SHOOTER_RPM_CORRECTING = -500.0;
+    public static double SHOOTER_RPM_SHOOTING_POLLEN = 3200.0;
+    public static double SHOOTER_RPM_SHOOTING_NECTAR =4000.0;
     public static final double SHOOTER_READY_TOLERANCE_RPM = 150.0;
+    public static double SHOOTER_FEED_STOP_DROP_RPM = 600.0;
     //========== SHOOTER ============================================
 
     public static final double SHOOTER_SPEED_STOP = 0.0;
@@ -39,18 +45,18 @@ public class Constant {
 
     //========== SERVOS =============================================
 
-    public static final double NECTAR_LIFT_DOWN = 0.0;
-    public static final double NECTAR_LIFT_UP = 1.0;
-    public static final double SHOOTER_RAMP_UP = 0.0;
+    public static final double NECTAR_LIFT_DOWN = -0.05;
+    public static final double NECTAR_LIFT_UP = 0.9;
     public static final double SHOOTER_STOPPER_CLOSED = 0.0;
     public static final double SHOOTER_STOPPER_OPEN = 1.0;
 
+    //========== Shooter Ramp RPM Compensation =======================
+    public static final double SHOOTER_RAMP_UP = -0.1;
     public static final double SHOOTER_RAMP_DOWN = 1.0;
     public static final double SHOOTER_RAMP_IDLE = 0.5;
-    //========== Shooter Ramp RPM Compensation =======================
     public static double SHOOTER_RAMP_NOMINAL = 0.50;
-    public static double SHOOTER_RAMP_MIN = 0.25;
-    public static double SHOOTER_RAMP_MAX = 0.50;
+    public static double SHOOTER_RAMP_MIN = 0.0;
+    public static double SHOOTER_RAMP_MAX = 0.40;
     public static double SHOOTER_RAMP_RPM_KP = 0.00025;
 
 

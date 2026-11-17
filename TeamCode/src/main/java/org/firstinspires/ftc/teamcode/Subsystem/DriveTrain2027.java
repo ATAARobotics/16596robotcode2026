@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.Utils.Constant;
 
 @Config
 public class DriveTrain2027 {
+    public double odometryTimeMs = 0.0;
+    public double motorWriteTimeMs = 0.0;
     public HardwareMap hwMap;
     public GoBildaPinpointDriver odometer;
     public boolean autoEnabled = false;
@@ -85,8 +87,10 @@ public class DriveTrain2027 {
 
     public void loop() {
         // - Update Inputs at the beginning of every loop
+        long t0 = System.nanoTime();
         updateOdometry();
-
+        long t1 = System.nanoTime();
+        odometryTimeMs = (t1 - t0) / 1e6;
         // PID controller for heading
         if (autoEnabled) {
             manual_FC_turning = false;
@@ -103,7 +107,7 @@ public class DriveTrain2027 {
                 headingCorrection = 0.0;
             }
         }
-
+        long t2 = System.nanoTime();
         if (drivemodefieldcentric) {
             driveBase.driveFieldCentric(
                     xSpeed,// strafe
@@ -115,6 +119,8 @@ public class DriveTrain2027 {
         else {
             driveBase.driveRobotCentric(xSpeed,ySpeed,turnSpeed);
         }
+        long t3 = System.nanoTime();
+        motorWriteTimeMs = (t3 - t2) / 1e6;
     }// end of main drivetrain loop()
     // Angle Wrapping
     // Returns error in [-180, 180], where 0 means "on target"

@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.Mechanisms.Old.C2;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.DriveTrainBasic2;
 import org.firstinspires.ftc.teamcode.Subsystem.LightIndicatorSubsystem;
 
-@Config// for FTC dashboard
-@Configurable // Needed for Panels
+//@Config// for FTC dashboard
+//@Configurable // Needed for Panels
 //@Autonomous(name = "AutoRedFar6BallWallPickup")
 public class AutoRedFar6BallWallPickup extends OpMode {
     private double atTargetStartTime = -1;

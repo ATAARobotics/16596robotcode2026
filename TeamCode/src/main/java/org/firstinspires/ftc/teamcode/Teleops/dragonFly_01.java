@@ -27,7 +27,10 @@ public class dragonFly_01 extends OpMode {
     public GamepadEx driver;
     public GamepadEx operator;
     private DriveTrain2027 driveTrain;
-
+    private long lastTelemetryNs = 0;
+    private long previousLoopStartNs = 0;
+    private double maxLoopPeriodMs = 0;
+    private static final long TELEMETRY_INTERVAL_NS = 100_000_000L;
     public HardwareMap hwMap;
     public void init(){
 
@@ -63,22 +66,54 @@ public class dragonFly_01 extends OpMode {
     }//start
 
     public void loop(){
+        // temp scan time checking
+        long currentLoopStartNs = System.nanoTime();
+
+        if (previousLoopStartNs != 0) {
+            double loopPeriodMs =
+                    (currentLoopStartNs - previousLoopStartNs) / 1e6;
+
+            maxLoopPeriodMs =
+                    Math.max(maxLoopPeriodMs, loopPeriodMs);
+        }
+
+        previousLoopStartNs = currentLoopStartNs;
+        // end temp scan time checking
         //========== Update Time =========================================
+        long loopStart = System.nanoTime();
         mechanisms.setNow(getRuntime());
         //========== Read Inputs =========================================
         driverControls.updateController(driver);
         operatorControls.updateController(operator);
-        //double batteryVoltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
-        addTelemetryData(); // last part of read
+        long inputsDone = System.nanoTime();
         //========== Process Controls ====================================
         operatorControls();
         driverControls();
         driveTrain.drive(driverControls.stickLeftY, driverControls.stickLeftX);
         //========== Execute Outputs =====================================
-        mechanisms.loop();
         driveTrain.loop();
+        long driveDone = System.nanoTime();
+        mechanisms.loop();
+        long mechanismsDone = System.nanoTime();
         //========== Publish Telemetry ===================================
+        long nowNs = System.nanoTime();
+        if (nowNs - lastTelemetryNs >= TELEMETRY_INTERVAL_NS) {
+            lastTelemetryNs = nowNs;
+            telemetry.addData("Inputs ms", "%.2f",
+                    (inputsDone - loopStart) / 1e6);
+
+            telemetry.addData("Drive ms", "%.2f",
+                    (driveDone - inputsDone) / 1e6);
+
+            telemetry.addData("Mechanisms ms", "%.2f",
+                    (mechanismsDone - driveDone) / 1e6);
+
+            telemetry.addData("Control loop ms", "%.2f",
+                    (mechanismsDone - loopStart) / 1e6);
+
+            addTelemetryData();
         joinedTelemetry.update();
+        }
     }//loop
 
 
@@ -113,11 +148,33 @@ public class dragonFly_01 extends OpMode {
     }
 
     private void addTelemetryData() {
+        //========== Color and Proximity Telemetry =========================
+        if (Mechanisms2027.color_prox_enable) {
+
+            telemetry.addData("Prox Sensor Distance", "%.2f mm",
+                    mechanisms.getProxDistance());
+
+            telemetry.addData("Color Sensor Distance", "%.2f mm",
+                    mechanisms.getColorDistance());
+
+            telemetry.addData("Ball Detected",
+                    mechanisms.detectBall());
+
+            telemetry.addData("Color Read ms", "%.2f",
+                    mechanisms.colorReadTimeMs);
+
+            telemetry.addData("Color Max Read ms", "%.2f",
+                    mechanisms.maxColorReadTimeMs);
+        }
+        telemetry.addData("Motor Write ms", "%.2f",
+                driveTrain.motorWriteTimeMs);
+        telemetry.addData("Max Loop Period ms", "%.2f",
+                maxLoopPeriodMs);
 
         this.telemetry.addData("Shooter Mode", this.mechanisms.getMode());
 
         this.telemetry.addData("Shooter Target RPM", "%.0f",
-                Constant.SHOOTER_RPM_SHOOTING);
+                mechanisms.getShooterTargetRPM());
 
         this.telemetry.addData("Shooter Right RPM", "%.0f",
                 this.mechanisms.getShooterRightRPM());
@@ -125,8 +182,6 @@ public class dragonFly_01 extends OpMode {
         this.telemetry.addData("Shooter Left RPM", "%.0f",
                 this.mechanisms.getShooterLeftRPM());
 
-        this.telemetry.addData("Shooter Ready",
-                this.mechanisms.canLaunch(Constant.SHOOTER_RPM_SHOOTING));
         this.telemetry.addData("Shooter Right Amps", "%.2f",
                 this.mechanisms.getShooterRightCurrent());
 
@@ -144,12 +199,7 @@ public class dragonFly_01 extends OpMode {
         } else {
             this.telemetry.addData("Shooter Spin-Up Time", "Waiting...");
         }
-        this.telemetry.addData("Prox Sensor Distance", "%.2f mm",
-                this.mechanisms.getProxDistance());
-        this.telemetry.addData("Color Sensor Distance", "%.2f mm",
-                this.mechanisms.getColorDistance());
-        this.telemetry.addData("Ball Detected",
-                this.mechanisms.detectBall());
+
         this.telemetry.addData("Shooter Ramp Target", "%.3f",
                 this.mechanisms.getShooterRampTargetPosition());
         // PINPOINT TESTING

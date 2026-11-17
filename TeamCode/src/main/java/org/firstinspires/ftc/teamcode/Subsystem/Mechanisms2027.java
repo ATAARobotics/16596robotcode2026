@@ -32,19 +32,31 @@ public class Mechanisms2027 {
     //========== Servos =============================================
     private Servo shooterNectarLift;
     private boolean manualLiftUp = false;
+    private boolean nectarLiftUp = false;
     private Servo shooterRamp;
     private Servo shooterStopper;
     //========== Sensors ============================================
     private RevColorSensorV3 shooterColorSensor;
     //private NormalizedColorSensor shooterColorSensor;
     private DistanceSensor shooterProximity;
-    //private DistanceSensor shooterColorDistance;
+    //========== Sensor Enable ========================================
+    public static boolean color_prox_enable = false;
+    //========== Color Sensor Cache ==================================
+    private static final long COLOR_INTERVAL_NS = 20_000_000L;
+
+    private long lastColorReadNs = 0;
+
+    private double cachedColorDistance = 1000.0;
+    private ballDetecting cachedBall = ballDetecting.NONE;
+
+    public double colorReadTimeMs = 0.0;
+    public double maxColorReadTimeMs = 0.0;
     //========== Time ===============================================
     private double now = 0.0;
     private double shooterModeStartTime = 0.0;
     private double shooterSpinUpTime = -1.0;
     private boolean shooterReachedSpeed = false;
-
+    private boolean feederEnabled = false;
 
 
     public Mechanisms2027(HardwareMap hwMap) {
@@ -66,65 +78,78 @@ public class Mechanisms2027 {
     }
 
     public void loop() {
+        //========== Update Sensors =====================================
+        updateColorSensor();
 
-        // Shooter Modes
-        // shooterSpeed, double intakeSpeed, double feederSpeed, double shooterNectarLiftPosition, double shooterRampPosition
-        // shooterStopperPosition
+        //========== Determine Lift Position =============================
+        boolean automaticNectar =
+                (shooterMode == Mode.PICKUP
+                        || shooterMode == Mode.SHOOTING)
+                        && detectBall() == ballDetecting.NECTAR;
+        nectarLiftUp = manualLiftUp || automaticNectar;
+
+        //========== Shooter Modes =====================================
         switch (shooterMode){
             //========== PICKUP/INTAKE ===================================
             case PICKUP:
                 // Intake/pickup mode:
-                // stop (or reverse?) shooter while running intake and feeder
-                // intake servo down, ramp servo mid, shooter door closed
-
                 setOperatorMotors(
                         Constant.SHOOTER_RPM_HOLDING, // Speed - Shooter Flywheels
                         Constant.INTAKE_SPEED_PICKUP,   // Speed - Intake Motor
                         Constant.FEEDER_SPEED_PICKUP,   // Speed - Feeder Motor
                         Constant.NECTAR_LIFT_DOWN,      // Position - Nectar Lift
-                        Constant.SHOOTER_RAMP_DOWN,     // Position - Shooter Ramp
+                        Constant.SHOOTER_RAMP_UP,     // Position - Shooter Ramp
                         Constant.SHOOTER_STOPPER_CLOSED // Position - Shooter Stopper
                 );
 
                 break;
-            //========== SHOOTING ===================================
-            case SHOOTING: // Shooting
-                if (!ShooterModeActiveForMoreThan(Constant.CORRECTION_DELAY)) { // input delay seconds
+            //========== SHOOTING ============================================
+            case SHOOTING:
+
+                if (!ShooterModeActiveForMoreThan(Constant.CORRECTION_DELAY)) {
+
                     setOperatorMotors(
-                            //holding mode for current delay time
-                            Constant.SHOOTER_RPM_HOLDING,   // Speed - Shooter Flywheels
-                            Constant.INTAKE_SPEED_HOLDING,    // Speed - Intake Motor
-                            Constant.FEEDER_SPEED_CORRECTING, // Speed - Feeder Motor
-                            Constant.NECTAR_LIFT_DOWN,        // Position - Nectar Lift
-                            Constant.SHOOTER_RAMP_DOWN,       // Position - Shooter Ramp
-                            Constant.SHOOTER_STOPPER_CLOSED   // Position - Shooter Stopper
+                            Constant.SHOOTER_RPM_CORRECTING,
+                            Constant.INTAKE_SPEED_CORRECTING,
+                            Constant.FEEDER_SPEED_CORRECTING,
+                            Constant.NECTAR_LIFT_DOWN,
+                            Constant.SHOOTER_RAMP_UP,
+                            Constant.SHOOTER_STOPPER_CLOSED
                     );
+
                 } else {
-                    setOperatorMotors(
-                            Constant.SHOOTER_RPM_SHOOTING,   // Speed - Shooter Flywheels
-                            Constant.INTAKE_SPEED_HOLDING,    // Speed - Intake Motor
-                            Constant.FEEDER_SPEED_CORRECTING, // Speed - Feeder Motor
-                            Constant.NECTAR_LIFT_DOWN,        // Position - Nectar Lift
-                            Constant.SHOOTER_RAMP_DOWN,       // Position - Shooter Ramp
-                            Constant.SHOOTER_STOPPER_CLOSED   // Position - Shooter Stopper
-                    );
-                    if (canLaunch(Constant.SHOOTER_RPM_SHOOTING)) {
+
+                    double targetRPM = getShooterTargetRPM();
+
+                    //if (canLaunch(targetRPM)) {
+                    if (updateFeederEnabled(targetRPM)) {
                         setOperatorMotors(
-                                Constant.SHOOTER_RPM_SHOOTING,  // Speed - Shooter Flywheels
-                                Constant.INTAKE_SPEED_PICKUP,     // Speed - Intake Motor
-                                Constant.FEEDER_SPEED_PICKUP,     // Speed - Feeder Motor
-                                Constant.NECTAR_LIFT_DOWN,        // Position - Nectar Lift
-                                //Constant.SHOOTER_RAMP_UP,         // Position - Shooter Ramp
+                                targetRPM,
+                                Constant.INTAKE_SPEED_SHOOTING,
+                                Constant.FEEDER_SPEED_SHOOTING,
+                                Constant.NECTAR_LIFT_DOWN,
+                                Constant.SHOOTER_RAMP_UP,
+                                Constant.SHOOTER_STOPPER_OPEN
+                        );
+
+                    } else {
+
+                        setOperatorMotors(
+                                targetRPM,
+                                Constant.INTAKE_SPEED_CORRECTING,
+                                Constant.FEEDER_SPEED_CORRECTING,
+                                Constant.NECTAR_LIFT_DOWN,
                                 getShooterRampTargetPosition(),
-                                Constant.SHOOTER_STOPPER_OPEN     // Position - Shooter Stopper
+                                Constant.SHOOTER_STOPPER_CLOSED
                         );
                     }
                 }
+
                 break;
-            //========== STOP ===================================
+            //========== SHOOTER TESTING ===================================
             case SHOOT_TEST: // Off
                 setOperatorMotors(
-                        Constant.SHOOTER_RPM_SHOOTING,    // Speed - Shooter Flywheels
+                        Constant.SHOOTER_RPM_SHOOTING_POLLEN,    // Speed - Shooter Flywheels
                         Constant.INTAKE_SPEED_STOP,     // Speed - Intake Motor
                         Constant.FEEDER_SPEED_STOP,     // Speed - Feeder Motor
                         Constant.NECTAR_LIFT_DOWN,      // Position - Nectar Lift
@@ -142,7 +167,7 @@ public class Mechanisms2027 {
                         Constant.INTAKE_SPEED_STOP,     // Speed - Intake Motor
                         Constant.FEEDER_SPEED_STOP,     // Speed - Feeder Motor
                         Constant.NECTAR_LIFT_DOWN,      // Position - Nectar Lift
-                        Constant.SHOOTER_RAMP_IDLE,     // Position - Shooter Ramp
+                        Constant.SHOOTER_RAMP_UP,     // Position - Shooter Ramp
                         Constant.SHOOTER_STOPPER_CLOSED // Position - Shooter Stopper
                 );
                 break;
@@ -153,7 +178,7 @@ public class Mechanisms2027 {
                 || shooterMode == Mode.SHOOT_TEST)
                 && !shooterReachedSpeed) {
 
-            if (canLaunch(Constant.SHOOTER_RPM_SHOOTING)) {
+            if (canLaunch(Constant.SHOOTER_RPM_SHOOTING_POLLEN)) {
                 shooterSpinUpTime = now - shooterModeStartTime;
                 shooterReachedSpeed = true;
             }
@@ -163,35 +188,103 @@ public class Mechanisms2027 {
 
 
     //========== Sensor Functions ===================================
-    public ballDetecting detectBall() {
-        double colorDist = getColorDistance();
-        boolean nectarDetected = detectNectar();
+    //public ballDetecting detectBall() {
+    //    double colorDist = getColorDistance();
+    //    boolean nectarDetected = detectNectar();
+//
+ //        if (colorDist > 75.0) {
+//            return ballDetecting.NONE;
+//        } else if (nectarDetected) {
+//            return ballDetecting.NECTAR;
+//        } else {
+//            return ballDetecting.POLLEN;
+//        }
+//    }
 
-        if (colorDist > 75.0) {
-            return ballDetecting.NONE;
-        } else if (nectarDetected) {
-            return ballDetecting.NECTAR;
-        } else {
-            return ballDetecting.POLLEN;
+    //========== Update Color Sensor ================================
+    public void updateColorSensor() {
+        if (!color_prox_enable) {
+            cachedBall = ballDetecting.NONE;
+            cachedColorDistance = 1000.0;
+            return;
         }
+        long nowNs = System.nanoTime();
+
+        if (nowNs - lastColorReadNs < COLOR_INTERVAL_NS) {
+            return;
+        }
+
+        lastColorReadNs = nowNs;
+        long startNs = System.nanoTime();
+
+        // Read distance once.
+        cachedColorDistance =
+                shooterColorSensor.getDistance(DistanceUnit.MM);
+
+        // Only read RGB when a ball is within detection range.
+        if (cachedColorDistance > 75.0) {
+            cachedBall = ballDetecting.NONE;
+        } else {
+            NormalizedRGBA colors =
+                    shooterColorSensor.getNormalizedColors();
+
+            boolean nectarDetected =
+                    ((colors.red > colors.green
+                            && colors.red > colors.blue)
+                            || (colors.blue > colors.green
+                            && colors.blue > colors.red))
+                            && (colors.red > Constant.COLOR_THRESHOLD
+                            || colors.blue > Constant.COLOR_THRESHOLD
+                            || colors.green > Constant.COLOR_THRESHOLD);
+
+            cachedBall = nectarDetected
+                    ? ballDetecting.NECTAR
+                    : ballDetecting.POLLEN;
+        }
+
+        colorReadTimeMs =
+                (System.nanoTime() - startNs) / 1e6;
+
+        maxColorReadTimeMs =
+                Math.max(maxColorReadTimeMs, colorReadTimeMs);
     }
+
+    //========== Cached Sensor Results =============================
+    public ballDetecting detectBall() {
+        return cachedBall;
+    }
+
     public boolean detectNectar() {
-        NormalizedRGBA colors = this.shooterColorSensor.getNormalizedColors();
-        return (((colors.red > colors.green
-                && colors.red > colors.blue)
-                || (colors.blue > colors.green
-                && colors.blue > colors.red))
-                && (colors.red > Constant.COLOR_THRESHOLD
-                || colors.blue > Constant.COLOR_THRESHOLD
-                || colors.green > Constant.COLOR_THRESHOLD));
+        if (!color_prox_enable) {
+            return false;
+        }
+        return cachedBall == ballDetecting.NECTAR;
     }
+
+    public double getColorDistance() {
+        if (!color_prox_enable) {
+            return 1000.0;
+        }
+        return cachedColorDistance;
+    }
+
+//    public boolean detectNectar() {
+//        NormalizedRGBA colors = this.shooterColorSensor.getNormalizedColors();
+//        return (((colors.red > colors.green
+//                && colors.red > colors.blue)
+//                || (colors.blue > colors.green
+//                && colors.blue > colors.red))
+//                && (colors.red > Constant.COLOR_THRESHOLD
+//                || colors.blue > Constant.COLOR_THRESHOLD
+//                || colors.green > Constant.COLOR_THRESHOLD));
+//    }
 
     //========== Class Get Sections =================================
-    public double getProxDistance(){
-        return this.shooterProximity.getDistance(DistanceUnit.MM);
-    }
-    public double getColorDistance() {
-        return this.shooterColorSensor.getDistance(DistanceUnit.MM);
+    public double getProxDistance() {
+        if (!color_prox_enable) {
+            return 1000.0;
+        }
+        return shooterProximity.getDistance(DistanceUnit.MM);
     }
 
     public Mode getMode(){return this.shooterMode;}
@@ -246,25 +339,47 @@ public class Mechanisms2027 {
         FEEDING
     }
     //========== Class Functions ====================================
-    private void onShooterModeChange() {
 
+    private void onShooterModeChange() {
         this.shooterModeStartTime = this.now;
         shooterSpinUpTime = -1.0;
         shooterReachedSpeed = false;
+        feederEnabled = false;
     }
     private boolean ShooterModeActiveForMoreThan(double seconds) {
         return (this.now - this.shooterModeStartTime) >= seconds;
     }
-    private void setOperatorMotors(double shooterRPM, double intakeSpeed, double feederSpeed, double shooterNectarLiftPosition, double shooterRampPosition, double shooterStopperPosition){
+    //========== Shooter RPM Selection ===============================
+    public double getShooterTargetRPM() {
+        return nectarLiftUp
+                ? Constant.SHOOTER_RPM_SHOOTING_NECTAR
+                : Constant.SHOOTER_RPM_SHOOTING_POLLEN;
+    }
+
+    //========== Set Mechanism Outputs ===============================
+    private void setOperatorMotors(
+            double shooterRPM,
+            double intakeSpeed,
+            double feederSpeed,
+            double shooterNectarLiftPosition,
+            double shooterRampPosition,
+            double shooterStopperPosition) {
+
         this.feeder.set(feederSpeed);
         this.intake.set(intakeSpeed);
-        setShooterRPM(shooterRPM);
-        this.shooterNectarLift.setPosition(shooterNectarLiftPosition);
-        //this.shooterRamp.setPosition(shooterRampPosition);
-        this.shooterNectarLift.setPosition(manualLiftUp ? Constant.NECTAR_LIFT_UP : shooterNectarLiftPosition);
-        this.shooterStopper.setPosition(shooterStopperPosition);
 
+        setShooterRPM(shooterRPM);
+
+        this.shooterNectarLift.setPosition(
+                nectarLiftUp
+                        ? Constant.NECTAR_LIFT_UP
+                        : shooterNectarLiftPosition
+        );
+
+        this.shooterRamp.setPosition(shooterRampPosition);
+        this.shooterStopper.setPosition(shooterStopperPosition);
     }
+
     //========== Assign functions ===================================
     private void assignMotors(){
         shooterRight = this.hwMap.get(DcMotorEx.class, "ShooterRight");
@@ -352,7 +467,27 @@ public class Mechanisms2027 {
                 && rightRPM >= minimumRPM
                 && leftRPM >= minimumRPM;
     }
+    //========== Shooter Feed Control ================================
+    private boolean updateFeederEnabled(double targetRPM) {
 
+        if (!feederEnabled) {
+            // Start only when shooter is at target RPM.
+            feederEnabled = canLaunch(targetRPM);
+
+        } else {
+            // Continue feeding through normal RPM dips.
+            double minimumRPM =
+                    targetRPM - Constant.SHOOTER_FEED_STOP_DROP_RPM;
+
+            if (getShooterRightRPM() < minimumRPM
+                    || getShooterLeftRPM() < minimumRPM) {
+
+                feederEnabled = false;
+            }
+        }
+
+        return feederEnabled;
+    }
 
     //private double calculateShooterRampPosition() {
     public double getShooterRampTargetPosition() {
@@ -360,7 +495,7 @@ public class Mechanisms2027 {
         double actualRPM = (getShooterRightRPM()
                 + getShooterLeftRPM()) / 2.0;
 
-        double targetRPM = Constant.SHOOTER_RPM_SHOOTING;
+        double targetRPM = getShooterTargetRPM();
 
         // Calculate RPM error (ignore overspeed)
         double rpmError = Math.max(0.0, targetRPM - actualRPM);
