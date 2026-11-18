@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.Mechanisms.Old.Constants;
 import org.firstinspires.ftc.teamcode.Mechanisms.Old.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.Utils.Constant;
 
 @Config
 @TeleOp(name = "GetStats", group="b_Config")
@@ -25,7 +25,7 @@ public class GetStats extends OpMode {
     @Override
     public void init() {
         odometer = hardwareMap.get(GoBildaPinpointDriver.class, "xy-cord");
-        odometer.setOffsets(Constants.ODOMETER_X_OFFSET, Constants.ODOMETER_Y_OFFSET);
+        odometer.setOffsets(Constant.ODOMETER_X_OFFSET, Constant.ODOMETER_Y_OFFSET);
         odometer.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometer.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odometer.resetPosAndIMU();

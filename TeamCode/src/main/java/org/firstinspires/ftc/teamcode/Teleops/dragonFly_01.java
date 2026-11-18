@@ -169,6 +169,18 @@ public class dragonFly_01 extends OpMode {
             telemetry.addData("Color Max Read ms", "%.2f",
                     mechanisms.maxColorReadTimeMs);
         }
+        // PINPOINT TESTING
+        telemetry.addData("Pinpoint X (mm)",
+                driveTrain.odometer.getPosition().getX(DistanceUnit.MM));
+        telemetry.addData("Pinpoint Y (mm)",
+                driveTrain.odometer.getPosition().getY(DistanceUnit.MM));
+        telemetry.addData("Pinpoint Heading (deg)",
+                driveTrain.heading);
+        telemetry.addData("Raw X Encoder",
+                driveTrain.odometer.getEncoderX());
+        telemetry.addData("Raw Y Encoder",
+                driveTrain.odometer.getEncoderY());
+        // END PINPOINT TESTING
         telemetry.addData("Motor Write ms", "%.2f",
                 driveTrain.motorWriteTimeMs);
         telemetry.addData("Max Loop Period ms", "%.2f",
@@ -205,18 +217,7 @@ public class dragonFly_01 extends OpMode {
 
         this.telemetry.addData("Shooter Ramp Target", "%.3f",
                 this.mechanisms.getShooterRampTargetPosition());
-        // PINPOINT TESTING
-        telemetry.addData("Pinpoint X (mm)",
-                driveTrain.odometer.getPosition().getX(DistanceUnit.MM));
-        telemetry.addData("Pinpoint Y (mm)",
-                driveTrain.odometer.getPosition().getY(DistanceUnit.MM));
-        telemetry.addData("Pinpoint Heading (deg)",
-                driveTrain.heading);
-        telemetry.addData("Raw X Encoder",
-                driveTrain.odometer.getEncoderX());
-        telemetry.addData("Raw Y Encoder",
-                driveTrain.odometer.getEncoderY());
-        // END PINPOINT TESTING
+
     }// Print Telemetry
 
 

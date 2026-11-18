@@ -18,7 +18,7 @@ public class Constant {
 
     //========== FEEDER =============================================
     public static final double FEEDER_SPEED_STOP = 0.0;
-    public static final double FEEDER_SPEED_CORRECTING = -0.2;
+    public static final double FEEDER_SPEED_CORRECTING = -0.01;
     public static final double FEEDER_SPEED_HOLDING = -0.0;
     public static final double FEEDER_SPEED_PICKUP = 0.1;
     public static final double FEEDER_SPEED_SHOOTING = 0.6;
@@ -30,7 +30,7 @@ public class Constant {
     //========== SHOOTER =============================================
     public static final double SHOOTER_RPM_STOP = 0.0;
     public static final double SHOOTER_RPM_HOLDING = -1.0;
-    public static final double SHOOTER_RPM_CORRECTING = -500.0;
+    public static final double SHOOTER_RPM_CORRECTING = -600.0;
     public static double SHOOTER_RPM_SHOOTING_POLLEN = 3400.0; // max is 4500
     public static double SHOOTER_RPM_SHOOTING_NECTAR =4500.0; // max is 4500
     public static final double SHOOTER_READY_TOLERANCE_RPM = 150.0;
