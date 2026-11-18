@@ -14,6 +14,8 @@ public class Constant {
     public static final double INTAKE_SPEED_SHOOTING = 0.7;
     public static final double INTAKE_SPEED_HOLDING = 0.1;
     public static final double INTAKE_SPEED_CORRECTING = 0.1;
+    public static final double INTAKE_SPEED_REVERSE = -1.0;
+
     //========== FEEDER =============================================
     public static final double FEEDER_SPEED_STOP = 0.0;
     public static final double FEEDER_SPEED_CORRECTING = -0.2;
@@ -24,16 +26,17 @@ public class Constant {
     public static final double FEEDER_SPEED_REVERSE = -1.0;
     public static final double FEEDER_SPEED_AUTO = -0.5;
     public static final double CORRECTION_DELAY = 1.0;  //  Should this move to a timers section?
+
     //========== SHOOTER =============================================
     public static final double SHOOTER_RPM_STOP = 0.0;
     public static final double SHOOTER_RPM_HOLDING = -1.0;
     public static final double SHOOTER_RPM_CORRECTING = -500.0;
-    public static double SHOOTER_RPM_SHOOTING_POLLEN = 3200.0;
-    public static double SHOOTER_RPM_SHOOTING_NECTAR =4000.0;
+    public static double SHOOTER_RPM_SHOOTING_POLLEN = 3400.0; // max is 4500
+    public static double SHOOTER_RPM_SHOOTING_NECTAR =4500.0; // max is 4500
     public static final double SHOOTER_READY_TOLERANCE_RPM = 150.0;
     public static double SHOOTER_FEED_STOP_DROP_RPM = 600.0;
-    //========== SHOOTER ============================================
 
+    //========== SHOOTER ============================================
     public static final double SHOOTER_SPEED_STOP = 0.0;
     public static final double SHOOTER_SPEED_HOLDING = -1.0;
     public static final double SHOOTER_SPEED_SHOOTING = 1.0;
@@ -44,7 +47,6 @@ public class Constant {
     public static final double SHOOTER_MAX = 2100;
 
     //========== SERVOS =============================================
-
     public static final double NECTAR_LIFT_DOWN = -0.05;
     public static final double NECTAR_LIFT_UP = 0.9;
     public static final double SHOOTER_STOPPER_CLOSED = 0.0;
@@ -59,16 +61,14 @@ public class Constant {
     public static double SHOOTER_RAMP_MAX = 0.40;
     public static double SHOOTER_RAMP_RPM_KP = 0.00025;
 
-
-
-
     //========== DRIVE ==============================================
     //========== SPEED RATIO SETTINGS ===============================
     public static final double DRIVER_SPEED_RATIO = 0.6;  // Use this to slow down robot
     public static final double OPER_SPEED_RATIO = DRIVER_SPEED_RATIO * 0.567;
     public static final double TURN_RATIO = 1.0;
     public static final double MAX_TURN_SPEED = 1.0;
-    //========== DRIVE SETTINGS ===
+
+    //========== DRIVE SETTINGS =====================================
     public static final double DRIVE_FORWARD = 0; // north
     public static final double DRIVE_BACK = -180; // south
     public static final double DRIVE_RIGHT = -90; // east
@@ -82,11 +82,9 @@ public class Constant {
     public static final double DRIVE_SOUTH_WEST = 135; // South West
     public static final double DRIVE_NORTH_WEST = 45; // North West
 
-
     //========== TOLERANCE ==========================================
     public static final float TOLERANCE_JOYSTICK = 0.05F;
     public static final float TOLERANCE_TRIGGER = 0.05F;
-
 
     //========== ODOMETER ===========================================
     public static final double ODOMETER_X_OFFSET = 119.063;
@@ -102,7 +100,6 @@ public class Constant {
     public static final double AUTO_YPID_Kp = 0.00267;
     public static final double AUTO_HEADING_ERROR_TOLERANCE = 1.5; // Degrees
     public static final double AUTO_HEADING_Kp = 0.001;
-
 
     //========== LIMELIGHT ==========================================
     public static final int LIMELIGHT_APRIL_TAG_BLUE = 0;

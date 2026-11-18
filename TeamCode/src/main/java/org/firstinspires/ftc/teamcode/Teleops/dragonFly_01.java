@@ -121,12 +121,12 @@ public class dragonFly_01 extends OpMode {
 
         if(this.operatorControls.buttonX){}//intake forward
         if(this.operatorControls.buttonCircle){}//shooter forward
-        if(this.operatorControls.bummerRight){}//feeder forward
+      //  if(this.operatorControls.bummerRight){}//feeder forward
 
         if(this.operatorControls.dpadDown){}//intake reverse
         if(this.operatorControls.dpadLeft){}//shooter reverse
-        //if(this.operatorControls.bummerLeft){}//feeder reverse
-        mechanisms.setManualLiftUp(operatorControls.bummerLeft);
+        if(this.operatorControls.bummerLeft){}//feeder reverse
+        mechanisms.setManualLiftUp(operatorControls.bummerRight);
 
         if (this.operatorControls.buttonX) {
             this.mechanisms.setMode(Mechanisms2027.Mode.PICKUP);
@@ -137,7 +137,10 @@ public class dragonFly_01 extends OpMode {
         } else if (this.operatorControls.buttonTriangle) {
             this.mechanisms.setMode(Mechanisms2027.Mode.SHOOT_TEST);
 
-        } else {
+        } else if (this.operatorControls.dpadDown){
+            this.mechanisms.setMode(Mechanisms2027.Mode.REVERSE);
+
+        } else{
             this.mechanisms.setMode(Mechanisms2027.Mode.STOP);
         }
 

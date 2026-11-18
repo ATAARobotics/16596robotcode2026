@@ -58,12 +58,19 @@ public class SimpleLeave extends OpMode {
         if (elapsedTime.seconds() < 1.0) {
             // Drive forward
             currentSteps = Steps.STOP;
-        } else if (elapsedTime.seconds() < 3.0){
-            // Stop
-            currentSteps = Steps.SHOOT;
+        }else if (elapsedTime.seconds() < 2.0){
+            currentSteps = Steps.FORWARD;
         } else if (elapsedTime.seconds() < 4.0){
+            currentSteps = Steps.REVERSE;
+        } else if (elapsedTime.seconds() < 4.5){
+            currentSteps = Steps.FORWARD;
+        } else if (elapsedTime.seconds() < 5.0){
+            currentSteps = Steps.REVERSE;
+        }else if (elapsedTime.seconds() < 7.0){
+            currentSteps = Steps.SHOOT;
+        } else if (elapsedTime.seconds() < 10.0){
             currentSteps = Steps.MOVE_OFF_WALL;
-        }else if (elapsedTime.seconds() < 5.0){
+        }else if (elapsedTime.seconds() < 12.0){
             currentSteps = Steps.PARK;
         }else{
             currentSteps = Steps.STOP;
@@ -71,6 +78,15 @@ public class SimpleLeave extends OpMode {
 
         // CONTROLS MOTOR OUTPUTS FOR EACH STEP CASE
         switch (currentSteps){
+            case FORWARD:
+                mechanisms.setMode(Mechanisms2027.Mode.STOP);
+                driveTrain.drive(Constant.AUTO_DRIVE_SPEED,0);
+                break;
+            case REVERSE:
+                mechanisms.setMode(Mechanisms2027.Mode.STOP);
+                driveTrain.drive(-Constant.AUTO_DRIVE_SPEED,0);
+                break;
+
             case SHOOT:
                 mechanisms.setMode(Mechanisms2027.Mode.SHOOTING);
                 driveTrain.drive(0,0);
@@ -106,6 +122,10 @@ public class SimpleLeave extends OpMode {
 
     //========== Class Types ========================================
     public enum Steps {
+        FORWARD,
+        REVERSE,
+        FORWARD2,
+        REVERSE2,
         SHOOT,
         MOVE_OFF_WALL,
         PARK,
