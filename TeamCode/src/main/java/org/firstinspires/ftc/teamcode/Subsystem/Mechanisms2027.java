@@ -158,7 +158,19 @@ public class Mechanisms2027 {
                         Constant.SHOOTER_STOPPER_CLOSED // Position - Shooter Stopper
                 );
                 break;
+            //========== SHOOTER TESTING ===================================
+            case REVERSE: // Off
+                setOperatorMotors(
+                        Constant.SHOOTER_RPM_CORRECTING,    // Speed - Shooter Flywheel
+                        Constant.INTAKE_SPEED_REVERSE,     // Speed - Intake Motor
+                        Constant.FEEDER_SPEED_REVERSE,     // Speed - Feeder Motor
 
+                        Constant.NECTAR_LIFT_DOWN,      // Position - Nectar Lift
+                        //Constant.SHOOTER_RAMP_DOWN,     // Position - Shooter Ramp
+                        getShooterRampTargetPosition(),
+                        Constant.SHOOTER_STOPPER_CLOSED // Position - Shooter Stopper
+                );
+                break;
             //========== STOP ===================================
             case STOP: // Off
             default:
@@ -322,7 +334,9 @@ public class Mechanisms2027 {
         PICKUP,
         SHOOTING,
         SHOOT_TEST,
-        STOP
+        STOP,
+        REVERSE
+
     }
     public enum ballDetecting {
         NECTAR,
