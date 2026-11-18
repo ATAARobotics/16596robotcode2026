@@ -60,17 +60,17 @@ public class SimpleLeave extends OpMode {
             currentSteps = Steps.STOP;
         }else if (elapsedTime.seconds() < 2.0){
             currentSteps = Steps.FORWARD;
-        } else if (elapsedTime.seconds() < 3.0){
+        } else if (elapsedTime.seconds() < 4.0){
             currentSteps = Steps.REVERSE;
         } else if (elapsedTime.seconds() < 4.5){
-            currentSteps = Steps.FORWARD2;
+            currentSteps = Steps.FORWARD;
         } else if (elapsedTime.seconds() < 5.0){
-            currentSteps = Steps.REVERSE2;
-        }else if (elapsedTime.seconds() < 6.0){
+            currentSteps = Steps.REVERSE;
+        }else if (elapsedTime.seconds() < 7.0){
             currentSteps = Steps.SHOOT;
-        } else if (elapsedTime.seconds() < 8.0){
+        } else if (elapsedTime.seconds() < 10.0){
             currentSteps = Steps.MOVE_OFF_WALL;
-        }else if (elapsedTime.seconds() < 10.0){
+        }else if (elapsedTime.seconds() < 12.0){
             currentSteps = Steps.PARK;
         }else{
             currentSteps = Steps.STOP;
@@ -84,16 +84,9 @@ public class SimpleLeave extends OpMode {
                 break;
             case REVERSE:
                 mechanisms.setMode(Mechanisms2027.Mode.STOP);
-                driveTrain.drive(-0.5567,0);
+                driveTrain.drive(-Constant.AUTO_DRIVE_SPEED,0);
                 break;
-            case FORWARD2:
-                mechanisms.setMode(Mechanisms2027.Mode.STOP);
-                driveTrain.drive(Constant.AUTO_DRIVE_SPEED,0);
-                break;
-            case REVERSE2:
-                mechanisms.setMode(Mechanisms2027.Mode.STOP);
-                driveTrain.drive(-0.5567,0);
-                break;
+
             case SHOOT:
                 mechanisms.setMode(Mechanisms2027.Mode.SHOOTING);
                 driveTrain.drive(0,0);
